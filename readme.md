@@ -1,4 +1,4 @@
-## PRODUCT (Huy)
+## PRODUCT (Hưng)
   #### Database Struct
   - string ma_san_pham
   - string ten_san_pham
@@ -121,7 +121,7 @@
 
 ========================================================
 
-## Images (Hưng)
+## Images (Huy)
   #### Database Struct
   - int ma_hinh_anh
   - string filename
