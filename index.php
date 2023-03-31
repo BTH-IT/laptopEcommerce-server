@@ -34,15 +34,51 @@ $urlTarget = explode("?", $url[3]);
 $database = new Database();
 
 switch ($urlTarget[0]) {
+  case "guarantee":
+    break;
   case "products":
+    $id = $url[4] ?? null;
 
+    $perProducts = array_filter(
+      $perArr,
+      function ($per) {
+        return $per["ten_quyen_hang"] == 'products';
+      }
+    );
+
+    $productModel = new ProductModel($database->connect);
+
+    $productController = new ProductController($productModel, $perProducts);
+
+    $productController->processRequest($_SERVER["REQUEST_METHOD"], $id);
     break;
 
   case "brands":
 
     break;
 
-  case "users":
+  case "accounts":
+    $perAccounts = array_filter(
+      $perArr,
+      function ($per) {
+        return $per["ten_quyen_hang"] == 'accounts';
+      }
+    );
+
+    $id = $url[4] ?? null;
+
+    $accountModel = new AccountModel($database->connect);
+
+    $accountController = new AccountController($accountModel, $perAccounts);
+
+    $accountController->processRequest($_SERVER["REQUEST_METHOD"], $id);
+    break;
+
+  case "customers":
+
+    break;
+
+  case "employees":
 
     break;
 
@@ -50,14 +86,80 @@ switch ($urlTarget[0]) {
 
     break;
 
-  case "images":
+  case "import-orders":
 
+    break;
+
+  case "images":
+    $perImages = array_filter(
+      $perArr,
+      function ($per) {
+        return $per["ten_quyen_hang"] == 'images';
+      }
+    );
+
+    $id = $url[4] ?? null;
+
+    $imageModel = new ImageModel($database->connect);
+
+    $imageController = new ImageController($imageModel, $perImages);
+
+    $imageController->processRequest($_SERVER["REQUEST_METHOD"], $id);
     break;
 
   case "auth":
+    $action = $url[4] ?? null;
+
+    $authModel = new AuthModel($database->connect);
+
+    $authController = new AuthController($authModel);
+
+    $authController->processRequest($_SERVER["REQUEST_METHOD"], $action);
+    break;
+
+  case "auth-group":
+    $perAuthGroups = array_filter(
+      $perArr,
+      function ($per) {
+        return $per["ten_quyen_hang"] == 'auth-group';
+      }
+    );
+
+    $id = $url[4] ?? null;
+
+    $authGroupModel = new AuthGroupModel($database->connect);
+
+    $authGroupController = new AuthGroupController($authGroupModel, $perAuthGroups);
+
+    $authGroupController->processRequest($_SERVER["REQUEST_METHOD"], $id);
+    break;
+
+  case "decentralization":
+    $perDecentralization = array_filter(
+      $perArr,
+      function ($per) {
+        return $per["ten_quyen_hang"] == 'decentralization';
+      }
+    );
+
+    $roleId = $url[4] ?? null;
+    $perId = $url[5] ?? null;
+    $actionId = $url[6] ?? null;
+
+    $detailPermissionModel = new DetailPermissionModel($database->connect);
+
+    $detailPermissionController = new DetailPermissionController($detailPermissionModel, $perDecentralization);
+
+    $detailPermissionController->processRequest($_SERVER["REQUEST_METHOD"], $roleId, $perId, $actionId);
+    break;
+
+  case "suppliers":
 
     break;
+
   default:
     http_response_code(404);
     exit;
 }
+
+$database->connect->close();
