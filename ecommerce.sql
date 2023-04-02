@@ -1019,6 +1019,12 @@ ALTER TABLE `nhomquyen`
   MODIFY `ma_nhom_quyen` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
+-- AUTO_INCREMENT for table `nhomquyen`
+--
+ALTER TABLE `phieunhap`
+  MODIFY `ma_phieu_nhap` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `quyenhang`
 --
 ALTER TABLE `quyenhang`

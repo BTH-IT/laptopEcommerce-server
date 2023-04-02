@@ -98,14 +98,13 @@
 ## ORDER (Huy)
   #### Database Struct
   - int ma_don_hang
-  - string ten_nguoi_dat
-  - string so_dien_thoai
-  - JSON danh_sach_san_pham_da_mua
+  - string ma_khach_hang
+  - string ma_nhan_vien
   - string hinh_thuc_thanh_toan
-  - timestamp thoi_gian_dat 
-  - string tong_tien
+  - date thoi_gian_dat_mua
   - string trang_thai
-  - string dia_diem
+  - boolean hien_thi
+  - array danh_sach_san_pham_da_mua
 
   #### Method GET
   - /orders           (action: get list)
@@ -119,6 +118,50 @@
   #### Method DELETE
   - /orders/:orderId  (action: delete)
 
+========================================================
+
+## IMPORT (Huy)
+  #### Database Struct
+  - int ma_phieu_nhap
+  - int ma_nha_cung_cap
+  - string ma_nhan_vien
+  - date ngay_lap
+  - boolean hien_thi
+  - array danh_sach_san_pham_da_nhap
+
+  #### Method GET
+  - /import-orders           (action: get list)
+
+  #### Method POST
+  - /import-orders           (action: create)
+
+  #### Method PUT OR PATCH
+  - /import-orders/:importId  (action: update)
+
+  #### Method DELETE
+  - /import-orders/:importId  (action: delete)
+
+========================================================
+
+## SUPPLIER (Huy)
+  #### Database Struct
+  - int ma_nha_cung_cap
+  - string ten_nha_cung_cap
+  - string so_dien_thoai
+  - string dia_chi
+
+  #### Method GET
+  - /suppliers           (action: get list)
+
+  #### Method POST
+  - /suppliers           (action: create)
+
+  #### Method PUT OR PATCH
+  - /suppliers/:supplierId  (action: update)
+
+  #### Method DELETE
+  - /suppliers/:supplierId  (action: delete)
+  
 ========================================================
 
 ## Images (Huy)

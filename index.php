@@ -83,11 +83,41 @@ switch ($urlTarget[0]) {
     break;
 
   case "orders":
+    // $perAccounts = array_filter(
+    //   $perArr,
+    //   function ($per) {
+    //     return $per["ten_quyen_hang"] == 'accounts';
+    //   }
+    // );
 
+    $perAccounts = [];
+
+    $id = $url[4] ?? null;
+
+    $orderModel = new OrderModel($database->connect);
+
+    $orderController = new OrderController($orderModel, $perAccounts);
+
+    $orderController->processRequest($_SERVER["REQUEST_METHOD"], $id);
     break;
 
   case "import-orders":
+    // $perAccounts = array_filter(
+    //   $perArr,
+    //   function ($per) {
+    //     return $per["ten_quyen_hang"] == 'accounts';
+    //   }
+    // );
 
+    $perAccounts = [];
+
+    $id = $url[4] ?? null;
+
+    $importModel = new ImportModel($database->connect);
+
+    $importController = new ImportController($importModel, $perAccounts);
+
+    $importController->processRequest($_SERVER["REQUEST_METHOD"], $id);
     break;
 
   case "images":
@@ -154,7 +184,22 @@ switch ($urlTarget[0]) {
     break;
 
   case "suppliers":
+    // $perAccounts = array_filter(
+    //   $perArr,
+    //   function ($per) {
+    //     return $per["ten_quyen_hang"] == 'accounts';
+    //   }
+    // );
 
+    $perAccounts = [];
+
+    $id = $url[4] ?? null;
+
+    $supplierModel = new SupplierModel($database->connect);
+
+    $supplierController = new SupplierController($supplierModel, $perAccounts);
+
+    $supplierController->processRequest($_SERVER["REQUEST_METHOD"], $id);
     break;
 
   default:
