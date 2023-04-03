@@ -32,10 +32,10 @@ class AccountModel
     $ten_dang_nhap = $data["ten_dang_nhap"];
     $ma_nhom_quyen = (int) $data["ma_nhom_quyen"];
     $mat_khau = password_hash($data["mat_khau"], PASSWORD_DEFAULT);
-    $created_at = date("Y-m-d H:i:s", $data["created_at"]);
+    $created_at = date("Y-m-d H:i:s", intval($data["created_at"] / 1000));
 
     $sql = "INSERT INTO taikhoan (`ten_dang_nhap`, `ma_nhom_quyen`, `mat_khau`, `created_at`)
-            VALUES ($ten_dang_nhap, '$ma_nhom_quyen', '$mat_khau', '$created_at');";
+            VALUES ('$ten_dang_nhap', $ma_nhom_quyen, '$mat_khau', '$created_at');";
 
     $result = $this->conn->query($sql);
 
@@ -77,10 +77,14 @@ class AccountModel
       }
     }
 
+    var_dump($data);
+
     $ten_dang_nhap = $data["ten_dang_nhap"];
     $ma_nhom_quyen = (int) $data["ma_nhom_quyen"];
 
-    $sql = "UPDATE taikhoan SET ma_nhom_quyen='$ma_nhom_quyen' WHERE ten_dang_nhap=$ten_dang_nhap;";
+    $sql = "UPDATE taikhoan SET ma_nhom_quyen=$ma_nhom_quyen WHERE ten_dang_nhap='$ten_dang_nhap';";
+    echo $sql;
+
 
     $result = mysqli_query($this->conn, $sql);
 

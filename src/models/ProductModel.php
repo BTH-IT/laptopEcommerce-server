@@ -10,12 +10,11 @@ class ProductModel
   {
     $search = $_GET["search"] ?? null;
 
-    $sql = "SELECT * FROM sanpham";
+    $sql = "SELECT * FROM sanpham WHERE hien_thi=1";
 
     if ($search) {
-      $sql .= " WHERE `ten_san_pham` LIKE '%$search%'";
+      $sql .= " AND `ten_san_pham` LIKE '%$search%'";
     }
-
     $result = mysqli_query($this->conn, $sql);
 
     $data = [];
@@ -31,9 +30,26 @@ class ProductModel
       $row["created_at"] = strtotime($row["created_at"]);
       $row["updated_at"] = $row["updated_at"] ? strtotime($row["updated_at"]) : null;
       $row["dung_luong_ram"] = (int) $row["dung_luong_ram"];
-      $row["so_luong"] = (int) $row["so_luong"];
       $row["so_luong_da_ban"] = (int) $row["so_luong_da_ban"];
       $row["noi_bat"] = (bool) $row["noi_bat"];
+      $row["hien_thi"] = (bool) $row["hien_thi"];
+
+      $id = $row["ma_san_pham"];
+      $sql = "SELECT COUNT(ma_san_pham) AS so_luong FROM chitietsanpham
+              WHERE ma_san_pham=$id GROUP BY ma_san_pham;";
+
+      $result1 = mysqli_query($this->conn, $sql);
+
+      if ($result1->num_rows <= 0) {
+        $row["so_luong"] = 0;
+      } else {
+        $row1 = mysqli_fetch_assoc($result1);
+
+        $row["so_luong"] = (int) $row1["so_luong"];
+      }
+
+
+
       $data[] = $row;
     }
 
@@ -100,12 +116,12 @@ class ProductModel
     $maxPrice = isset($_GET["max_price"]) ? (float) $_GET["max_price"] : null;
     $outstanding = isset($_GET["noi_bat"]) ? 1 : null;
 
-    if (
-      $minPrice != null || $maxPrice || $brand || $seriesLaptop || $color
-      || $seriesCPU || $chip || $sizeRam || $weight || $name || $outstanding !== null
-    ) {
-      $sql .= " WHERE";
-    }
+    // if (
+    //   $minPrice != null || $maxPrice || $brand || $seriesLaptop || $color
+    //   || $seriesCPU || $chip || $sizeRam || $weight || $name || $outstanding !== null
+    // ) {
+    //   $sql .= " WHERE";
+    // }
 
     $whereArr = [];
 
@@ -150,13 +166,8 @@ class ProductModel
     }
 
     for ($i = 0; $i < count($whereArr); $i++) {
-      if ($i == 0) {
-        $value = $whereArr[$i];
-        $sql .= " $value";
-      } else {
-        $value = $whereArr[$i];
-        $sql .= " AND $value";
-      }
+      $value = $whereArr[$i];
+      $sql .= " AND $value";
     }
 
     switch ($sort) {
@@ -186,7 +197,7 @@ class ProductModel
     $limit = isset($_GET["_limit"]) ? (int) $_GET["_limit"] : 16;
     $page = isset($_GET["_page"]) ? (int) $_GET["_page"] - 1 : 0;
 
-    $sql = "SELECT * FROM sanpham";
+    $sql = "SELECT * FROM sanpham WHERE hien_thi=1";
 
     $sql = $this->handleParams($sql);
 
@@ -209,13 +220,28 @@ class ProductModel
       $row["created_at"] = strtotime($row["created_at"]);
       $row["updated_at"] = $row["updated_at"] ? strtotime($row["updated_at"]) : null;
       $row["dung_luong_ram"] = (int) $row["dung_luong_ram"];
-      $row["so_luong"] = (int) $row["so_luong"];
       $row["so_luong_da_ban"] = (int) $row["so_luong_da_ban"];
       $row["noi_bat"] = (bool) $row["noi_bat"];
+      $row["hien_thi"] = (bool) $row["hien_thi"];
+
+      $id = $row["ma_san_pham"];
+      $sql = "SELECT COUNT(ma_san_pham) AS so_luong FROM chitietsanpham
+              WHERE ma_san_pham=$id GROUP BY ma_san_pham;";
+
+      $result1 = mysqli_query($this->conn, $sql);
+
+      if ($result1->num_rows <= 0) {
+        $row["so_luong"] = 0;
+      } else {
+        $row1 = mysqli_fetch_assoc($result1);
+
+        $row["so_luong"] = (int) $row1["so_luong"];
+      }
+
       $data[] = $row;
     }
 
-    $sql = "SELECT * FROM sanpham";
+    $sql = "SELECT * FROM sanpham WHERE hien_thi=1";
 
     $sql = $this->handleParams($sql);
 
@@ -243,7 +269,7 @@ class ProductModel
     $giam_gia = (int) $data["giam_gia"];
     $mo_ta_san_pham = $data["mo_ta_san_pham"];
     $thuong_hieu = $data["thuong_hieu"];
-    $created_at = date("Y-m-d H:i:s", $data["created_at"]);
+    $created_at = date("Y-m-d H:i:s", intval($data["created_at"] / 1000));
     $the_he_cpu = $data["the_he_cpu"];
     $cpu = $data["cpu"];
     $series_cpu = $data["series_cpu"];
@@ -268,7 +294,6 @@ class ProductModel
     $den_led = $data["den_led"];
     $man_hinh_cam_ung = (bool) $data["man_hinh_cam_ung"] ? 1 : 0;
     $dung_luong_ram = (int) $data["dung_luong_ram"];
-    $so_luong = (int) $data["so_luong"];
     $so_luong_da_ban = 0;
     $noi_bat = 0;
 
@@ -278,14 +303,14 @@ class ProductModel
             `kieu_khe_m2_ho_tro`, `cong_xuat_hinh`, `cong_ket_noi`, `ket_noi_khong_day`,
             `ban_phim`, `he_dieu_hanh`, `kich_thuoc`, `pin`, `khoi_luong`, `series_laptop`,
             `part_number`, `mau_sac`, `phu_kien_di_kem`, `den_led`, `man_hinh_cam_ung`,
-            `dung_luong_ram`, `so_luong`, `so_luong_da_ban`, `noi_bat`)
+            `dung_luong_ram`, `so_luong_da_ban`, `noi_bat`)
             VALUES ('$ten_san_pham', '$hinh_anh', $bao_hanh, $gia_goc, $giam_gia, '$mo_ta_san_pham',
             '$thuong_hieu', '$created_at', '$the_he_cpu', '$cpu', '$series_cpu', '$chip_do_hoa_roi',
             '$ten_ram', '$man_hinh', '$luu_tru', '$so_cong_luu_tru_toi_da', '$kieu_khe_m2_ho_tro',
             '$cong_xuat_hinh', '$cong_ket_noi', '$ket_noi_khong_day', '$ban_phim', '$he_dieu_hanh',
             '$kich_thuoc', '$pin', $khoi_luong, '$series_laptop', '$part_number', '$mau_sac',
             '$phu_kien_di_kem', '$den_led', $man_hinh_cam_ung, $dung_luong_ram,
-            $so_luong, $so_luong_da_ban, $noi_bat);";
+            $so_luong_da_ban, $noi_bat);";
 
     $result = $this->conn->query($sql);
 
@@ -300,9 +325,11 @@ class ProductModel
 
   public function get(int $id): array | false
   {
-    $sql = "SELECT * FROM sanpham WHERE ma_san_pham=$id";
+    $sql = "SELECT * FROM sanpham WHERE ma_san_pham=$id AND hien_thi=1";
 
     $result = $this->conn->query($sql);
+
+    if ($result->num_rows <= 0) return false;
 
     $data = mysqli_fetch_assoc($result);
 
@@ -315,10 +342,23 @@ class ProductModel
     $data["khoi_luong"] = (int) $data["khoi_luong"];
     $data["man_hinh_cam_ung"] = (bool) $data["man_hinh_cam_ung"] ? 1 : 0;
     $data["dung_luong_ram"] = (int) $data["dung_luong_ram"];
-    $data["so_luong"] = (int) $data["so_luong"];
     $data["so_luong_da_ban"] = (int) $data["so_luong_da_ban"];
     $data["noi_bat"] = (bool) $data["noi_bat"];
+    $data["hien_thi"] = (bool) $data["hien_thi"];
 
+    $id = $data["ma_san_pham"];
+    $sql = "SELECT COUNT(ma_san_pham) AS so_luong FROM chitietsanpham
+              WHERE ma_san_pham=$id GROUP BY ma_san_pham;";
+
+    $result = mysqli_query($this->conn, $sql);
+
+    if ($result->num_rows <= 0) {
+      $data["so_luong"] = 0;
+    } else {
+      $row = mysqli_fetch_assoc($result);
+
+      $data["so_luong"] = (int) $row["so_luong"];
+    }
 
     return $data;
   }
@@ -367,7 +407,6 @@ class ProductModel
     $den_led = $data["den_led"];
     $man_hinh_cam_ung = (bool) $data["man_hinh_cam_ung"] ? 1 : 0;
     $dung_luong_ram = (int) $data["dung_luong_ram"];
-    $so_luong = (int) $data["so_luong"];
     $so_luong_da_ban = (int) $data["so_luong_da_ban"];
     $noi_bat = (bool) $data["noi_bat"] ? 1 : 0;
 
@@ -381,11 +420,9 @@ class ProductModel
             kich_thuoc='$kich_thuoc', pin='$pin', khoi_luong=$khoi_luong, series_laptop='$series_laptop',
             part_number='$part_number', mau_sac='$mau_sac', phu_kien_di_kem='$phu_kien_di_kem',
             den_led='$den_led', man_hinh_cam_ung=$man_hinh_cam_ung, dung_luong_ram=$dung_luong_ram,
-            so_luong=$so_luong, so_luong_da_ban=$so_luong_da_ban, noi_bat=$noi_bat
-            WHERE ma_san_pham=$ma_san_pham;";
+            so_luong_da_ban=$so_luong_da_ban, noi_bat=$noi_bat WHERE ma_san_pham=$ma_san_pham;";
 
     $result = mysqli_query($this->conn, $sql);
-
 
     if ($result) {
       return "Update Successful";
@@ -396,13 +433,13 @@ class ProductModel
 
   public function delete(int $id): string
   {
-    $sql = "DELETE FROM sanpham WHERE ma_san_pham=$id";
+    $sql = "UPDATE sanpham SET hien_thi=0 WHERE ma_san_pham=$id";
 
     $result = mysqli_query($this->conn, $sql);
 
 
     if ($result) {
-      return "" . mysqli_num_rows($result);
+      return "Delete successfull";
     } else {
       return $this->conn->error;
     }

@@ -1,7 +1,7 @@
 <?php
-class ImportController
+class ImportOrderController
 {
-    public function __construct(private ImportModel $importModel, private array $perArr)
+    public function __construct(private ImportOrderModel $importOrderModel, private array $perArr)
     {
     }
 
@@ -43,7 +43,7 @@ class ImportController
     {
         $id = (int) $id;
 
-        $import = $this->importModel->get($id);
+        $import = $this->importOrderModel->get($id);
 
         if (!$import) {
             http_response_code(404);
@@ -70,7 +70,7 @@ class ImportController
                 // trả về array và nếu null thì array trở thành rỗng
                 $data = (array) json_decode($data, true);
 
-                $rows = $this->importModel->update($import, $data);
+                $rows = $this->importOrderModel->update($import, $data);
 
                 echo json_encode([
                     "message" => "import $id updated",
@@ -82,7 +82,7 @@ class ImportController
 
                 // if (!$isValid) break;
 
-                $rows = $this->importModel->delete($id);
+                $rows = $this->importOrderModel->delete($id);
 
                 echo json_encode([
                     "message" => "import $id deleted",
@@ -102,7 +102,7 @@ class ImportController
 
                 // if (!$isValid) break;
 
-                echo json_encode($this->importModel->getAll());
+                echo json_encode($this->importOrderModel->getAll());
                 break;
             case "POST":
                 // $isValid = $this->checkPermission("CREATE");
@@ -123,7 +123,7 @@ class ImportController
                     break;
                 }
 
-                $id = $this->importModel->create($data);
+                $id = $this->importOrderModel->create($data);
 
                 echo json_encode([
                     "message" => "import created",

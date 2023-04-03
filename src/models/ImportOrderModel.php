@@ -1,5 +1,5 @@
 <?php
-class ImportModel
+class ImportOrderModel
 {
 
     public function __construct(private mysqli $conn)
@@ -32,7 +32,7 @@ class ImportModel
                 $product = [];
                 $product["ten_san_pham"] = $row2["ten_san_pham"];
                 $product["hinh_anh"] = $row2["hinh_anh"];
-                $product["don_gia"] = (double) $row2["don_gia"];
+                $product["don_gia"] = (float) $row2["don_gia"];
                 $product["so_luong_nhap_hang"] = $row2["so_luong_nhap_hang"];
 
                 $import["danh_sach_san_pham_da_nhap"][] = $product;
@@ -61,7 +61,7 @@ class ImportModel
             foreach ($data["danh_sach_san_pham_da_nhap"] as $product) {
                 $ma_san_pham = (int) $product["ma_san_pham"];
                 $so_luong_nhap_hang = $product["so_luong_nhap_hang"];
-                $don_gia = (double) $product["don_gia"];
+                $don_gia = (float) $product["don_gia"];
 
                 $sql = "INSERT INTO chitietphieunhap (`ma_san_pham`, `ma_phieu_nhap`, `so_luong_nhap_hang`, `don_gia`) 
                         VALUES ($ma_san_pham, $ma_phieu_nhap, '$so_luong_nhap_hang', '$don_gia');";
@@ -102,7 +102,7 @@ class ImportModel
             $product = [];
             $product["ten_san_pham"] = $row2["ten_san_pham"];
             $product["hinh_anh"] = $row2["hinh_anh"];
-            $product["don_gia"] = (double) $row2["don_gia"];
+            $product["don_gia"] = (float) $row2["don_gia"];
             $product["so_luong_nhap_hang"] = $row2["so_luong_nhap_hang"];
 
             $import["danh_sach_san_pham_da_nhap"][] = $product;
