@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 31, 2023 at 10:10 AM
+-- Generation Time: Apr 03, 2023 at 09:24 AM
 -- Server version: 8.0.31
 -- PHP Version: 8.2.0
 
@@ -20,6 +20,27 @@ SET time_zone = "+00:00";
 --
 -- Database: `ecommerce`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `baohanh`
+--
+
+CREATE TABLE `baohanh` (
+  `ma_bao_hanh` int NOT NULL,
+  `ma_chi_tiet_san_pham` varchar(256) NOT NULL,
+  `ma_khach_hang` varchar(256) NOT NULL,
+  `ngay_lap` timestamp NULL DEFAULT NULL,
+  `ngay_het_han` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
+--
+-- Dumping data for table `baohanh`
+--
+
+INSERT INTO `baohanh` (`ma_bao_hanh`, `ma_chi_tiet_san_pham`, `ma_khach_hang`, `ngay_lap`, `ngay_het_han`) VALUES
+(1, '1680426156', 'bttan', '2023-04-01 00:16:53', '2025-04-01 00:16:53');
 
 -- --------------------------------------------------------
 
@@ -41,7 +62,10 @@ CREATE TABLE `chitiethoadon` (
 
 INSERT INTO `chitiethoadon` (`ma_san_pham`, `ma_don_hang`, `so_luong_da_mua`, `don_gia`, `giam_gia_san_pham`) VALUES
 (1, 126, 1, 2000000, 10),
+(1, 131, 1, 10000000, 10),
+(1, 132, 1, 10000000, 10),
 (2, 126, 2, 3000000, 10),
+(2, 131, 1, 20000000, 10),
 (3, 126, 3, 4000000, 10),
 (4, 126, 4, 5000000, 10),
 (5, 126, 5, 6000000, 10);
@@ -64,11 +88,9 @@ CREATE TABLE `chitietphieunhap` (
 --
 
 INSERT INTO `chitietphieunhap` (`ma_san_pham`, `ma_phieu_nhap`, `so_luong_nhap_hang`, `don_gia`) VALUES
-(1, 1, 1, 2000000),
-(2, 1, 2, 2000000),
-(3, 1, 3, 2000000),
-(4, 1, 4, 2000000),
-(5, 1, 5, 2000000);
+(1, 2, 1, 11000000),
+(2, 2, 1, 22000000),
+(3, 2, 1, 33000000);
 
 -- --------------------------------------------------------
 
@@ -143,9 +165,9 @@ INSERT INTO `chitietquyenhang` (`ma_nhom_quyen`, `ma_quyen_hang`, `ma_chuc_nang`
 (1, 4, 3, 1),
 (1, 4, 4, 1),
 (1, 5, 1, 1),
-(1, 5, 2, 0),
-(1, 5, 3, 0),
-(1, 5, 4, 0),
+(1, 5, 2, 1),
+(1, 5, 3, 1),
+(1, 5, 4, 1),
 (1, 6, 1, 1),
 (1, 6, 2, 1),
 (1, 6, 3, 1),
@@ -365,6 +387,61 @@ INSERT INTO `chitietquyenhang` (`ma_nhom_quyen`, `ma_quyen_hang`, `ma_chuc_nang`
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `chitietsanpham`
+--
+
+CREATE TABLE `chitietsanpham` (
+  `ma_chi_tiet_san_pham` varchar(256) NOT NULL,
+  `ma_san_pham` int DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
+--
+-- Dumping data for table `chitietsanpham`
+--
+
+INSERT INTO `chitietsanpham` (`ma_chi_tiet_san_pham`, `ma_san_pham`) VALUES
+('1680426156', 1),
+('1680426207', 2),
+('16804266569', 1),
+('168042665910', 2),
+('168042679011', 1),
+('168042679012', 2),
+('168042680612', 1),
+('168042730413', 1),
+('168044932913', 2),
+('168044932914', 1),
+('16804493296', 3),
+('1_2', 1),
+('1_3', 1),
+('1_4', 1),
+('1_5', 1),
+('1_6', 1),
+('1_7', 1),
+('1_8', 1),
+('1_9', 1),
+('2_10', 2),
+('2_2', 2),
+('2_3', 2),
+('2_4', 2),
+('2_5', 2),
+('2_6', 2),
+('2_7', 2),
+('2_8', 2),
+('2_9', 2),
+('3_1', 3),
+('3_2', 3),
+('3_3', 3),
+('3_4', 3),
+('3_5', 3),
+('4_1', 4),
+('4_2', 4),
+('4_3', 4),
+('4_4', 4),
+('4_5', 4);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `chucnang`
 --
 
@@ -404,7 +481,9 @@ CREATE TABLE `donhang` (
 --
 
 INSERT INTO `donhang` (`ma_don_hang`, `ma_khach_hang`, `ma_nhan_vien`, `hinh_thuc_thanh_toan`, `thoi_gian_dat_mua`, `trang_thai`, `hien_thi`) VALUES
-(126, 'bttan', NULL, 'postpaid', '2023-03-07 10:17:58', 'hoàn thành', 1);
+(126, 'bttan', NULL, 'postpaid', '2023-03-07 10:17:58', 'hoàn thành', 1),
+(131, 'bttan', '', 'postpaid', '2023-04-01 00:13:44', 'đã hủy', 1),
+(132, 'bttan', '', 'postpaid', '2023-04-01 00:16:53', 'đã hủy', 1);
 
 -- --------------------------------------------------------
 
@@ -516,28 +595,6 @@ INSERT INTO `khachhang` (`ma_khach_hang`, `ten_khach_hang`, `ngay_sinh`, `gioi_t
 -- --------------------------------------------------------
 
 --
--- Table structure for table `nguoidung`
---
-
-CREATE TABLE `nguoidung` (
-  `ma_nguoi_dung` int NOT NULL,
-  `ma_nhom_quyen` int NOT NULL DEFAULT '3',
-  `ten_nguoi_dung` varchar(256) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
-  `mat_khau` varchar(512) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `nguoidung`
---
-
-INSERT INTO `nguoidung` (`ma_nguoi_dung`, `ma_nhom_quyen`, `ten_nguoi_dung`, `mat_khau`) VALUES
-(4, 1, 'bttan', '$2y$10$CZRh7Y4PYqVzsHeYVjy0pOPilQ9DWioHUXDTjhuDGZXYnA84vqXmu'),
-(8, 6, 'bth', '$2y$10$UVyryCcnVcXE1.olSewCYuR.jzSQXsORF1meNQMUOePeWFjOrPbVu'),
-(10, 6, '123123', '$2y$10$2Eps/5GCL7IY.WHcp4Oym.9UnN2Ue6G8tyu5xx1B4ae9nddcwBGpm');
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `nhacungcap`
 --
 
@@ -602,7 +659,7 @@ INSERT INTO `nhomquyen` (`ma_nhom_quyen`, `ten_nhom_quyen`, `mo_ta`, `trang_thai
 (0, 'khách hàng', 'mặc định', 1, 1),
 (1, 'quản lý', 'trùm', 1, 0),
 (6, 'nhân viên', 'test', 1, 0),
-(8, '123', '', 0, 0),
+(8, '345', '', 0, 0),
 (9, '123', '', 0, 0),
 (10, 'abc', '', 1, 0);
 
@@ -625,7 +682,8 @@ CREATE TABLE `phieunhap` (
 --
 
 INSERT INTO `phieunhap` (`ma_phieu_nhap`, `ma_nha_cung_cap`, `ma_nhan_vien`, `ngay_lap`, `hien_thi`) VALUES
-(1, 1, 'hung', '2023-03-07 10:17:58', 1);
+(1, 1, 'hung', '2023-03-07 10:17:58', 1),
+(2, 1, 'hung', '2023-04-02 10:28:49', 1);
 
 -- --------------------------------------------------------
 
@@ -697,7 +755,6 @@ CREATE TABLE `sanpham` (
   `den_led` varchar(512) DEFAULT NULL,
   `man_hinh_cam_ung` tinyint DEFAULT NULL,
   `dung_luong_ram` int DEFAULT NULL,
-  `so_luong` int NOT NULL,
   `so_luong_da_ban` int NOT NULL DEFAULT '0',
   `noi_bat` tinyint DEFAULT '0',
   `hien_thi` tinyint NOT NULL DEFAULT '1'
@@ -707,122 +764,122 @@ CREATE TABLE `sanpham` (
 -- Dumping data for table `sanpham`
 --
 
-INSERT INTO `sanpham` (`ma_san_pham`, `ten_san_pham`, `hinh_anh`, `bao_hanh`, `gia_goc`, `giam_gia`, `mo_ta_san_pham`, `thuong_hieu`, `created_at`, `updated_at`, `the_he_cpu`, `cpu`, `series_cpu`, `chip_do_hoa_roi`, `ten_ram`, `man_hinh`, `luu_tru`, `so_cong_luu_tru_toi_da`, `kieu_khe_m2_ho_tro`, `cong_xuat_hinh`, `cong_ket_noi`, `ket_noi_khong_day`, `ban_phim`, `he_dieu_hanh`, `kich_thuoc`, `pin`, `khoi_luong`, `series_laptop`, `part_number`, `mau_sac`, `phu_kien_di_kem`, `den_led`, `man_hinh_cam_ung`, `dung_luong_ram`, `so_luong`, `so_luong_da_ban`, `noi_bat`, `hien_thi`) VALUES
-(1, 'Laptop hưng nè', '[\"4.webp\", \"3.webp\"]', 24, 10000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', '2023-03-22 08:23:35', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 10, 1, 1, 1),
-(2, '2', '[\"4.webp\", \"3.webp\"]', 24, 20000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', '2023-03-13 01:15:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 9, 2, 0, 1),
-(3, '3', '[\"4.webp\", \"3.webp\"]', 24, 30000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', '2023-03-13 01:15:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 7, 3, 0, 1),
-(4, '4', '[\"4.webp\", \"3.webp\"]', 24, 40000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', '2023-03-13 01:15:46', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 21, 4, 0, 1),
-(5, '5', '[\"4.webp\", \"3.webp\"]', 24, 50000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', '2023-03-13 01:18:26', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, 5, 1, 1),
-(6, '6', '[\"4.webp\", \"3.webp\"]', 24, 70000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 6, 0, 1),
-(7, '7', '[\"4.webp\", \"3.webp\"]', 24, 80000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3, 7, 0, 1),
-(8, '8', '[\"4.webp\", \"3.webp\"]', 24, 90000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 4, 8, 0, 1),
-(9, '9', '[\"4.webp\", \"3.webp\"]', 24, 100000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 5, 9, 0, 1),
-(10, '10', '[\"4.webp\", \"3.webp\"]', 24, 110000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', '2023-02-13 01:10:41', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 6, 10, 0, 1),
-(11, '11', '[\"4.webp\", \"3.webp\"]', 24, 120000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 11, 0, 1),
-(12, '12', '[\"4.webp\", \"3.webp\"]', 24, 130000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 8, 12, 0, 1),
-(13, '13', '[\"4.webp\", \"3.webp\"]', 24, 140000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 7, 13, 0, 1),
-(14, '14', '[\"4.webp\", \"3.webp\"]', 24, 150000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 5, 14, 0, 1),
-(15, '15', '[\"4.webp\", \"3.webp\"]', 24, 160000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 15, 0, 1),
-(16, '16', '[\"4.webp\", \"3.webp\"]', 24, 170000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 16, 0, 1),
-(17, '17', '[\"4.webp\", \"3.webp\"]', 24, 180000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 17, 0, 1),
-(18, '18', '[\"4.webp\", \"3.webp\"]', 24, 190000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, 18, 0, 1),
-(19, '19', '[\"4.webp\", \"3.webp\"]', 24, 200000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3, 19, 0, 1),
-(20, '20', '[\"4.webp\", \"3.webp\"]', 24, 210000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 20, 0, 1),
-(21, '21', '[\"4.webp\", \"3.webp\"]', 24, 220000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 21, 21, 0, 1),
-(22, '22', '[\"4.webp\", \"3.webp\"]', 24, 230000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', '2023-03-13 01:18:28', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 312, 22, 1, 1),
-(23, '23', '[\"4.webp\", \"3.webp\"]', 24, 240000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 43, 23, 0, 1),
-(24, '24', '[\"4.webp\", \"3.webp\"]', 24, 250000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 24, 0, 1),
-(25, '25', '[\"4.webp\", \"3.webp\"]', 24, 260000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 54, 25, 0, 1),
-(26, '26', '[\"4.webp\", \"3.webp\"]', 24, 270000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 26, 0, 1),
-(27, '27', '[\"4.webp\", \"3.webp\"]', 24, 280000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 54, 27, 0, 1),
-(28, '28', '[\"4.webp\", \"3.webp\"]', 24, 290000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 4, 28, 0, 1),
-(29, '29', '[\"4.webp\", \"3.webp\"]', 24, 300000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 29, 0, 1),
-(30, '30', '[\"4.webp\", \"3.webp\"]', 24, 310000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2312, 30, 0, 1),
-(31, '31', '[\"4.webp\", \"3.webp\"]', 24, 320000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 312, 31, 0, 1),
-(32, '32', '[\"4.webp\", \"3.webp\"]', 24, 330000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 32, 0, 1),
-(33, '33', '[\"4.webp\", \"3.webp\"]', 24, 340000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3123, 33, 0, 1),
-(34, '34', '[\"4.webp\", \"3.webp\"]', 24, 350000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 34, 0, 1),
-(35, '35', '[\"4.webp\", \"3.webp\"]', 24, 360000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3123, 35, 0, 1),
-(36, '36', '[\"4.webp\", \"3.webp\"]', 24, 370000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 13, 36, 0, 1),
-(37, '37', '[\"4.webp\", \"3.webp\"]', 24, 380000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 13, 37, 0, 1),
-(38, '38', '[\"4.webp\", \"3.webp\"]', 24, 390000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 13, 38, 0, 1),
-(39, '39', '[\"4.webp\", \"3.webp\"]', 24, 400000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 123, 39, 0, 1),
-(40, '40', '[\"4.webp\", \"3.webp\"]', 24, 410000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1231, 40, 0, 1),
-(41, '41', '[\"4.webp\", \"3.webp\"]', 24, 420000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2312, 41, 0, 1),
-(42, '42', '[\"4.webp\", \"3.webp\"]', 24, 430000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 31, 42, 0, 1),
-(43, '43', '[\"4.webp\", \"3.webp\"]', 24, 440000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 23, 43, 0, 1),
-(44, '44', '[\"4.webp\", \"3.webp\"]', 24, 450000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 13, 44, 0, 1),
-(45, '45', '[\"4.webp\", \"3.webp\"]', 24, 460000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 13, 45, 0, 1),
-(46, '46', '[\"4.webp\", \"3.webp\"]', 24, 470000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 123, 46, 0, 1),
-(47, '47', '[\"4.webp\", \"3.webp\"]', 24, 480000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 123, 47, 0, 1),
-(48, '48', '[\"4.webp\", \"3.webp\"]', 24, 490000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 123, 48, 0, 1),
-(49, '49', '[\"4.webp\", \"3.webp\"]', 24, 500000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 123, 49, 0, 1),
-(50, '50', '[\"4.webp\", \"3.webp\"]', 24, 510000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 50, 0, 1),
-(51, '51', '[\"4.webp\", \"3.webp\"]', 24, 520000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 51, 0, 1),
-(52, '52', '[\"4.webp\", \"3.webp\"]', 24, 530000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 13, 52, 0, 1),
-(53, '53', '[\"4.webp\", \"3.webp\"]', 24, 540000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 123, 53, 0, 1),
-(54, '54', '[\"4.webp\", \"3.webp\"]', 24, 550000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 123, 54, 0, 1),
-(55, '55', '[\"4.webp\", \"3.webp\"]', 24, 560000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 123, 55, 0, 1),
-(56, '56', '[\"4.webp\", \"3.webp\"]', 24, 570000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 123, 56, 0, 1),
-(57, '57', '[\"4.webp\", \"3.webp\"]', 24, 580000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 13, 57, 0, 1),
-(58, '58', '[\"4.webp\", \"3.webp\"]', 24, 590000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', '2023-02-12 04:38:15', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 58, 0, 1),
-(59, '59', '[\"4.webp\", \"3.webp\"]', 24, 600000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 59, 0, 1),
-(60, '60', '[\"4.webp\", \"3.webp\"]', 24, 610000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 13, 60, 0, 1),
-(61, '61', '[\"4.webp\", \"3.webp\"]', 24, 620000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 13, 61, 0, 1),
-(62, '62', '[\"4.webp\", \"3.webp\"]', 24, 630000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 123, 62, 0, 1),
-(63, '63', '[\"4.webp\", \"3.webp\"]', 24, 640000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 123, 63, 0, 1),
-(64, '64', '[\"4.webp\", \"3.webp\"]', 24, 650000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3, 64, 0, 1),
-(65, '65', '[\"4.webp\", \"3.webp\"]', 24, 660000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 13, 65, 0, 1),
-(66, '66', '[\"4.webp\", \"3.webp\"]', 24, 670000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 66, 0, 1),
-(67, '67', '[\"4.webp\", \"3.webp\"]', 24, 680000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', '2023-02-13 01:10:41', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 67, 0, 1),
-(68, '68', '[\"4.webp\", \"3.webp\"]', 24, 690000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3, 68, 0, 1),
-(69, '69', '[\"4.webp\", \"3.webp\"]', 24, 700000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 13, 69, 0, 1),
-(70, '70', '[\"4.webp\", \"3.webp\"]', 24, 710000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 13, 70, 0, 1),
-(71, '71', '[\"4.webp\", \"3.webp\"]', 24, 720000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 13, 71, 0, 1),
-(72, '72', '[\"4.webp\", \"3.webp\"]', 24, 730000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 72, 0, 1),
-(73, '73', '[\"4.webp\", \"3.webp\"]', 24, 740000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 123, 73, 0, 1),
-(74, '74', '[\"4.webp\", \"3.webp\"]', 24, 750000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 13, 74, 0, 1),
-(75, '75', '[\"4.webp\", \"3.webp\"]', 24, 760000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 123, 75, 0, 1),
-(76, '76', '[\"4.webp\", \"3.webp\"]', 24, 770000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 123, 76, 0, 1),
-(77, '77', '[\"4.webp\", \"3.webp\"]', 24, 780000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 123, 77, 0, 1),
-(78, '78', '[\"4.webp\", \"3.webp\"]', 24, 790000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 13, 78, 0, 1),
-(79, '79', '[\"4.webp\", \"3.webp\"]', 24, 800000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 123, 79, 0, 1),
-(80, '80', '[\"4.webp\", \"3.webp\"]', 24, 810000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 23, 80, 0, 1),
-(81, '81', '[\"4.webp\", \"3.webp\"]', 24, 820000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 232, 81, 0, 1),
-(82, '82', '[\"4.webp\", \"3.webp\"]', 24, 830000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 32, 82, 0, 1),
-(83, '83', '[\"4.webp\", \"3.webp\"]', 24, 840000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 83, 0, 1),
-(84, '84', '[\"4.webp\", \"3.webp\"]', 24, 850000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 84, 0, 1),
-(85, '85', '[\"4.webp\", \"3.webp\"]', 24, 860000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 85, 0, 1),
-(86, '86', '[\"4.webp\", \"3.webp\"]', 24, 870000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 86, 0, 1),
-(87, '87', '[\"4.webp\", \"3.webp\"]', 24, 880000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 87, 0, 1),
-(88, '88', '[\"4.webp\", \"3.webp\"]', 24, 890000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1231, 88, 0, 1),
-(89, '89', '[\"4.webp\", \"3.webp\"]', 24, 900000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 89, 0, 1),
-(90, '90', '[\"4.webp\", \"3.webp\"]', 24, 910000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3232, 90, 0, 1),
-(91, '91', '[\"4.webp\", \"3.webp\"]', 24, 920000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3, 91, 0, 1),
-(92, '92', '[\"4.webp\", \"3.webp\"]', 24, 930000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 92, 0, 1),
-(93, '93', '[\"4.webp\", \"3.webp\"]', 24, 940000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 232, 93, 0, 1),
-(94, '94', '[\"4.webp\", \"3.webp\"]', 24, 950000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 94, 0, 1),
-(95, '95', '[\"4.webp\", \"3.webp\"]', 24, 960000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, 95, 0, 1),
-(96, '96', '[\"4.webp\", \"3.webp\"]', 24, 970000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 96, 0, 1),
-(97, '97', '[\"4.webp\", \"3.webp\"]', 24, 980000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 13, 97, 0, 1),
-(98, '98', '[\"4.webp\", \"3.webp\"]', 24, 990000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 98, 0, 1),
-(99, '99', '[\"4.webp\", \"3.webp\"]', 24, 1000000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3232, 99, 0, 1),
-(100, '100', '[\"4.webp\", \"3.webp\"]', 24, 1100000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 100, 0, 1),
-(101, '101', '[\"4.webp\", \"3.webp\"]', 24, 1200000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, 101, 0, 1),
-(102, '102', '[\"4.webp\", \"3.webp\"]', 24, 1300000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 213, 102, 0, 1),
-(103, '103', '[\"4.webp\", \"3.webp\"]', 24, 1400000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 103, 0, 1),
-(104, '104', '[\"4.webp\", \"3.webp\"]', 24, 1500000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 104, 0, 1),
-(105, '105', '[\"4.webp\", \"3.webp\"]', 24, 1600000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 232, 105, 0, 1),
-(106, '106', '[\"4.webp\", \"3.webp\"]', 24, 1700000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3, 106, 0, 1),
-(107, '107', '[\"4.webp\", \"3.webp\"]', 24, 1800000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 107, 0, 1),
-(108, '108', '[\"4.webp\", \"3.webp\"]', 24, 1900000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 21, 108, 0, 1),
-(109, '109', '[\"4.webp\", \"3.webp\"]', 24, 2000000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 109, 0, 1),
-(110, '110', '[\"4.webp\", \"3.webp\"]', 24, 2100000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 32, 110, 0, 1),
-(111, '111', '[\"4.webp\", \"3.webp\"]', 24, 2200000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 32, 111, 0, 1),
-(112, '112', '[\"4.webp\", \"3.webp\"]', 24, 2300000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 112, 0, 1),
-(113, '113', '[\"4.webp\", \"3.webp\"]', 24, 2400000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 123, 113, 0, 1),
-(114, '114', '[\"4.webp\", \"3.webp\"]', 24, 2500000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 12, 114, 0, 1),
-(123123149, '1', '[\"4.webp\", \"3.webp\", \"2.webp\", \"1.webp\"]', 1, 1, 1, '', 'Asus', '2023-03-12 10:53:55', '2023-03-13 01:15:50', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 0, 1, 1);
+INSERT INTO `sanpham` (`ma_san_pham`, `ten_san_pham`, `hinh_anh`, `bao_hanh`, `gia_goc`, `giam_gia`, `mo_ta_san_pham`, `thuong_hieu`, `created_at`, `updated_at`, `the_he_cpu`, `cpu`, `series_cpu`, `chip_do_hoa_roi`, `ten_ram`, `man_hinh`, `luu_tru`, `so_cong_luu_tru_toi_da`, `kieu_khe_m2_ho_tro`, `cong_xuat_hinh`, `cong_ket_noi`, `ket_noi_khong_day`, `ban_phim`, `he_dieu_hanh`, `kich_thuoc`, `pin`, `khoi_luong`, `series_laptop`, `part_number`, `mau_sac`, `phu_kien_di_kem`, `den_led`, `man_hinh_cam_ung`, `dung_luong_ram`, `so_luong_da_ban`, `noi_bat`, `hien_thi`) VALUES
+(1, 'Laptop hưng nè', '[\"4.webp\", \"3.webp\"]', 24, 11000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', '2023-04-02 10:28:49', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', '', '', '', 0, 0, 1, 1, 1),
+(2, '2', '[\"4.webp\", \"3.webp\"]', 24, 22000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', '2023-04-02 10:28:49', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', '', '', '', 0, 0, 2, 0, 1),
+(3, '3', '[\"4.webp\", \"3.webp\"]', 24, 33000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', '2023-04-02 10:28:49', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', '', '', '', 0, 0, 3, 0, 1),
+(4, '4', '[\"4.webp\", \"3.webp\"]', 24, 40000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', '2023-03-13 01:15:46', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 4, 0, 1),
+(5, '5', '[\"4.webp\", \"3.webp\"]', 24, 50000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', '2023-03-13 01:18:26', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 5, 1, 1),
+(6, '6', '[\"4.webp\", \"3.webp\"]', 24, 70000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 6, 0, 1),
+(7, '7', '[\"4.webp\", \"3.webp\"]', 24, 80000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 7, 0, 1),
+(8, '8', '[\"4.webp\", \"3.webp\"]', 24, 90000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 8, 0, 1),
+(9, '9', '[\"4.webp\", \"3.webp\"]', 24, 100000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 9, 0, 1),
+(10, '10', '[\"4.webp\", \"3.webp\"]', 24, 110000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', '2023-02-13 01:10:41', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 10, 0, 1),
+(11, '11', '[\"4.webp\", \"3.webp\"]', 24, 120000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 11, 0, 1),
+(12, '12', '[\"4.webp\", \"3.webp\"]', 24, 130000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 12, 0, 1),
+(13, '13', '[\"4.webp\", \"3.webp\"]', 24, 140000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 13, 0, 1),
+(14, '14', '[\"4.webp\", \"3.webp\"]', 24, 150000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 14, 0, 1),
+(15, '15', '[\"4.webp\", \"3.webp\"]', 24, 160000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 15, 0, 1),
+(16, '16', '[\"4.webp\", \"3.webp\"]', 24, 170000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 16, 0, 1),
+(17, '17', '[\"4.webp\", \"3.webp\"]', 24, 180000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 17, 0, 1),
+(18, '18', '[\"4.webp\", \"3.webp\"]', 24, 190000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 18, 0, 1),
+(19, '19', '[\"4.webp\", \"3.webp\"]', 24, 200000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 19, 0, 1),
+(20, '20', '[\"4.webp\", \"3.webp\"]', 24, 210000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 20, 0, 1),
+(21, '21', '[\"4.webp\", \"3.webp\"]', 24, 220000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 21, 0, 1),
+(22, '22', '[\"4.webp\", \"3.webp\"]', 24, 230000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', '2023-03-13 01:18:28', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 22, 1, 1),
+(23, '23', '[\"4.webp\", \"3.webp\"]', 24, 240000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 23, 0, 1),
+(24, '24', '[\"4.webp\", \"3.webp\"]', 24, 250000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 24, 0, 1),
+(25, '25', '[\"4.webp\", \"3.webp\"]', 24, 260000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 25, 0, 1),
+(26, '26', '[\"4.webp\", \"3.webp\"]', 24, 270000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 26, 0, 1),
+(27, '27', '[\"4.webp\", \"3.webp\"]', 24, 280000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 27, 0, 1),
+(28, '28', '[\"4.webp\", \"3.webp\"]', 24, 290000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 28, 0, 1),
+(29, '29', '[\"4.webp\", \"3.webp\"]', 24, 300000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 29, 0, 1),
+(30, '30', '[\"4.webp\", \"3.webp\"]', 24, 310000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 30, 0, 1),
+(31, '31', '[\"4.webp\", \"3.webp\"]', 24, 320000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 31, 0, 1),
+(32, '32', '[\"4.webp\", \"3.webp\"]', 24, 330000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 32, 0, 1),
+(33, '33', '[\"4.webp\", \"3.webp\"]', 24, 340000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 33, 0, 1),
+(34, '34', '[\"4.webp\", \"3.webp\"]', 24, 350000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 34, 0, 1),
+(35, '35', '[\"4.webp\", \"3.webp\"]', 24, 360000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 35, 0, 1),
+(36, '36', '[\"4.webp\", \"3.webp\"]', 24, 370000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 36, 0, 1),
+(37, '37', '[\"4.webp\", \"3.webp\"]', 24, 380000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 37, 0, 1),
+(38, '38', '[\"4.webp\", \"3.webp\"]', 24, 390000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 38, 0, 1),
+(39, '39', '[\"4.webp\", \"3.webp\"]', 24, 400000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 39, 0, 1),
+(40, '40', '[\"4.webp\", \"3.webp\"]', 24, 410000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 40, 0, 1),
+(41, '41', '[\"4.webp\", \"3.webp\"]', 24, 420000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 41, 0, 1),
+(42, '42', '[\"4.webp\", \"3.webp\"]', 24, 430000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 42, 0, 1),
+(43, '43', '[\"4.webp\", \"3.webp\"]', 24, 440000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 43, 0, 1),
+(44, '44', '[\"4.webp\", \"3.webp\"]', 24, 450000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 44, 0, 1),
+(45, '45', '[\"4.webp\", \"3.webp\"]', 24, 460000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 45, 0, 1),
+(46, '46', '[\"4.webp\", \"3.webp\"]', 24, 470000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 46, 0, 1),
+(47, '47', '[\"4.webp\", \"3.webp\"]', 24, 480000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 47, 0, 1),
+(48, '48', '[\"4.webp\", \"3.webp\"]', 24, 490000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 48, 0, 1),
+(49, '49', '[\"4.webp\", \"3.webp\"]', 24, 500000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 49, 0, 1),
+(50, '50', '[\"4.webp\", \"3.webp\"]', 24, 510000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 50, 0, 1),
+(51, '51', '[\"4.webp\", \"3.webp\"]', 24, 520000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 51, 0, 1),
+(52, '52', '[\"4.webp\", \"3.webp\"]', 24, 530000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 52, 0, 1),
+(53, '53', '[\"4.webp\", \"3.webp\"]', 24, 540000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 53, 0, 1),
+(54, '54', '[\"4.webp\", \"3.webp\"]', 24, 550000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 54, 0, 1),
+(55, '55', '[\"4.webp\", \"3.webp\"]', 24, 560000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 55, 0, 1),
+(56, '56', '[\"4.webp\", \"3.webp\"]', 24, 570000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 56, 0, 1),
+(57, '57', '[\"4.webp\", \"3.webp\"]', 24, 580000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 57, 0, 1),
+(58, '58', '[\"4.webp\", \"3.webp\"]', 24, 590000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', '2023-02-12 04:38:15', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 58, 0, 1),
+(59, '59', '[\"4.webp\", \"3.webp\"]', 24, 600000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 59, 0, 1),
+(60, '60', '[\"4.webp\", \"3.webp\"]', 24, 610000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 60, 0, 1),
+(61, '61', '[\"4.webp\", \"3.webp\"]', 24, 620000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 61, 0, 1),
+(62, '62', '[\"4.webp\", \"3.webp\"]', 24, 630000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 62, 0, 1),
+(63, '63', '[\"4.webp\", \"3.webp\"]', 24, 640000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 63, 0, 1),
+(64, '64', '[\"4.webp\", \"3.webp\"]', 24, 650000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 64, 0, 1),
+(65, '65', '[\"4.webp\", \"3.webp\"]', 24, 660000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 65, 0, 1),
+(66, '66', '[\"4.webp\", \"3.webp\"]', 24, 670000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 66, 0, 1),
+(67, '67', '[\"4.webp\", \"3.webp\"]', 24, 680000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', '2023-02-13 01:10:41', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 67, 0, 1),
+(68, '68', '[\"4.webp\", \"3.webp\"]', 24, 690000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 68, 0, 1),
+(69, '69', '[\"4.webp\", \"3.webp\"]', 24, 700000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 69, 0, 1),
+(70, '70', '[\"4.webp\", \"3.webp\"]', 24, 710000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 70, 0, 1),
+(71, '71', '[\"4.webp\", \"3.webp\"]', 24, 720000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 71, 0, 1),
+(72, '72', '[\"4.webp\", \"3.webp\"]', 24, 730000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 72, 0, 1),
+(73, '73', '[\"4.webp\", \"3.webp\"]', 24, 740000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 73, 0, 1),
+(74, '74', '[\"4.webp\", \"3.webp\"]', 24, 750000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 74, 0, 1),
+(75, '75', '[\"4.webp\", \"3.webp\"]', 24, 760000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 75, 0, 1),
+(76, '76', '[\"4.webp\", \"3.webp\"]', 24, 770000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 76, 0, 1),
+(77, '77', '[\"4.webp\", \"3.webp\"]', 24, 780000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 77, 0, 1),
+(78, '78', '[\"4.webp\", \"3.webp\"]', 24, 790000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 78, 0, 1),
+(79, '79', '[\"4.webp\", \"3.webp\"]', 24, 800000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 79, 0, 1),
+(80, '80', '[\"4.webp\", \"3.webp\"]', 24, 810000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 80, 0, 1),
+(81, '81', '[\"4.webp\", \"3.webp\"]', 24, 820000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 81, 0, 1),
+(82, '82', '[\"4.webp\", \"3.webp\"]', 24, 830000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 82, 0, 1),
+(83, '83', '[\"4.webp\", \"3.webp\"]', 24, 840000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 83, 0, 1),
+(84, '84', '[\"4.webp\", \"3.webp\"]', 24, 850000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 84, 0, 1),
+(85, '85', '[\"4.webp\", \"3.webp\"]', 24, 860000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 85, 0, 1),
+(86, '86', '[\"4.webp\", \"3.webp\"]', 24, 870000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 86, 0, 1),
+(87, '87', '[\"4.webp\", \"3.webp\"]', 24, 880000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 87, 0, 1),
+(88, '88', '[\"4.webp\", \"3.webp\"]', 24, 890000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 88, 0, 1),
+(89, '89', '[\"4.webp\", \"3.webp\"]', 24, 900000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 89, 0, 1),
+(90, '90', '[\"4.webp\", \"3.webp\"]', 24, 910000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 90, 0, 1),
+(91, '91', '[\"4.webp\", \"3.webp\"]', 24, 920000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 91, 0, 1),
+(92, '92', '[\"4.webp\", \"3.webp\"]', 24, 930000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 92, 0, 1),
+(93, '93', '[\"4.webp\", \"3.webp\"]', 24, 940000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 93, 0, 1),
+(94, '94', '[\"4.webp\", \"3.webp\"]', 24, 950000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 94, 0, 1),
+(95, '95', '[\"4.webp\", \"3.webp\"]', 24, 960000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 95, 0, 1),
+(96, '96', '[\"4.webp\", \"3.webp\"]', 24, 970000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 96, 0, 1),
+(97, '97', '[\"4.webp\", \"3.webp\"]', 24, 980000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 97, 0, 1),
+(98, '98', '[\"4.webp\", \"3.webp\"]', 24, 990000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 98, 0, 1),
+(99, '99', '[\"4.webp\", \"3.webp\"]', 24, 1000000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 99, 0, 1),
+(100, '100', '[\"4.webp\", \"3.webp\"]', 24, 1100000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 100, 0, 1),
+(101, '101', '[\"4.webp\", \"3.webp\"]', 24, 1200000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 101, 0, 1),
+(102, '102', '[\"4.webp\", \"3.webp\"]', 24, 1300000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 102, 0, 1),
+(103, '103', '[\"4.webp\", \"3.webp\"]', 24, 1400000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 103, 0, 1),
+(104, '104', '[\"4.webp\", \"3.webp\"]', 24, 1500000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 104, 0, 1),
+(105, '105', '[\"4.webp\", \"3.webp\"]', 24, 1600000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 105, 0, 1),
+(106, '106', '[\"4.webp\", \"3.webp\"]', 24, 1700000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 106, 0, 1),
+(107, '107', '[\"4.webp\", \"3.webp\"]', 24, 1800000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 107, 0, 1),
+(108, '108', '[\"4.webp\", \"3.webp\"]', 24, 1900000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 108, 0, 1),
+(109, '109', '[\"4.webp\", \"3.webp\"]', 24, 2000000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 109, 0, 1),
+(110, '110', '[\"4.webp\", \"3.webp\"]', 24, 2100000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 110, 0, 1),
+(111, '111', '[\"4.webp\", \"3.webp\"]', 24, 2200000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 111, 0, 1),
+(112, '112', '[\"4.webp\", \"3.webp\"]', 24, 2300000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 112, 0, 1),
+(113, '113', '[\"4.webp\", \"3.webp\"]', 24, 2400000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 113, 0, 1),
+(114, '114', '[\"4.webp\", \"3.webp\"]', 24, 2500000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 114, 0, 1),
+(123123149, '1', '[\"4.webp\", \"3.webp\", \"2.webp\", \"1.webp\"]', 1, 1, 1, '', 'Asus', '2023-03-12 10:53:55', '2023-03-13 01:15:50', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -844,8 +901,9 @@ CREATE TABLE `taikhoan` (
 --
 
 INSERT INTO `taikhoan` (`ma_tai_khoan`, `ten_dang_nhap`, `ma_nhom_quyen`, `mat_khau`, `created_at`, `hien_thi`) VALUES
-(1, 'bttan', 1, '$2y$10$12QGE/POO4/oaU.g7Fq3juFcl8AAJyJEZAxRpq.pLLWsieYHV8qOy', '2023-03-24 11:32:15', 1),
-(2, 'bttan1', 0, '$2y$10$npvkuJLXKjOKDFz3vgV2OOUKyopzReaY5.1wpHqQy49oBtwgPZD1.', '2023-03-24 11:38:09', 1);
+(1, 'bttan', 0, '$2y$10$12QGE/POO4/oaU.g7Fq3juFcl8AAJyJEZAxRpq.pLLWsieYHV8qOy', '2023-03-24 11:32:15', 1),
+(2, 'bttan1', 0, '$2y$10$npvkuJLXKjOKDFz3vgV2OOUKyopzReaY5.1wpHqQy49oBtwgPZD1.', '2023-03-24 11:38:09', 1),
+(3, 'hung', 1, '$2y$10$T4R2dSyO2owZoX29PUEMDe2TLHgTcRH/WD.Duw3gTGxT5200hzkdq', '2023-04-02 10:08:23', 1);
 
 -- --------------------------------------------------------
 
@@ -880,6 +938,12 @@ INSERT INTO `thuonghieu` (`ma_thuong_hieu`, `ten_thuong_hieu`, `icon`, `hinh_anh
 --
 
 --
+-- Indexes for table `baohanh`
+--
+ALTER TABLE `baohanh`
+  ADD PRIMARY KEY (`ma_bao_hanh`);
+
+--
 -- Indexes for table `chitiethoadon`
 --
 ALTER TABLE `chitiethoadon`
@@ -892,13 +956,19 @@ ALTER TABLE `chitiethoadon`
 --
 ALTER TABLE `chitietphieunhap`
   ADD PRIMARY KEY (`ma_san_pham`,`ma_phieu_nhap`),
-  ADD KEY `pk_ma_don_hang_idx` (`ma_phieu_nhap`);
+  ADD KEY `pk_ctpn_pn_idx` (`ma_phieu_nhap`);
 
 --
 -- Indexes for table `chitietquyenhang`
 --
 ALTER TABLE `chitietquyenhang`
   ADD PRIMARY KEY (`ma_nhom_quyen`,`ma_quyen_hang`,`ma_chuc_nang`);
+
+--
+-- Indexes for table `chitietsanpham`
+--
+ALTER TABLE `chitietsanpham`
+  ADD PRIMARY KEY (`ma_chi_tiet_san_pham`);
 
 --
 -- Indexes for table `chucnang`
@@ -923,12 +993,6 @@ ALTER TABLE `hinhanh`
 --
 ALTER TABLE `khachhang`
   ADD PRIMARY KEY (`ma_khach_hang`);
-
---
--- Indexes for table `nguoidung`
---
-ALTER TABLE `nguoidung`
-  ADD PRIMARY KEY (`ma_nguoi_dung`);
 
 --
 -- Indexes for table `nhacungcap`
@@ -983,6 +1047,12 @@ ALTER TABLE `thuonghieu`
 --
 
 --
+-- AUTO_INCREMENT for table `baohanh`
+--
+ALTER TABLE `baohanh`
+  MODIFY `ma_bao_hanh` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `chucnang`
 --
 ALTER TABLE `chucnang`
@@ -992,19 +1062,13 @@ ALTER TABLE `chucnang`
 -- AUTO_INCREMENT for table `donhang`
 --
 ALTER TABLE `donhang`
-  MODIFY `ma_don_hang` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=127;
+  MODIFY `ma_don_hang` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=133;
 
 --
 -- AUTO_INCREMENT for table `hinhanh`
 --
 ALTER TABLE `hinhanh`
   MODIFY `ma_hinh_anh` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
-
---
--- AUTO_INCREMENT for table `nguoidung`
---
-ALTER TABLE `nguoidung`
-  MODIFY `ma_nguoi_dung` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `nhacungcap`
@@ -1019,10 +1083,10 @@ ALTER TABLE `nhomquyen`
   MODIFY `ma_nhom_quyen` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
--- AUTO_INCREMENT for table `nhomquyen`
+-- AUTO_INCREMENT for table `phieunhap`
 --
 ALTER TABLE `phieunhap`
-  MODIFY `ma_phieu_nhap` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `ma_phieu_nhap` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `quyenhang`
@@ -1040,7 +1104,7 @@ ALTER TABLE `sanpham`
 -- AUTO_INCREMENT for table `taikhoan`
 --
 ALTER TABLE `taikhoan`
-  MODIFY `ma_tai_khoan` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `ma_tai_khoan` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `thuonghieu`
@@ -1063,7 +1127,7 @@ ALTER TABLE `chitiethoadon`
 -- Constraints for table `chitietphieunhap`
 --
 ALTER TABLE `chitietphieunhap`
-  ADD CONSTRAINT `pk_ctpn_pn` FOREIGN KEY (`ma_phieu_nhap`) REFERENCES `phieunhap` (`ma_phieu_nhap`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `pk_ctpn_pn` FOREIGN KEY (`ma_phieu_nhap`) REFERENCES `phieunhap` (`ma_phieu_nhap`),
   ADD CONSTRAINT `pk_ctpn_sp` FOREIGN KEY (`ma_san_pham`) REFERENCES `sanpham` (`ma_san_pham`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
