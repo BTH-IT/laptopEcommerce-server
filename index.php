@@ -35,16 +35,35 @@ $database = new Database();
 
 switch ($urlTarget[0]) {
   case "guarantee":
+    // $perAccounts = array_filter(
+    //   $perArr,
+    //   function ($per) {
+    //     return $per["ten_quyen_hang"] == 'accounts';
+    //   }
+    // );
+
+    $perAccounts = [];
+
+    $id = $url[4] ?? null;
+
+    $guaranteeModel = new GuaranteeModel($database->connect);
+
+    $guaranteeController = new GuaranteeController($guaranteeModel, $perAccounts);
+
+    $guaranteeController->processRequest($_SERVER["REQUEST_METHOD"], $id);
     break;
+
   case "products":
     $id = $url[4] ?? null;
 
-    $perProducts = array_filter(
-      $perArr,
-      function ($per) {
-        return $per["ten_quyen_hang"] == 'products';
-      }
-    );
+    // $perProducts = array_filter(
+    //   $perArr,
+    //   function ($per) {
+    //     return $per["ten_quyen_hang"] == 'products';
+    //   }
+    // );
+
+    $perProducts = [];
 
     $productModel = new ProductModel($database->connect);
 

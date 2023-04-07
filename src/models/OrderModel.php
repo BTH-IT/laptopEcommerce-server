@@ -32,11 +32,13 @@ class OrderModel
 
             while ($row2 = mysqli_fetch_assoc($rows2)) {
                 $product = [];
+                $product["ma_chi_tiet_san_pham"] = $row2["ma_chi_tiet_san_pham"];
                 $product["ten_san_pham"] = $row2["ten_san_pham"];
                 $product["hinh_anh"] = $row2["hinh_anh"];
                 $product["don_gia"] = (double) $row2["don_gia"];
                 $product["giam_gia_san_pham"] = (int) $row2["giam_gia_san_pham"];
-                $product["so_luong_da_mua"] = $row2["so_luong_da_mua"];
+                $product["so_luong_da_mua"] = (int) $row2["so_luong_da_mua"];
+                $product["thoi_gian_bao_hanh"] = (int) $row2["thoi_gian_bao_hanh"];
 
                 $order["danh_sach_san_pham_da_mua"][] = $product;
             }
@@ -49,15 +51,14 @@ class OrderModel
 
     public function create($data): string
     {
-        $ma_don_hang = (int) $data["ma_don_hang"];
         $ma_khach_hang = $data["ma_khach_hang"];
         $ma_nhan_vien = $data["ma_nhan_vien"];
         $hinh_thuc_thanh_toan = $data["hinh_thuc_thanh_toan"];
-        $thoi_gian_dat_mua = date("Y-m-d H:i:s", $data["thoi_gian_dat_mua"] / 1000);
+        $thoi_gian_dat_mua = date("Y-m-d H:i:s", (int) ($data["thoi_gian_dat_mua"] / 1000));
         $trang_thai = $data["trang_thai"];
 
-        $sql = "INSERT INTO donhang (`ma_don_hang`, `ma_khach_hang`, `ma_nhan_vien`, `hinh_thuc_thanh_toan`, `thoi_gian_dat_mua`, `trang_thai`)
-                VALUES ($ma_don_hang, '$ma_khach_hang', '$ma_nhan_vien', '$hinh_thuc_thanh_toan', '$thoi_gian_dat_mua', '$trang_thai');";
+        $sql = "INSERT INTO donhang (`ma_khach_hang`, `ma_nhan_vien`, `hinh_thuc_thanh_toan`, `thoi_gian_dat_mua`, `trang_thai`)
+                VALUES ('$ma_khach_hang'," . ($ma_nhan_vien ? "'$ma_nhan_vien'" : "DEFAULT") . ", '$hinh_thuc_thanh_toan', '$thoi_gian_dat_mua'," . ($trang_thai ? "'$trang_thai'" : "DEFAULT") . ");";
 
         $result = $this->conn->query($sql);
 
@@ -65,14 +66,26 @@ class OrderModel
             $ma_don_hang = $this->conn->insert_id;
             foreach ($data["danh_sach_san_pham_da_mua"] as $product) {
                 $ma_san_pham = (int) $product["ma_san_pham"];
+
+                $query1 = "SELECT * FROM chitietsanpham WHERE ma_san_pham = $ma_san_pham LIMIT 1";
+                $row1 = mysqli_query($this->conn, $query1);
+                $data1 = mysqli_fetch_assoc($row1);
+                $ma_chi_tiet_san_pham = $data1["ma_chi_tiet_san_pham"];
+
                 $don_gia = (double) $product["don_gia"];
                 $giam_gia_san_pham = (int) $product["giam_gia_san_pham"];
                 $so_luong_da_mua = (int) $product["so_luong_da_mua"];
 
-                $sql = "INSERT INTO chitiethoadon (`ma_san_pham`, `ma_don_hang`, `so_luong_da_mua`, `don_gia`, `giam_gia_san_pham`) 
-                        VALUES ($ma_san_pham, $ma_don_hang, $don_gia, $giam_gia_san_pham, $so_luong_da_mua);";
+                $query2 = "SELECT * FROM sanpham WHERE ma_san_pham = $ma_san_pham";
+                $row2 = mysqli_query($this->conn, $query2);
+                $data2 = mysqli_fetch_assoc($row2);
+                $thoi_gian_bao_hanh = $data2["bao_hanh"];
+
+                $sql = "INSERT INTO chitiethoadon (`ma_san_pham`, `ma_chi_tiet_san_pham`, `ma_don_hang`, `so_luong_da_mua`, `don_gia`, `giam_gia_san_pham`, `thoi_gian_bao_hanh`) 
+                        VALUES ($ma_san_pham, '$ma_chi_tiet_san_pham', $ma_don_hang, $so_luong_da_mua, $don_gia, $giam_gia_san_pham, $thoi_gian_bao_hanh);";
                 $result = $this->conn->query($sql);
             }
+
             return "New record created successfully. Last inserted ID is: " . $ma_don_hang;
         } else {
             return $this->conn->error;
@@ -108,12 +121,14 @@ class OrderModel
 
         while ($row2 = mysqli_fetch_assoc($rows2)) {
             $product = [];
+            $product["ma_chi_tiet_san_pham"] = $row2["ma_chi_tiet_san_pham"];
             $product["ten_san_pham"] = $row2["ten_san_pham"];
             $product["hinh_anh"] = $row2["hinh_anh"];
             $product["don_gia"] = (double) $row2["don_gia"];
             $product["giam_gia_san_pham"] = (int) $row2["giam_gia_san_pham"];
             $product["ten_san_pham"] = $row2["ten_san_pham"];
-            $product["so_luong_da_mua"] = $row2["so_luong_da_mua"];
+            $product["so_luong_da_mua"] = (int) $row2["so_luong_da_mua"];
+            $product["thoi_gian_bao_hanh"] = (int) $row2["thoi_gian_bao_hanh"];
 
             $order["danh_sach_san_pham_da_mua"][] = $product;
         }
@@ -138,7 +153,7 @@ class OrderModel
         $ma_khach_hang = $data["ma_khach_hang"];
         $ma_nhan_vien = $data["ma_nhan_vien"];
         $hinh_thuc_thanh_toan = $data["hinh_thuc_thanh_toan"];
-        $thoi_gian_dat_mua = date("Y-m-d H:i:s", $data["thoi_gian_dat_mua"] / 1000);
+        $thoi_gian_dat_mua = date("Y-m-d H:i:s", (int) ($data["thoi_gian_dat_mua"] / 1000));
         $trang_thai = $data["trang_thai"];
         $hien_thi = (bool) $data["hien_thi"] ? 1 : 0;
         $sql = "UPDATE donhang 

@@ -56,9 +56,9 @@ class ProductController
         echo json_encode($product);
         break;
       case "PATCH":
-        $isValid = $this->checkPermission("UPDATE");
+        // $isValid = $this->checkPermission("UPDATE");
 
-        if (!$isValid) break;
+        // if (!$isValid) break;
 
         // lấy dữ liệu từ phía client gửi cho server (dạng json)
         $data = file_get_contents("php://input");
@@ -74,9 +74,9 @@ class ProductController
         ]);
         break;
       case 'DELETE':
-        $isValid = $this->checkPermission("DELETE");
+        // $isValid = $this->checkPermission("DELETE");
 
-        if (!$isValid) break;
+        // if (!$isValid) break;
 
         $rows = $this->productModel->delete($id);
 
@@ -103,9 +103,9 @@ class ProductController
         }
         break;
       case "POST":
-        $isValid = $this->checkPermission("CREATE");
+        // $isValid = $this->checkPermission("CREATE");
 
-        if (!$isValid) break;
+        // if (!$isValid) break;
 
         // lấy dữ liệu từ phía client gửi cho server (dạng json)
         $data = file_get_contents("php://input");
@@ -113,7 +113,7 @@ class ProductController
         // trả về array và nếu null thì array trở thành rỗng
         $data = (array) json_decode($data, true);
 
-        $errors = $this->getValidationErrors($data);
+        // $errors = $this->getValidationErrors($data);
 
         if (!empty($errors)) {
           http_response_code(422);

@@ -50,25 +50,20 @@ INSERT INTO `baohanh` (`ma_bao_hanh`, `ma_chi_tiet_san_pham`, `ma_khach_hang`, `
 
 CREATE TABLE `chitiethoadon` (
   `ma_san_pham` int NOT NULL,
+  `ma_chi_tiet_san_pham` varchar(256) NOT NULL,
   `ma_don_hang` int NOT NULL,
   `so_luong_da_mua` int DEFAULT NULL,
   `don_gia` double DEFAULT NULL,
-  `giam_gia_san_pham` int DEFAULT '0'
+  `giam_gia_san_pham` int DEFAULT '0',
+  `thoi_gian_bao_hanh` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 --
 -- Dumping data for table `chitiethoadon`
 --
 
-INSERT INTO `chitiethoadon` (`ma_san_pham`, `ma_don_hang`, `so_luong_da_mua`, `don_gia`, `giam_gia_san_pham`) VALUES
-(1, 126, 1, 2000000, 10),
-(1, 131, 1, 10000000, 10),
-(1, 132, 1, 10000000, 10),
-(2, 126, 2, 3000000, 10),
-(2, 131, 1, 20000000, 10),
-(3, 126, 3, 4000000, 10),
-(4, 126, 4, 5000000, 10),
-(5, 126, 5, 6000000, 10);
+INSERT INTO `chitiethoadon` (`ma_san_pham`, `ma_chi_tiet_san_pham`, `ma_don_hang`, `so_luong_da_mua`, `don_gia`, `giam_gia_san_pham`, `thoi_gian_bao_hanh`) VALUES
+(1, 168042680612, 126, 1, 2000000, 10, 24);
 
 -- --------------------------------------------------------
 
