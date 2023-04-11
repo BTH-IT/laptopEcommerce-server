@@ -132,9 +132,9 @@ switch ($urlTarget[0]) {
 
     $id = $url[4] ?? null;
 
-    $importModel = new ImportModel($database->connect);
+    $importModel = new ImportOrderModel($database->connect);
 
-    $importController = new ImportController($importModel, $perAccounts);
+    $importController = new ImportOrderController($importModel, $perAccounts);
 
     $importController->processRequest($_SERVER["REQUEST_METHOD"], $id);
     break;
