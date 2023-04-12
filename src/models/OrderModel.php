@@ -53,17 +53,25 @@ class OrderModel
     {
         try {
             $order_type = $query["order_type"];
-        } catch(Throwable $th) {$order_type = "";}
+        } catch (Throwable $th) {
+            $order_type = "";
+        }
         try {
             $start = $query["start"] == 0 ? 0 : date("Y-m-d H:i:s", (int) ($query["start"] / 1000));
-        } catch(Throwable $th) {$start = "";}
+        } catch (Throwable $th) {
+            $start = "";
+        }
         try {
             $end = $query["end"] == 0 ? 0 : date("Y-m-d H:i:s", (int) ($query["end"] / 1000));
-        } catch(Throwable $th) {$end = "";}
+        } catch (Throwable $th) {
+            $end = "";
+        }
 
         if (!empty($order_type)) {
             if ($order_type == "waiting") {
                 $order_type = "Chờ xử lý";
+            } else if ($order_type == "shipping") {
+                $order_type = "Đang giao";
             } else if ($order_type == "completed") {
                 $order_type = "Hoàn thành";
             } else if ($order_type == "canceled") {

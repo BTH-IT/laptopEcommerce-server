@@ -101,13 +101,13 @@ class OrderController
         // $isValid = $this->checkPermission("READ");
 
         // if (!$isValid) break;
-        $query = file_get_contents("php://input");
-        $query = (array) json_decode($query, true);
+        $query = $_SERVER['QUERY_STRING'];
+        parse_str($query, $query_params);
 
         if (empty($query)) {
           echo json_encode($this->orderModel->getAll());
         } else {
-          echo json_encode($this->orderModel->getAllWithQuery($query));
+          echo json_encode($this->orderModel->getAllWithQuery($query_params));
         }
 
         break;
