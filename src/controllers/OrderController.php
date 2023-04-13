@@ -101,8 +101,15 @@ class OrderController
         // $isValid = $this->checkPermission("READ");
 
         // if (!$isValid) break;
+        $query = $_SERVER['QUERY_STRING'];
+        parse_str($query, $query_params);
 
-        echo json_encode($this->orderModel->getAll());
+        if (empty($query)) {
+          echo json_encode($this->orderModel->getAll());
+        } else {
+          echo json_encode($this->orderModel->getAllWithQuery($query_params));
+        }
+
         break;
       case "POST":
         // $isValid = $this->checkPermission("CREATE");

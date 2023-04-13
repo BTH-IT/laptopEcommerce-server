@@ -50,7 +50,11 @@ INSERT INTO `baohanh` (`ma_bao_hanh`, `ma_chi_tiet_san_pham`, `ma_khach_hang`, `
 --
 
 CREATE TABLE `chitiethoadon` (
+<<<<<<< HEAD
   `ma_san_pham` int DEFAULT NULL,
+=======
+  `ma_san_pham` int NOT NULL,
+>>>>>>> fd5fad15f18963627a066fbc01c5653cfee71d02
   `ma_chi_tiet_san_pham` varchar(256) NOT NULL,
   `ma_don_hang` int NOT NULL,
   `don_gia` double DEFAULT NULL,
@@ -62,6 +66,7 @@ CREATE TABLE `chitiethoadon` (
 -- Dumping data for table `chitiethoadon`
 --
 
+<<<<<<< HEAD
 INSERT INTO `chitiethoadon` (`ma_san_pham`, `ma_chi_tiet_san_pham`, `ma_don_hang`, `don_gia`, `giam_gia_san_pham`, `thoi_gian_bao_hanh`) VALUES
 (1, '168042680612', 148, 11000000, 10, 24),
 (1, '168042730413', 149, 11000000, 10, 24),
@@ -69,6 +74,10 @@ INSERT INTO `chitiethoadon` (`ma_san_pham`, `ma_chi_tiet_san_pham`, `ma_don_hang
 (1, '1680449329612', 156, 15840000, 10, 24),
 (1, '16804493296121', 156, 15840000, 10, 24),
 (1, '168044932962', 156, 15840000, 10, 24);
+=======
+INSERT INTO `chitiethoadon` (`ma_san_pham`, `ma_chi_tiet_san_pham`, `ma_don_hang`, `so_luong_da_mua`, `don_gia`, `giam_gia_san_pham`, `thoi_gian_bao_hanh`) VALUES
+(1, 168042680612, 126, 1, 2000000, 10, 24);
+>>>>>>> fd5fad15f18963627a066fbc01c5653cfee71d02
 
 -- --------------------------------------------------------
 
