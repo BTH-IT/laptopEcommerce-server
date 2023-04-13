@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 03, 2023 at 09:24 AM
+-- Generation Time: Apr 13, 2023 at 09:54 AM
 -- Server version: 8.0.31
 -- PHP Version: 8.2.0
 
@@ -32,15 +32,16 @@ CREATE TABLE `baohanh` (
   `ma_chi_tiet_san_pham` varchar(256) NOT NULL,
   `ma_khach_hang` varchar(256) NOT NULL,
   `ngay_lap` timestamp NULL DEFAULT NULL,
-  `ngay_het_han` timestamp NULL DEFAULT NULL
+  `ngay_het_han` timestamp NULL DEFAULT NULL,
+  `hien_thi` tinyint DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 --
 -- Dumping data for table `baohanh`
 --
 
-INSERT INTO `baohanh` (`ma_bao_hanh`, `ma_chi_tiet_san_pham`, `ma_khach_hang`, `ngay_lap`, `ngay_het_han`) VALUES
-(1, '1680426156', 'bttan', '2023-04-01 00:16:53', '2025-04-01 00:16:53');
+INSERT INTO `baohanh` (`ma_bao_hanh`, `ma_chi_tiet_san_pham`, `ma_khach_hang`, `ngay_lap`, `ngay_het_han`, `hien_thi`) VALUES
+(2, '168042680612', 'bttan', '2023-04-03 09:23:50', '2025-04-03 09:23:50', 1);
 
 -- --------------------------------------------------------
 
@@ -49,26 +50,25 @@ INSERT INTO `baohanh` (`ma_bao_hanh`, `ma_chi_tiet_san_pham`, `ma_khach_hang`, `
 --
 
 CREATE TABLE `chitiethoadon` (
-  `ma_san_pham` int NOT NULL,
+  `ma_san_pham` int DEFAULT NULL,
+  `ma_chi_tiet_san_pham` varchar(256) NOT NULL,
   `ma_don_hang` int NOT NULL,
-  `so_luong_da_mua` int DEFAULT NULL,
   `don_gia` double DEFAULT NULL,
-  `giam_gia_san_pham` int DEFAULT '0'
+  `giam_gia_san_pham` int DEFAULT '0',
+  `thoi_gian_bao_hanh` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 --
 -- Dumping data for table `chitiethoadon`
 --
 
-INSERT INTO `chitiethoadon` (`ma_san_pham`, `ma_don_hang`, `so_luong_da_mua`, `don_gia`, `giam_gia_san_pham`) VALUES
-(1, 126, 1, 2000000, 10),
-(1, 131, 1, 10000000, 10),
-(1, 132, 1, 10000000, 10),
-(2, 126, 2, 3000000, 10),
-(2, 131, 1, 20000000, 10),
-(3, 126, 3, 4000000, 10),
-(4, 126, 4, 5000000, 10),
-(5, 126, 5, 6000000, 10);
+INSERT INTO `chitiethoadon` (`ma_san_pham`, `ma_chi_tiet_san_pham`, `ma_don_hang`, `don_gia`, `giam_gia_san_pham`, `thoi_gian_bao_hanh`) VALUES
+(1, '168042680612', 148, 11000000, 10, 24),
+(1, '168042730413', 149, 11000000, 10, 24),
+(1, '168044932914', 150, 11000000, 10, 24),
+(1, '1680449329612', 156, 15840000, 10, 24),
+(1, '16804493296121', 156, 15840000, 10, 24),
+(1, '168044932962', 156, 15840000, 10, 24);
 
 -- --------------------------------------------------------
 
@@ -89,8 +89,16 @@ CREATE TABLE `chitietphieunhap` (
 
 INSERT INTO `chitietphieunhap` (`ma_san_pham`, `ma_phieu_nhap`, `so_luong_nhap_hang`, `don_gia`) VALUES
 (1, 2, 1, 11000000),
+(1, 3, 1, 11000000),
+(1, 4, 2, 13200000),
+(1, 6, 1, 10000000),
 (2, 2, 1, 22000000),
-(3, 2, 1, 33000000);
+(2, 3, 2, 22000000),
+(2, 4, 3, 26400000),
+(2, 6, 1, 31680000),
+(3, 2, 1, 33000000),
+(7, 5, 2, 80000000),
+(8, 5, 2, 90000000);
 
 -- --------------------------------------------------------
 
@@ -126,12 +134,12 @@ INSERT INTO `chitietquyenhang` (`ma_nhom_quyen`, `ma_quyen_hang`, `ma_chuc_nang`
 (0, 5, 3, 0),
 (0, 5, 4, 0),
 (0, 6, 1, 0),
-(0, 6, 2, 0),
-(0, 6, 3, 0),
+(0, 6, 2, 1),
+(0, 6, 3, 1),
 (0, 6, 4, 0),
 (0, 7, 1, 0),
 (0, 7, 2, 0),
-(0, 7, 3, 0),
+(0, 7, 3, 1),
 (0, 7, 4, 0),
 (0, 8, 1, 0),
 (0, 8, 2, 0),
@@ -147,7 +155,6 @@ INSERT INTO `chitietquyenhang` (`ma_nhom_quyen`, `ma_quyen_hang`, `ma_chuc_nang`
 (0, 10, 4, 0),
 (0, 11, 1, 0),
 (0, 11, 2, 0),
-(0, 11, 3, 0),
 (0, 11, 4, 0),
 (0, 12, 1, 0),
 (0, 12, 2, 0),
@@ -190,7 +197,6 @@ INSERT INTO `chitietquyenhang` (`ma_nhom_quyen`, `ma_quyen_hang`, `ma_chuc_nang`
 (1, 10, 4, 1),
 (1, 11, 1, 1),
 (1, 11, 2, 1),
-(1, 11, 3, 1),
 (1, 11, 4, 1),
 (1, 12, 1, 1),
 (1, 12, 2, 1),
@@ -233,156 +239,53 @@ INSERT INTO `chitietquyenhang` (`ma_nhom_quyen`, `ma_quyen_hang`, `ma_chuc_nang`
 (6, 10, 4, 0),
 (6, 11, 1, 0),
 (6, 11, 2, 0),
-(6, 11, 3, 0),
 (6, 11, 4, 0),
 (6, 12, 1, 0),
 (6, 12, 2, 0),
 (6, 12, 3, 0),
 (6, 12, 4, 0),
-(8, 1, 1, 0),
-(8, 1, 2, 0),
-(8, 1, 3, 0),
-(8, 1, 4, 0),
-(8, 2, 1, 0),
-(8, 2, 2, 0),
-(8, 2, 3, 0),
-(8, 2, 4, 0),
-(8, 3, 1, 0),
-(8, 3, 2, 0),
-(8, 3, 3, 0),
-(8, 3, 4, 0),
-(8, 4, 1, 0),
-(8, 4, 2, 0),
-(8, 4, 3, 0),
-(8, 4, 4, 0),
-(8, 5, 1, 0),
-(8, 5, 2, 0),
-(8, 5, 3, 0),
-(8, 5, 4, 0),
-(8, 6, 1, 0),
-(8, 6, 2, 0),
-(8, 6, 3, 0),
-(8, 6, 4, 0),
-(8, 7, 1, 0),
-(8, 7, 2, 0),
-(8, 7, 3, 0),
-(8, 7, 4, 0),
-(8, 8, 1, 0),
-(8, 8, 2, 0),
-(8, 8, 3, 0),
-(8, 8, 4, 0),
-(8, 9, 1, 0),
-(8, 9, 2, 0),
-(8, 9, 3, 0),
-(8, 9, 4, 0),
-(8, 10, 1, 0),
-(8, 10, 2, 0),
-(8, 10, 3, 0),
-(8, 10, 4, 0),
-(8, 11, 1, 0),
-(8, 11, 2, 0),
-(8, 11, 3, 0),
-(8, 11, 4, 0),
-(8, 12, 1, 0),
-(8, 12, 2, 0),
-(8, 12, 3, 0),
-(8, 12, 4, 0),
-(9, 1, 1, 0),
-(9, 1, 2, 0),
-(9, 1, 3, 0),
-(9, 1, 4, 0),
-(9, 2, 1, 0),
-(9, 2, 2, 0),
-(9, 2, 3, 0),
-(9, 2, 4, 0),
-(9, 3, 1, 0),
-(9, 3, 2, 0),
-(9, 3, 3, 0),
-(9, 3, 4, 0),
-(9, 4, 1, 0),
-(9, 4, 2, 0),
-(9, 4, 3, 0),
-(9, 4, 4, 0),
-(9, 5, 1, 0),
-(9, 5, 2, 0),
-(9, 5, 3, 0),
-(9, 5, 4, 0),
-(9, 6, 1, 0),
-(9, 6, 2, 0),
-(9, 6, 3, 0),
-(9, 6, 4, 0),
-(9, 7, 1, 0),
-(9, 7, 2, 0),
-(9, 7, 3, 0),
-(9, 7, 4, 0),
-(9, 8, 1, 0),
-(9, 8, 2, 0),
-(9, 8, 3, 0),
-(9, 8, 4, 0),
-(9, 9, 1, 0),
-(9, 9, 2, 0),
-(9, 9, 3, 0),
-(9, 9, 4, 0),
-(9, 10, 1, 0),
-(9, 10, 2, 0),
-(9, 10, 3, 0),
-(9, 10, 4, 0),
-(9, 11, 1, 0),
-(9, 11, 2, 0),
-(9, 11, 3, 0),
-(9, 11, 4, 0),
-(9, 12, 1, 0),
-(9, 12, 2, 0),
-(9, 12, 3, 0),
-(9, 12, 4, 0),
-(10, 1, 1, 0),
-(10, 1, 2, 0),
-(10, 1, 3, 0),
-(10, 1, 4, 0),
-(10, 2, 1, 0),
-(10, 2, 2, 0),
-(10, 2, 3, 0),
-(10, 2, 4, 0),
-(10, 3, 1, 0),
-(10, 3, 2, 0),
-(10, 3, 3, 0),
-(10, 3, 4, 0),
-(10, 4, 1, 0),
-(10, 4, 2, 0),
-(10, 4, 3, 0),
-(10, 4, 4, 0),
-(10, 5, 1, 1),
-(10, 5, 2, 1),
-(10, 5, 3, 1),
-(10, 5, 4, 1),
-(10, 6, 1, 0),
-(10, 6, 2, 0),
-(10, 6, 3, 0),
-(10, 6, 4, 0),
-(10, 7, 1, 0),
-(10, 7, 2, 0),
-(10, 7, 3, 0),
-(10, 7, 4, 0),
-(10, 8, 1, 0),
-(10, 8, 2, 0),
-(10, 8, 3, 0),
-(10, 8, 4, 0),
-(10, 9, 1, 0),
-(10, 9, 2, 0),
-(10, 9, 3, 0),
-(10, 9, 4, 0),
-(10, 10, 1, 0),
-(10, 10, 2, 0),
-(10, 10, 3, 0),
-(10, 10, 4, 0),
-(10, 11, 1, 0),
-(10, 11, 2, 0),
-(10, 11, 3, 0),
-(10, 11, 4, 0),
-(10, 12, 1, 0),
-(10, 12, 2, 0),
-(10, 12, 3, 0),
-(10, 12, 4, 0);
+(11, 1, 1, 0),
+(11, 2, 1, 0),
+(11, 2, 3, 0),
+(11, 3, 1, 0),
+(11, 3, 2, 0),
+(11, 3, 3, 0),
+(11, 3, 4, 0),
+(11, 4, 1, 0),
+(11, 4, 2, 0),
+(11, 4, 3, 0),
+(11, 4, 4, 0),
+(11, 5, 1, 1),
+(11, 5, 2, 1),
+(11, 5, 3, 1),
+(11, 5, 4, 1),
+(11, 6, 1, 0),
+(11, 6, 2, 0),
+(11, 6, 3, 0),
+(11, 6, 4, 0),
+(11, 7, 1, 0),
+(11, 7, 2, 0),
+(11, 7, 3, 0),
+(11, 7, 4, 0),
+(11, 8, 1, 0),
+(11, 8, 2, 0),
+(11, 8, 3, 0),
+(11, 8, 4, 0),
+(11, 9, 1, 0),
+(11, 9, 2, 0),
+(11, 9, 3, 0),
+(11, 9, 4, 0),
+(11, 10, 1, 0),
+(11, 10, 2, 0),
+(11, 10, 3, 0),
+(11, 10, 4, 0),
+(11, 11, 1, 0),
+(11, 11, 2, 0),
+(11, 11, 4, 0),
+(11, 12, 1, 0),
+(11, 12, 2, 0),
+(11, 12, 3, 0),
+(11, 12, 4, 0);
 
 -- --------------------------------------------------------
 
@@ -400,44 +303,38 @@ CREATE TABLE `chitietsanpham` (
 --
 
 INSERT INTO `chitietsanpham` (`ma_chi_tiet_san_pham`, `ma_san_pham`) VALUES
-('1680426156', 1),
-('1680426207', 2),
-('16804266569', 1),
+('12312', 2),
+('123131233', 2),
+('12322', 4),
+('12323123', 2),
+('1234321', 3),
+('132123', 3),
 ('168042665910', 2),
-('168042679011', 1),
 ('168042679012', 2),
-('168042680612', 1),
-('168042730413', 1),
 ('168044932913', 2),
-('168044932914', 1),
 ('16804493296', 3),
-('1_2', 1),
-('1_3', 1),
-('1_4', 1),
-('1_5', 1),
-('1_6', 1),
-('1_7', 1),
-('1_8', 1),
-('1_9', 1),
-('2_10', 2),
-('2_2', 2),
-('2_3', 2),
-('2_4', 2),
-('2_5', 2),
-('2_6', 2),
-('2_7', 2),
-('2_8', 2),
-('2_9', 2),
-('3_1', 3),
-('3_2', 3),
-('3_3', 3),
-('3_4', 3),
-('3_5', 3),
-('4_1', 4),
-('4_2', 4),
-('4_3', 4),
-('4_4', 4),
-('4_5', 4);
+('1680449329623', 1),
+('16804493296231', 1),
+('16804493296a', 1),
+('168076695112', 2),
+('16807669518', 1),
+('168076725213', 2),
+('16807672529', 1),
+('16807683761', 7),
+('168110773010', 1),
+('168110773014', 2),
+('21323', 4),
+('222', 2),
+('3221', 4),
+('333', 2),
+('333334', 4),
+('42321', 4),
+('444', 2),
+('555', 2),
+('666', 2),
+('777', 3),
+('888', 3),
+('999', 3);
 
 -- --------------------------------------------------------
 
@@ -481,9 +378,15 @@ CREATE TABLE `donhang` (
 --
 
 INSERT INTO `donhang` (`ma_don_hang`, `ma_khach_hang`, `ma_nhan_vien`, `hinh_thuc_thanh_toan`, `thoi_gian_dat_mua`, `trang_thai`, `hien_thi`) VALUES
-(126, 'bttan', NULL, 'postpaid', '2023-03-07 10:17:58', 'hoàn thành', 1),
-(131, 'bttan', '', 'postpaid', '2023-04-01 00:13:44', 'đã hủy', 1),
-(132, 'bttan', '', 'postpaid', '2023-04-01 00:16:53', 'đã hủy', 1);
+(148, 'bttan', 'hung', 'postpaid', '2023-04-03 09:23:36', 'hoàn thành', 1),
+(149, 'bttan', '', 'postpaid', '2023-04-05 01:24:16', 'chờ xử lý', 1),
+(150, 'bttan', NULL, 'postpaid', '2023-04-13 02:43:56', 'chờ xử lý', 1),
+(151, 'bttan', NULL, 'postpaid', '2023-04-13 02:50:40', 'chờ xử lý', 1),
+(152, 'bttan', NULL, 'postpaid', '2023-04-13 02:50:41', 'chờ xử lý', 1),
+(153, 'bttan', NULL, 'postpaid', '2023-04-13 02:50:42', 'chờ xử lý', 1),
+(154, 'bttan', NULL, 'postpaid', '2023-04-13 02:50:42', 'chờ xử lý', 1),
+(155, 'bttan', NULL, 'postpaid', '2023-04-13 02:50:42', 'chờ xử lý', 1),
+(156, 'bttan', NULL, 'postpaid', '2023-04-13 02:51:23', 'chờ xử lý', 1);
 
 -- --------------------------------------------------------
 
@@ -581,6 +484,7 @@ CREATE TABLE `khachhang` (
   `gioi_tinh` tinyint DEFAULT NULL,
   `so_dien_thoai` varchar(45) DEFAULT NULL,
   `dia_chi` varchar(256) DEFAULT NULL,
+  `avatar` longtext,
   `hien_thi` tinyint DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
@@ -588,9 +492,9 @@ CREATE TABLE `khachhang` (
 -- Dumping data for table `khachhang`
 --
 
-INSERT INTO `khachhang` (`ma_khach_hang`, `ten_khach_hang`, `ngay_sinh`, `gioi_tinh`, `so_dien_thoai`, `dia_chi`, `hien_thi`) VALUES
-('bttan', '123123', '2023-03-01 00:00:00', 1, '123123', '123123', 1),
-('bttan1', '123123', '2023-03-02 00:00:00', 1, '123123', '123123', 1);
+INSERT INTO `khachhang` (`ma_khach_hang`, `ten_khach_hang`, `ngay_sinh`, `gioi_tinh`, `so_dien_thoai`, `dia_chi`, `avatar`, `hien_thi`) VALUES
+('bttan', '123123', '2023-03-01 00:00:00', 1, '123123', '123123', 'avatar.jpg', 1),
+('bttan1', '123123', '2023-03-02 00:00:00', 1, '123123', '123123', 'avatar.jpg', 1);
 
 -- --------------------------------------------------------
 
@@ -602,18 +506,19 @@ CREATE TABLE `nhacungcap` (
   `ma_nha_cung_cap` int NOT NULL,
   `ten_nha_cung_cap` varchar(256) DEFAULT NULL,
   `so_dien_thoai` varchar(45) DEFAULT NULL,
-  `dia_chi` varchar(256) DEFAULT NULL
+  `dia_chi` varchar(256) DEFAULT NULL,
+  `hien_thi` tinyint DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 --
 -- Dumping data for table `nhacungcap`
 --
 
-INSERT INTO `nhacungcap` (`ma_nha_cung_cap`, `ten_nha_cung_cap`, `so_dien_thoai`, `dia_chi`) VALUES
-(1, 'Phong Vu', '0707007009', '123'),
-(2, 'GearVN', '0890989090', '123'),
-(3, 'Cellphone', '0123013010', '231'),
-(4, 'Thinkpad', '0706092403', 'ha noi');
+INSERT INTO `nhacungcap` (`ma_nha_cung_cap`, `ten_nha_cung_cap`, `so_dien_thoai`, `dia_chi`, `hien_thi`) VALUES
+(1, 'Phong Vu', '0707007009', '123', 1),
+(2, 'GearVN', '0890989090', '123', 1),
+(3, 'Cellphone', '0123013010', '231', 1),
+(4, 'An ', '0706092403', 'ha noi 1945', 1);
 
 -- --------------------------------------------------------
 
@@ -635,7 +540,10 @@ CREATE TABLE `nhanvien` (
 --
 
 INSERT INTO `nhanvien` (`ma_nhan_vien`, `ten_nhan_vien`, `so_dien_thoai`, `ngay_sinh`, `gioi_tinh`, `muc_luong`) VALUES
-('hung', 'bth2', '123', '2003-03-01', 1, 20000000);
+('hieu', '123123', '123123', '2023-04-04', 1, 1000000),
+('hung', 'bth2', '123', '2003-03-01', 1, 20000000),
+('huy', 'Huy abc', '0706092403', '2023-04-01', 1, 1000000),
+('lam', 'lam ne', '0987654321', '2023-04-06', 1, 10000000);
 
 -- --------------------------------------------------------
 
@@ -659,9 +567,7 @@ INSERT INTO `nhomquyen` (`ma_nhom_quyen`, `ten_nhom_quyen`, `mo_ta`, `trang_thai
 (0, 'khách hàng', 'mặc định', 1, 1),
 (1, 'quản lý', 'trùm', 1, 0),
 (6, 'nhân viên', 'test', 1, 0),
-(8, '345', '', 0, 0),
-(9, '123', '', 0, 0),
-(10, 'abc', '', 1, 0);
+(11, 'abc', '', 1, 0);
 
 -- --------------------------------------------------------
 
@@ -682,8 +588,12 @@ CREATE TABLE `phieunhap` (
 --
 
 INSERT INTO `phieunhap` (`ma_phieu_nhap`, `ma_nha_cung_cap`, `ma_nhan_vien`, `ngay_lap`, `hien_thi`) VALUES
-(1, 1, 'hung', '2023-03-07 10:17:58', 1),
-(2, 1, 'hung', '2023-04-02 10:28:49', 1);
+(1, 1, 'hung', '2023-03-07 10:17:58', 0),
+(2, 1, 'hung', '2023-04-02 10:28:49', 1),
+(3, 4, 'hung', '2023-04-06 02:42:30', 1),
+(4, 1, 'hung', '2023-04-06 02:47:31', 1),
+(5, 2, 'hung', '2023-04-06 03:06:16', 1),
+(6, 2, 'hung', '2023-04-10 01:22:10', 1);
 
 -- --------------------------------------------------------
 
@@ -704,7 +614,7 @@ INSERT INTO `quyenhang` (`ma_quyen_hang`, `ten_quyen_hang`) VALUES
 (1, 'statistics'),
 (2, 'decentralization'),
 (3, 'brands'),
-(4, 'auth-group'),
+(4, 'auth-groups'),
 (5, 'products'),
 (6, 'orders'),
 (7, 'customers'),
@@ -765,14 +675,14 @@ CREATE TABLE `sanpham` (
 --
 
 INSERT INTO `sanpham` (`ma_san_pham`, `ten_san_pham`, `hinh_anh`, `bao_hanh`, `gia_goc`, `giam_gia`, `mo_ta_san_pham`, `thuong_hieu`, `created_at`, `updated_at`, `the_he_cpu`, `cpu`, `series_cpu`, `chip_do_hoa_roi`, `ten_ram`, `man_hinh`, `luu_tru`, `so_cong_luu_tru_toi_da`, `kieu_khe_m2_ho_tro`, `cong_xuat_hinh`, `cong_ket_noi`, `ket_noi_khong_day`, `ban_phim`, `he_dieu_hanh`, `kich_thuoc`, `pin`, `khoi_luong`, `series_laptop`, `part_number`, `mau_sac`, `phu_kien_di_kem`, `den_led`, `man_hinh_cam_ung`, `dung_luong_ram`, `so_luong_da_ban`, `noi_bat`, `hien_thi`) VALUES
-(1, 'Laptop hưng nè', '[\"4.webp\", \"3.webp\"]', 24, 11000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', '2023-04-02 10:28:49', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', '', '', '', 0, 0, 1, 1, 1),
-(2, '2', '[\"4.webp\", \"3.webp\"]', 24, 22000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', '2023-04-02 10:28:49', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', '', '', '', 0, 0, 2, 0, 1),
-(3, '3', '[\"4.webp\", \"3.webp\"]', 24, 33000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', '2023-04-02 10:28:49', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', '', '', '', 0, 0, 3, 0, 1),
-(4, '4', '[\"4.webp\", \"3.webp\"]', 24, 40000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', '2023-03-13 01:15:46', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 4, 0, 1),
+(1, 'Laptop hưng nè', '[\"4.webp\", \"3.webp\"]', 24, 15840000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', '2023-04-10 01:22:10', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', '', '', '', 0, 0, 1, 1, 1),
+(2, '2', '[\"4.webp\", \"3.webp\"]', 24, 34848000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', '2023-04-10 01:22:10', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', '', '', '', 0, 0, 2, 0, 1),
+(3, '3', '[\"4.webp\", \"3.webp\"]', 24, 33000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', '2023-04-06 02:40:02', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', '', '', '', 0, 0, 3, 0, 1),
+(4, '4', '[\"4.webp\", \"3.webp\"]', 24, 40000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', '2023-04-06 02:40:03', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', '', '', '', 0, 0, 4, 1, 1),
 (5, '5', '[\"4.webp\", \"3.webp\"]', 24, 50000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', '2023-03-13 01:18:26', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 5, 1, 1),
 (6, '6', '[\"4.webp\", \"3.webp\"]', 24, 70000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 6, 0, 1),
-(7, '7', '[\"4.webp\", \"3.webp\"]', 24, 80000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 7, 0, 1),
-(8, '8', '[\"4.webp\", \"3.webp\"]', 24, 90000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 8, 0, 1),
+(7, '7', '[\"4.webp\", \"3.webp\"]', 24, 88000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', '2023-04-06 03:06:16', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', '', '', '', 0, 0, 7, 0, 1),
+(8, '8', '[\"4.webp\", \"3.webp\"]', 24, 99000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', '2023-04-06 03:06:16', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', '', '', '', 0, 0, 8, 0, 1),
 (9, '9', '[\"4.webp\", \"3.webp\"]', 24, 100000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 9, 0, 1),
 (10, '10', '[\"4.webp\", \"3.webp\"]', 24, 110000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', '2023-02-13 01:10:41', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 10, 0, 1),
 (11, '11', '[\"4.webp\", \"3.webp\"]', 24, 120000000, 10, 'Đang cập nhật.....', 'Lenovo', '2023-02-06 07:50:47', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 11, 0, 1),
@@ -903,7 +813,10 @@ CREATE TABLE `taikhoan` (
 INSERT INTO `taikhoan` (`ma_tai_khoan`, `ten_dang_nhap`, `ma_nhom_quyen`, `mat_khau`, `created_at`, `hien_thi`) VALUES
 (1, 'bttan', 0, '$2y$10$12QGE/POO4/oaU.g7Fq3juFcl8AAJyJEZAxRpq.pLLWsieYHV8qOy', '2023-03-24 11:32:15', 1),
 (2, 'bttan1', 0, '$2y$10$npvkuJLXKjOKDFz3vgV2OOUKyopzReaY5.1wpHqQy49oBtwgPZD1.', '2023-03-24 11:38:09', 1),
-(3, 'hung', 1, '$2y$10$T4R2dSyO2owZoX29PUEMDe2TLHgTcRH/WD.Duw3gTGxT5200hzkdq', '2023-04-02 10:08:23', 1);
+(3, 'hung', 1, '$2y$10$T4R2dSyO2owZoX29PUEMDe2TLHgTcRH/WD.Duw3gTGxT5200hzkdq', '2023-04-02 10:08:23', 1),
+(4, 'lam', 11, '$2y$10$FH.XFfsp.whb6EOQ.LyLI.kCMOfQZ.Rg.Q7BqWn8UK/4fRxVbLmxq', '2023-04-06 04:35:50', 1),
+(6, 'huy', 11, '$2y$10$fgElQGaKTqah1nqaCDrM5uddEZvWi0lUy.7Ts7Je17fUablL1tipm', '2023-04-07 03:59:03', 1),
+(7, 'hieu', 6, '$2y$10$rmWN.HAj9PszOfuNhw2kuuERu6JD0NuxMT.0F.SJBe/re5MxcZGTq', '2023-04-08 01:59:07', 1);
 
 -- --------------------------------------------------------
 
@@ -947,8 +860,7 @@ ALTER TABLE `baohanh`
 -- Indexes for table `chitiethoadon`
 --
 ALTER TABLE `chitiethoadon`
-  ADD PRIMARY KEY (`ma_san_pham`,`ma_don_hang`),
-  ADD KEY `pk_ma_san_pham_idx` (`ma_san_pham`),
+  ADD PRIMARY KEY (`ma_chi_tiet_san_pham`,`ma_don_hang`),
   ADD KEY `pk_ma_don_hang_idx` (`ma_don_hang`);
 
 --
@@ -1050,7 +962,7 @@ ALTER TABLE `thuonghieu`
 -- AUTO_INCREMENT for table `baohanh`
 --
 ALTER TABLE `baohanh`
-  MODIFY `ma_bao_hanh` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `ma_bao_hanh` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `chucnang`
@@ -1062,7 +974,7 @@ ALTER TABLE `chucnang`
 -- AUTO_INCREMENT for table `donhang`
 --
 ALTER TABLE `donhang`
-  MODIFY `ma_don_hang` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=133;
+  MODIFY `ma_don_hang` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=157;
 
 --
 -- AUTO_INCREMENT for table `hinhanh`
@@ -1080,13 +992,13 @@ ALTER TABLE `nhacungcap`
 -- AUTO_INCREMENT for table `nhomquyen`
 --
 ALTER TABLE `nhomquyen`
-  MODIFY `ma_nhom_quyen` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `ma_nhom_quyen` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `phieunhap`
 --
 ALTER TABLE `phieunhap`
-  MODIFY `ma_phieu_nhap` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `ma_phieu_nhap` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `quyenhang`
@@ -1104,7 +1016,7 @@ ALTER TABLE `sanpham`
 -- AUTO_INCREMENT for table `taikhoan`
 --
 ALTER TABLE `taikhoan`
-  MODIFY `ma_tai_khoan` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `ma_tai_khoan` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `thuonghieu`
@@ -1120,8 +1032,7 @@ ALTER TABLE `thuonghieu`
 -- Constraints for table `chitiethoadon`
 --
 ALTER TABLE `chitiethoadon`
-  ADD CONSTRAINT `pk_ma_don_hang` FOREIGN KEY (`ma_don_hang`) REFERENCES `donhang` (`ma_don_hang`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `pk_ma_san_pham` FOREIGN KEY (`ma_san_pham`) REFERENCES `sanpham` (`ma_san_pham`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `pk_ma_don_hang` FOREIGN KEY (`ma_don_hang`) REFERENCES `donhang` (`ma_don_hang`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `chitietphieunhap`
