@@ -1,7 +1,6 @@
 <?php
 class OrderModel
 {
-
     public function __construct(private mysqli $conn)
     {
     }
@@ -32,12 +31,12 @@ class OrderModel
 
             while ($row2 = mysqli_fetch_assoc($rows2)) {
                 $product = [];
+                $product["ma_san_pham"] = $row2["ma_san_pham"];
                 $product["ma_chi_tiet_san_pham"] = $row2["ma_chi_tiet_san_pham"];
                 $product["ten_san_pham"] = $row2["ten_san_pham"];
                 $product["hinh_anh"] = json_decode($row2["hinh_anh"], true);
                 $product["don_gia"] = (double) $row2["don_gia"];
                 $product["giam_gia_san_pham"] = (int) $row2["giam_gia_san_pham"];
-                $product["so_luong_da_mua"] = (int) $row2["so_luong_da_mua"];
                 $product["thoi_gian_bao_hanh"] = (int) $row2["thoi_gian_bao_hanh"];
 
                 $order["danh_sach_san_pham_da_mua"][] = $product;
@@ -53,17 +52,17 @@ class OrderModel
     {
         try {
             $order_type = $query["order_type"];
-        } catch (Throwable $th) {
+        } catch (Exception $e) {
             $order_type = "";
         }
         try {
             $start = $query["start"] == 0 ? 0 : date("Y-m-d H:i:s", (int) ($query["start"] / 1000));
-        } catch (Throwable $th) {
+        } catch (Exception $e) {
             $start = "";
         }
         try {
             $end = $query["end"] == 0 ? 0 : date("Y-m-d H:i:s", (int) ($query["end"] / 1000));
-        } catch (Throwable $th) {
+        } catch (Exception $e) {
             $end = "";
         }
 
@@ -113,12 +112,12 @@ class OrderModel
 
             while ($row2 = mysqli_fetch_assoc($rows2)) {
                 $product = [];
+                $product["ma_san_pham"] = $row2["ma_san_pham"];
                 $product["ma_chi_tiet_san_pham"] = $row2["ma_chi_tiet_san_pham"];
                 $product["ten_san_pham"] = $row2["ten_san_pham"];
                 $product["hinh_anh"] = json_decode($row2["hinh_anh"], true);
                 $product["don_gia"] = (double) $row2["don_gia"];
                 $product["giam_gia_san_pham"] = (int) $row2["giam_gia_san_pham"];
-                $product["so_luong_da_mua"] = (int) $row2["so_luong_da_mua"];
                 $product["thoi_gian_bao_hanh"] = (int) $row2["thoi_gian_bao_hanh"];
 
                 $order["danh_sach_san_pham_da_mua"][] = $product;
@@ -143,28 +142,33 @@ class OrderModel
 
         $result = $this->conn->query($sql);
 
-        if ($result === TRUE) {
+        if ($result === TRUE) { 
             $ma_don_hang = $this->conn->insert_id;
             foreach ($data["danh_sach_san_pham_da_mua"] as $product) {
-                $ma_san_pham = (int) $product["ma_san_pham"];
+                $so_luong = (int) $product["so_luong_da_mua"];
+                for ($i = 1; $i <= $so_luong; $i++) {
+                    $ma_san_pham = (int) $product["ma_san_pham"];
 
-                $query1 = "SELECT * FROM chitietsanpham WHERE ma_san_pham = $ma_san_pham LIMIT 1";
-                $row1 = mysqli_query($this->conn, $query1);
-                $data1 = mysqli_fetch_assoc($row1);
-                $ma_chi_tiet_san_pham = $data1["ma_chi_tiet_san_pham"];
+                    $query1 = "SELECT * FROM chitietsanpham WHERE ma_san_pham = $ma_san_pham LIMIT 1";
+                    $row1 = mysqli_query($this->conn, $query1);
+                    $data1 = mysqli_fetch_assoc($row1);
+                    $ma_chi_tiet_san_pham = $data1["ma_chi_tiet_san_pham"];
+                    $delQuery = "DELETE FROM chitietsanpham WHERE ma_chi_tiet_san_pham='$ma_chi_tiet_san_pham';";
+                    $this->conn->query($delQuery);
 
-                $don_gia = (double) $product["don_gia"];
-                $giam_gia_san_pham = (int) $product["giam_gia_san_pham"];
-                $so_luong_da_mua = (int) $product["so_luong_da_mua"];
+                    $don_gia = (double) $product["don_gia"];
+                    $giam_gia_san_pham = (int) $product["giam_gia_san_pham"];
 
-                $query2 = "SELECT * FROM sanpham WHERE ma_san_pham = $ma_san_pham";
-                $row2 = mysqli_query($this->conn, $query2);
-                $data2 = mysqli_fetch_assoc($row2);
-                $thoi_gian_bao_hanh = $data2["bao_hanh"];
+                    $query2 = "SELECT * FROM sanpham WHERE ma_san_pham = $ma_san_pham";
+                    $row2 = mysqli_query($this->conn, $query2);
+                    $data2 = mysqli_fetch_assoc($row2);
+                    $thoi_gian_bao_hanh = $data2["bao_hanh"];
 
-                $sql = "INSERT INTO chitiethoadon (`ma_san_pham`, `ma_chi_tiet_san_pham`, `ma_don_hang`, `so_luong_da_mua`, `don_gia`, `giam_gia_san_pham`, `thoi_gian_bao_hanh`) 
-                        VALUES ($ma_san_pham, '$ma_chi_tiet_san_pham', $ma_don_hang, $so_luong_da_mua, $don_gia, $giam_gia_san_pham, $thoi_gian_bao_hanh);";
-                $result = $this->conn->query($sql);
+                    $sql = "INSERT INTO chitiethoadon (`ma_san_pham`, `ma_chi_tiet_san_pham`, `ma_don_hang`, `don_gia`, `giam_gia_san_pham`, `thoi_gian_bao_hanh`) 
+                            VALUES ($ma_san_pham, '$ma_chi_tiet_san_pham', $ma_don_hang, $don_gia, $giam_gia_san_pham, $thoi_gian_bao_hanh);";
+                    $result = $this->conn->query($sql);
+                }
+
             }
 
             return "New record created successfully. Last inserted ID is: " . $ma_don_hang;
@@ -250,7 +254,7 @@ class OrderModel
         }
     }
 
-    public function delete(int $id): string
+    public function delete($id): string
     {
         $sql = "UPDATE donhang SET hien_thi=0 WHERE ma_don_hang=$id;";
 
