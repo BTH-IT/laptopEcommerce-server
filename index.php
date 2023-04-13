@@ -56,22 +56,15 @@ switch ($urlTarget[0]) {
   case "products":
     $id = $url[4] ?? null;
 
-<<<<<<< HEAD
     $perProducts = [];
 
-=======
->>>>>>> fd5fad15f18963627a066fbc01c5653cfee71d02
     // $perProducts = array_filter(
     //   $perArr,
     //   function ($per) {
     //     return $per["ten_quyen_hang"] == 'products';
     //   }
     // );
-<<<<<<< HEAD
-=======
-
     $perProducts = [];
->>>>>>> fd5fad15f18963627a066fbc01c5653cfee71d02
 
     $productModel = new ProductModel($database->connect);
 
