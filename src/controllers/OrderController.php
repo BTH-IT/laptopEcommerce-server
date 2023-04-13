@@ -102,13 +102,8 @@ class OrderController
 
         // if (!$isValid) break;
         $query = $_SERVER['QUERY_STRING'];
-        parse_str($query, $query_params);
 
-        if (empty($query)) {
-          echo json_encode($this->orderModel->getAll());
-        } else {
-          echo json_encode($this->orderModel->getAllWithQuery($query_params));
-        }
+        echo json_encode($this->orderModel->getAll($query));
 
         break;
       case "POST":

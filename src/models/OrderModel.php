@@ -6,9 +6,49 @@ class OrderModel
     {
     }
 
-    public function getAll(): array
+    public function getAll($query = null): array
     {
-        $sql = "SELECT * FROM donhang";
+        $sql = "SELECT * FROM donhang WHERE hien_thi=1";
+        $arrQuery = [];
+
+        if ($query != null) {
+            parse_str($query, $q);
+
+            if (isset($q["order_type"])) {
+                switch ($q["order_type"]) {
+                    case 'waiting':
+                        $arrQuery[] = "`trang_thai`='chờ xử lý'";
+                        break;
+                    case 'shipping':
+                        $arrQuery[] = "`trang_thai`='đang giao hàng'";
+                        break;
+                    case 'completed':
+                        $arrQuery[] = "`trang_thai`='hoàn thành'";
+                        break;
+                    case 'canceled':
+                        $arrQuery[] = "`trang_thai`='đã hủy'";
+                        break;
+                }
+            }
+
+            if (isset($q["userId"])) {
+                $id = $q["userId"];
+                $arrQuery[] = "`ma_khach_hang`='$id'";
+            }
+
+            if (isset($q["from"]) && isset($q["to"])) {
+                $from = date("Y-m-d H:i:s", $q["from"]);
+                $to = date("Y-m-d H:i:s", $q["to"]);
+                $arrQuery[] = "`thoi_gian_dat_mua` BETWEEN '$from' AND '$to'";
+            }
+        }
+
+        for ($i = 0; $i < count($arrQuery); $i++) {
+            $value = $arrQuery[$i];
+            $sql .= " AND $value";
+        }
+
+        $sql .= ";";
 
         $rows = mysqli_query($this->conn, $sql);
 
@@ -25,8 +65,18 @@ class OrderModel
             $order["hien_thi"] = (bool) $row["hien_thi"];
 
             $orderID = $order["ma_don_hang"];
-            $sql = "SELECT * FROM chitiethoadon as cthd, sanpham as sp 
-                    WHERE cthd.ma_san_pham = sp.ma_san_pham AND cthd.ma_don_hang = $orderID;";
+            $sql = "SELECT sanpham.ma_san_pham, sanpham.ten_san_pham, sanpham.hinh_anh,
+                    chitiethoadon.don_gia, chitiethoadon.giam_gia_san_pham,
+                    COUNT(chitiethoadon.ma_san_pham) as so_luong_da_mua, chitiethoadon.thoi_gian_bao_hanh,
+                    sanpham.thuong_hieu
+                    FROM donhang, chitiethoadon, sanpham
+                    WHERE donhang.ma_don_hang = chitiethoadon.ma_don_hang
+                    AND chitiethoadon.ma_san_pham = sanpham.ma_san_pham
+                    AND donhang.ma_don_hang = $orderID
+                    GROUP BY sanpham.ma_san_pham, sanpham.ten_san_pham, sanpham.hinh_anh,
+                    chitiethoadon.don_gia, chitiethoadon.giam_gia_san_pham,
+                    chitiethoadon.thoi_gian_bao_hanh, sanpham.thuong_hieu;";
+
             $rows2 = mysqli_query($this->conn, $sql);
             $order["danh_sach_san_pham_da_mua"] = [];
 
@@ -34,89 +84,8 @@ class OrderModel
                 $product = [];
                 $product["ma_chi_tiet_san_pham"] = $row2["ma_chi_tiet_san_pham"];
                 $product["ten_san_pham"] = $row2["ten_san_pham"];
-                $product["hinh_anh"] = json_decode($row2["hinh_anh"], true);
-                $product["don_gia"] = (double) $row2["don_gia"];
-                $product["giam_gia_san_pham"] = (int) $row2["giam_gia_san_pham"];
-                $product["so_luong_da_mua"] = (int) $row2["so_luong_da_mua"];
-                $product["thoi_gian_bao_hanh"] = (int) $row2["thoi_gian_bao_hanh"];
-
-                $order["danh_sach_san_pham_da_mua"][] = $product;
-            }
-
-            $data[] = $order;
-        }
-
-        return $data;
-    }
-
-    public function getAllWithQuery($query): array
-    {
-        try {
-            $order_type = $query["order_type"];
-        } catch (Throwable $th) {
-            $order_type = "";
-        }
-        try {
-            $start = $query["start"] == 0 ? 0 : date("Y-m-d H:i:s", (int) ($query["start"] / 1000));
-        } catch (Throwable $th) {
-            $start = "";
-        }
-        try {
-            $end = $query["end"] == 0 ? 0 : date("Y-m-d H:i:s", (int) ($query["end"] / 1000));
-        } catch (Throwable $th) {
-            $end = "";
-        }
-
-        if (!empty($order_type)) {
-            if ($order_type == "waiting") {
-                $order_type = "Chờ xử lý";
-            } else if ($order_type == "shipping") {
-                $order_type = "Đang giao";
-            } else if ($order_type == "completed") {
-                $order_type = "Hoàn thành";
-            } else if ($order_type == "canceled") {
-                $order_type = "Đã huỷ";
-            }
-        }
-
-        if (!empty($order_type)) {
-            if (!empty($start) && !empty($end)) {
-                $sql = "SELECT * FROM donhang as dh WHERE " . ($order_type == "all" ? "" : "dh.trang_thai='$order_type' AND ") . "DATE(dh.thoi_gian_dat_mua) BETWEEN '$start' AND '$end'";
-            } else {
-                $sql = "SELECT * FROM donhang as dh " . ($order_type == "all" ? "" : "WHERE dh.trang_thai='$order_type'");
-            }
-        } else if (!empty($start) && !empty($end)) {
-            $sql = "SELECT * FROM donhang as dh WHERE DATE(dh.thoi_gian_dat_mua) BETWEEN '$start' AND '$end'";
-        } else {
-            return $this->getAll();
-        }
-
-        $rows = mysqli_query($this->conn, $sql);
-
-        $data = [];
-
-        while ($row = mysqli_fetch_assoc($rows)) {
-            $order = [];
-            $order["ma_don_hang"] = (int) $row["ma_don_hang"];
-            $order["ma_khach_hang"] = $row["ma_khach_hang"];
-            $order["ma_nhan_vien"] = $row["ma_nhan_vien"];
-            $order["hinh_thuc_thanh_toan"] = $row["hinh_thuc_thanh_toan"];
-            $order["thoi_gian_dat_mua"] = strtotime($row["thoi_gian_dat_mua"]) * 1000;
-            $order["trang_thai"] = $row["trang_thai"];
-            $order["hien_thi"] = (bool) $row["hien_thi"];
-
-            $orderID = $order["ma_don_hang"];
-            $sql = "SELECT * FROM chitiethoadon as cthd, sanpham as sp 
-                    WHERE cthd.ma_san_pham = sp.ma_san_pham AND cthd.ma_don_hang = $orderID;";
-            $rows2 = mysqli_query($this->conn, $sql);
-            $order["danh_sach_san_pham_da_mua"] = [];
-
-            while ($row2 = mysqli_fetch_assoc($rows2)) {
-                $product = [];
-                $product["ma_chi_tiet_san_pham"] = $row2["ma_chi_tiet_san_pham"];
-                $product["ten_san_pham"] = $row2["ten_san_pham"];
-                $product["hinh_anh"] = json_decode($row2["hinh_anh"], true);
-                $product["don_gia"] = (double) $row2["don_gia"];
+                $product["hinh_anh"] = json_decode($row2["hinh_anh"], true)[0];
+                $product["don_gia"] = (float) $row2["don_gia"];
                 $product["giam_gia_san_pham"] = (int) $row2["giam_gia_san_pham"];
                 $product["so_luong_da_mua"] = (int) $row2["so_luong_da_mua"];
                 $product["thoi_gian_bao_hanh"] = (int) $row2["thoi_gian_bao_hanh"];
@@ -153,7 +122,7 @@ class OrderModel
                 $data1 = mysqli_fetch_assoc($row1);
                 $ma_chi_tiet_san_pham = $data1["ma_chi_tiet_san_pham"];
 
-                $don_gia = (double) $product["don_gia"];
+                $don_gia = (float) $product["don_gia"];
                 $giam_gia_san_pham = (int) $product["giam_gia_san_pham"];
                 $so_luong_da_mua = (int) $product["so_luong_da_mua"];
 
@@ -195,17 +164,25 @@ class OrderModel
         $order["hien_thi"] = (bool) $data["hien_thi"];
 
         $orderID = $order["ma_don_hang"];
-        $sql = "SELECT * FROM chitiethoadon as cthd, sanpham as sp 
-                    WHERE cthd.ma_san_pham = sp.ma_san_pham AND cthd.ma_don_hang = $orderID;";
+        $sql = "SELECT sanpham.ma_san_pham, sanpham.ten_san_pham, sanpham.hinh_anh,
+                chitiethoadon.don_gia, chitiethoadon.giam_gia_san_pham,
+                COUNT(chitiethoadon.ma_san_pham) as so_luong_da_mua, chitiethoadon.thoi_gian_bao_hanh
+                FROM donhang, chitiethoadon, sanpham
+                WHERE donhang.ma_don_hang = chitiethoadon.ma_don_hang
+                AND chitiethoadon.ma_san_pham = sanpham.ma_san_pham
+                AND donhang.ma_don_hang = $orderID
+                GROUP BY sanpham.ma_san_pham, sanpham.ten_san_pham, sanpham.hinh_anh,
+                chitiethoadon.don_gia, chitiethoadon.giam_gia_san_pham,
+                chitiethoadon.thoi_gian_bao_hanh;";
+
         $rows2 = mysqli_query($this->conn, $sql);
         $order["danh_sach_san_pham_da_mua"] = [];
 
         while ($row2 = mysqli_fetch_assoc($rows2)) {
             $product = [];
-            $product["ma_chi_tiet_san_pham"] = $row2["ma_chi_tiet_san_pham"];
             $product["ten_san_pham"] = $row2["ten_san_pham"];
-            $product["hinh_anh"] = $row2["hinh_anh"];
-            $product["don_gia"] = (double) $row2["don_gia"];
+            $product["hinh_anh"] = json_decode($row2["hinh_anh"], true)[0];
+            $product["don_gia"] = (float) $row2["don_gia"];
             $product["giam_gia_san_pham"] = (int) $row2["giam_gia_san_pham"];
             $product["ten_san_pham"] = $row2["ten_san_pham"];
             $product["so_luong_da_mua"] = (int) $row2["so_luong_da_mua"];
