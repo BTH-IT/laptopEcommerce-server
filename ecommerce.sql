@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 13, 2023 at 09:54 AM
+-- Generation Time: Apr 17, 2023 at 07:50 AM
 -- Server version: 8.0.31
 -- PHP Version: 8.2.0
 
@@ -50,11 +50,7 @@ INSERT INTO `baohanh` (`ma_bao_hanh`, `ma_chi_tiet_san_pham`, `ma_khach_hang`, `
 --
 
 CREATE TABLE `chitiethoadon` (
-<<<<<<< HEAD
   `ma_san_pham` int DEFAULT NULL,
-=======
-  `ma_san_pham` int NOT NULL,
->>>>>>> fd5fad15f18963627a066fbc01c5653cfee71d02
   `ma_chi_tiet_san_pham` varchar(256) NOT NULL,
   `ma_don_hang` int NOT NULL,
   `don_gia` double DEFAULT NULL,
@@ -66,18 +62,13 @@ CREATE TABLE `chitiethoadon` (
 -- Dumping data for table `chitiethoadon`
 --
 
-<<<<<<< HEAD
 INSERT INTO `chitiethoadon` (`ma_san_pham`, `ma_chi_tiet_san_pham`, `ma_don_hang`, `don_gia`, `giam_gia_san_pham`, `thoi_gian_bao_hanh`) VALUES
-(1, '168042680612', 148, 11000000, 10, 24),
-(1, '168042730413', 149, 11000000, 10, 24),
-(1, '168044932914', 150, 11000000, 10, 24),
-(1, '1680449329612', 156, 15840000, 10, 24),
-(1, '16804493296121', 156, 15840000, 10, 24),
-(1, '168044932962', 156, 15840000, 10, 24);
-=======
-INSERT INTO `chitiethoadon` (`ma_san_pham`, `ma_chi_tiet_san_pham`, `ma_don_hang`, `so_luong_da_mua`, `don_gia`, `giam_gia_san_pham`, `thoi_gian_bao_hanh`) VALUES
-(1, 168042680612, 126, 1, 2000000, 10, 24);
->>>>>>> fd5fad15f18963627a066fbc01c5653cfee71d02
+(2, '12312', 158, 34848000, 10, 24),
+(2, '123131233', 158, 34848000, 10, 24),
+(3, '1234321', 158, 33000000, 10, 24),
+(3, '132123', 158, 33000000, 10, 24),
+(1, '1680449329623', 157, 15840000, 10, 24),
+(1, '16804493296231', 157, 15840000, 10, 24);
 
 -- --------------------------------------------------------
 
@@ -312,18 +303,12 @@ CREATE TABLE `chitietsanpham` (
 --
 
 INSERT INTO `chitietsanpham` (`ma_chi_tiet_san_pham`, `ma_san_pham`) VALUES
-('12312', 2),
-('123131233', 2),
 ('12322', 4),
 ('12323123', 2),
-('1234321', 3),
-('132123', 3),
 ('168042665910', 2),
 ('168042679012', 2),
 ('168044932913', 2),
 ('16804493296', 3),
-('1680449329623', 1),
-('16804493296231', 1),
 ('16804493296a', 1),
 ('168076695112', 2),
 ('16807669518', 1),
@@ -387,15 +372,8 @@ CREATE TABLE `donhang` (
 --
 
 INSERT INTO `donhang` (`ma_don_hang`, `ma_khach_hang`, `ma_nhan_vien`, `hinh_thuc_thanh_toan`, `thoi_gian_dat_mua`, `trang_thai`, `hien_thi`) VALUES
-(148, 'bttan', 'hung', 'postpaid', '2023-04-03 09:23:36', 'hoàn thành', 1),
-(149, 'bttan', '', 'postpaid', '2023-04-05 01:24:16', 'chờ xử lý', 1),
-(150, 'bttan', NULL, 'postpaid', '2023-04-13 02:43:56', 'chờ xử lý', 1),
-(151, 'bttan', NULL, 'postpaid', '2023-04-13 02:50:40', 'chờ xử lý', 1),
-(152, 'bttan', NULL, 'postpaid', '2023-04-13 02:50:41', 'chờ xử lý', 1),
-(153, 'bttan', NULL, 'postpaid', '2023-04-13 02:50:42', 'chờ xử lý', 1),
-(154, 'bttan', NULL, 'postpaid', '2023-04-13 02:50:42', 'chờ xử lý', 1),
-(155, 'bttan', NULL, 'postpaid', '2023-04-13 02:50:42', 'chờ xử lý', 1),
-(156, 'bttan', NULL, 'postpaid', '2023-04-13 02:51:23', 'chờ xử lý', 1);
+(157, 'bttan', NULL, 'postpaid', '2023-04-13 03:51:02', 'chờ xử lý', 1),
+(158, 'bttan', NULL, 'postpaid', '2023-04-13 04:04:01', 'chờ xử lý', 1);
 
 -- --------------------------------------------------------
 
@@ -541,18 +519,19 @@ CREATE TABLE `nhanvien` (
   `so_dien_thoai` varchar(45) DEFAULT NULL,
   `ngay_sinh` date DEFAULT NULL,
   `gioi_tinh` tinyint DEFAULT NULL,
-  `muc_luong` bigint DEFAULT NULL
+  `muc_luong` bigint DEFAULT NULL,
+  `hien_thi` tinyint DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 --
 -- Dumping data for table `nhanvien`
 --
 
-INSERT INTO `nhanvien` (`ma_nhan_vien`, `ten_nhan_vien`, `so_dien_thoai`, `ngay_sinh`, `gioi_tinh`, `muc_luong`) VALUES
-('hieu', '123123', '123123', '2023-04-04', 1, 1000000),
-('hung', 'bth2', '123', '2003-03-01', 1, 20000000),
-('huy', 'Huy abc', '0706092403', '2023-04-01', 1, 1000000),
-('lam', 'lam ne', '0987654321', '2023-04-06', 1, 10000000);
+INSERT INTO `nhanvien` (`ma_nhan_vien`, `ten_nhan_vien`, `so_dien_thoai`, `ngay_sinh`, `gioi_tinh`, `muc_luong`, `hien_thi`) VALUES
+('hieu', '123123', '123123', '2023-04-04', 1, 1000000, 1),
+('hung', 'bth2', '123', '2003-03-01', 1, 20000000, 1),
+('huy', 'Huy abc', '0706092403', '2023-04-01', 1, 1000000, 1),
+('lam', 'lam ne', '0987654321', '2023-04-06', 1, 10000000, 1);
 
 -- --------------------------------------------------------
 
@@ -983,7 +962,7 @@ ALTER TABLE `chucnang`
 -- AUTO_INCREMENT for table `donhang`
 --
 ALTER TABLE `donhang`
-  MODIFY `ma_don_hang` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=157;
+  MODIFY `ma_don_hang` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=159;
 
 --
 -- AUTO_INCREMENT for table `hinhanh`
