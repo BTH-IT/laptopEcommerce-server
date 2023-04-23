@@ -83,6 +83,7 @@ class OrderModel
             $order["thoi_gian_dat_mua"] = strtotime($row["thoi_gian_dat_mua"]) * 1000;
             $order["trang_thai"] = $row["trang_thai"];
             $order["hien_thi"] = (bool) $row["hien_thi"];
+            $order["tong_tien"] = 0;
 
             $orderID = $order["ma_don_hang"];
             $sql = "SELECT sanpham.ma_san_pham, sanpham.ten_san_pham, sanpham.hinh_anh,
@@ -102,13 +103,13 @@ class OrderModel
 
             while ($row2 = mysqli_fetch_assoc($rows2)) {
                 $product = [];
-                $product["ma_chi_tiet_san_pham"] = $row2["ma_chi_tiet_san_pham"];
                 $product["ten_san_pham"] = $row2["ten_san_pham"];
                 $product["hinh_anh"] = json_decode($row2["hinh_anh"], true)[0];
                 $product["don_gia"] = (float) $row2["don_gia"];
                 $product["giam_gia_san_pham"] = (int) $row2["giam_gia_san_pham"];
                 $product["so_luong_da_mua"] = (int) $row2["so_luong_da_mua"];
                 $product["thoi_gian_bao_hanh"] = (int) $row2["thoi_gian_bao_hanh"];
+                $order["tong_tien"] += ($product["don_gia"] * (100 - $product["giam_gia_san_pham"]) / 100) * $product["so_luong_da_mua"];
 
                 $order["danh_sach_san_pham_da_mua"][] = $product;
             }
@@ -135,25 +136,29 @@ class OrderModel
         if ($result === TRUE) {
             $ma_don_hang = $this->conn->insert_id;
             foreach ($data["danh_sach_san_pham_da_mua"] as $product) {
-                $ma_san_pham = (int) $product["ma_san_pham"];
+                $so_luong = (int) $product["so_luong_da_mua"];
+                for ($i = 1; $i <= $so_luong; $i++) {
+                    $ma_san_pham = (int) $product["ma_san_pham"];
 
-                $query1 = "SELECT * FROM chitietsanpham WHERE ma_san_pham = $ma_san_pham LIMIT 1";
-                $row1 = mysqli_query($this->conn, $query1);
-                $data1 = mysqli_fetch_assoc($row1);
-                $ma_chi_tiet_san_pham = $data1["ma_chi_tiet_san_pham"];
+                    $query1 = "SELECT * FROM chitietsanpham WHERE ma_san_pham = $ma_san_pham LIMIT 1";
+                    $row1 = mysqli_query($this->conn, $query1);
+                    $data1 = mysqli_fetch_assoc($row1);
+                    $ma_chi_tiet_san_pham = $data1["ma_chi_tiet_san_pham"];
+                    $del = "DELETE FROM chitietsanpham WHERE ma_chi_tiet_san_pham='$ma_chi_tiet_san_pham';";
+                    mysqli_query($this->conn, $del);
 
-                $don_gia = (float) $product["don_gia"];
-                $giam_gia_san_pham = (int) $product["giam_gia_san_pham"];
-                $so_luong_da_mua = (int) $product["so_luong_da_mua"];
+                    $don_gia = (float) $product["don_gia"];
+                    $giam_gia_san_pham = (int) $product["giam_gia_san_pham"];
 
-                $query2 = "SELECT * FROM sanpham WHERE ma_san_pham = $ma_san_pham";
-                $row2 = mysqli_query($this->conn, $query2);
-                $data2 = mysqli_fetch_assoc($row2);
-                $thoi_gian_bao_hanh = $data2["bao_hanh"];
+                    $query2 = "SELECT * FROM sanpham WHERE ma_san_pham = $ma_san_pham";
+                    $row2 = mysqli_query($this->conn, $query2);
+                    $data2 = mysqli_fetch_assoc($row2);
+                    $thoi_gian_bao_hanh = $data2["bao_hanh"];
 
-                $sql = "INSERT INTO chitiethoadon (`ma_san_pham`, `ma_chi_tiet_san_pham`, `ma_don_hang`, `so_luong_da_mua`, `don_gia`, `giam_gia_san_pham`, `thoi_gian_bao_hanh`) 
-                        VALUES ($ma_san_pham, '$ma_chi_tiet_san_pham', $ma_don_hang, $so_luong_da_mua, $don_gia, $giam_gia_san_pham, $thoi_gian_bao_hanh);";
-                $result = $this->conn->query($sql);
+                    $sql = "INSERT INTO chitiethoadon (`ma_san_pham`, `ma_chi_tiet_san_pham`, `ma_don_hang`, `don_gia`, `giam_gia_san_pham`, `thoi_gian_bao_hanh`) 
+                            VALUES ($ma_san_pham, '$ma_chi_tiet_san_pham', $ma_don_hang, $don_gia, $giam_gia_san_pham, $thoi_gian_bao_hanh);";
+                    $result = $this->conn->query($sql);
+                }
             }
 
             return "New record created successfully. Last inserted ID is: " . $ma_don_hang;
@@ -200,6 +205,7 @@ class OrderModel
 
         while ($row2 = mysqli_fetch_assoc($rows2)) {
             $product = [];
+            $product["ma_san_pham"] = $row2["ma_san_pham"];
             $product["ten_san_pham"] = $row2["ten_san_pham"];
             $product["hinh_anh"] = json_decode($row2["hinh_anh"], true)[0];
             $product["don_gia"] = (float) $row2["don_gia"];
@@ -239,6 +245,50 @@ class OrderModel
                 , thoi_gian_dat_mua='$thoi_gian_dat_mua', trang_thai='$trang_thai', hien_thi=$hien_thi
                 WHERE ma_don_hang=$ma_don_hang;";
         $result = mysqli_query($this->conn, $sql);
+
+        if ($result) {
+            return "Successfully";
+        } else {
+            return $this->conn->error;
+        }
+    }
+
+    public function cancel($data): string
+    {
+        $ma_don_hang = (int) $data["ma_don_hang"];
+        foreach ($data["danh_sach_san_pham_da_mua"] as $product) {
+            $so_luong = (int) $product["so_luong_da_mua"];
+            for ($i = 1; $i <= $so_luong; $i++) {
+                $ma_chi_tiet_san_pham = '';
+                $ma_chi_tiet_san_pham .= strtotime("now");
+                $ma_san_pham = (int) $product["ma_san_pham"];
+
+                $id = $product["ma_san_pham"];
+                $ma_chi_tiet_san_pham .= $id;
+                $sql = "SELECT COUNT(ma_san_pham) AS so_luong FROM chitietsanpham
+                        WHERE ma_san_pham=$id GROUP BY ma_san_pham;";
+
+                $result = mysqli_query($this->conn, $sql);
+
+                if ($result->num_rows <= 0) {
+                    $ma_chi_tiet_san_pham .= "1";
+                } else {
+                    $row = mysqli_fetch_assoc($result);
+
+                    $so_luong_hien_tai = ((int) $row["so_luong"]) + 1;
+
+                    $ma_chi_tiet_san_pham .= (string) ($so_luong_hien_tai);
+                }
+
+                $sql = "INSERT INTO chitietsanpham (`ma_chi_tiet_san_pham`, `ma_san_pham`)
+                      VALUES ('$ma_chi_tiet_san_pham', $ma_san_pham);";
+                $result = $this->conn->query($sql);
+            }
+        }
+
+        $sql1 = "UPDATE donhang 
+                SET trang_thai='đã huỷ' WHERE ma_don_hang=$ma_don_hang;";
+        $result = mysqli_query($this->conn, $sql1);
 
         if ($result) {
             return "Successfully";
