@@ -70,12 +70,22 @@ class OrderController
         // trả về array và nếu null thì array trở thành rỗng
         $data = (array) json_decode($data, true);
 
-        $rows = $this->orderModel->update($order, $data);
+        if (isset($data["trang_thai"]) && $data["trang_thai"] == "đã huỷ") {
+          $rows = $this->orderModel->cancel($data);
 
-        echo json_encode([
-          "message" => "order $id updated",
-          "rows" => $rows
-        ]);
+          echo json_encode([
+            "message" => "order $id canceled",
+            "rows" => $rows
+          ]);
+        } else {
+          $rows = $this->orderModel->update($order, $data);
+  
+          echo json_encode([
+            "message" => "order $id updated",
+            "rows" => $rows
+          ]);
+        }
+
         break;
       case 'DELETE':
         // $isValid = $this->checkPermission("DELETE");
