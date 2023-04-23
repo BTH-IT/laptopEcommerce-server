@@ -36,17 +36,4 @@ class AuthController
         header("Allow: POST");
     }
   }
-
-  private function getValidationErrors(array $data, bool $is_new = true): array
-  {
-    $errors = [];
-
-    if ($is_new) {
-      if (empty($data["hinh_anh"])) {
-        $errors[] = "hình ảnh là bắt buộc";
-      }
-    }
-
-    return $errors;
-  }
 }

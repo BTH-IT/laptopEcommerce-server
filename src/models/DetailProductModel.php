@@ -29,11 +29,11 @@ class DetailProductModel
     $so_luong = (int) $data["so_luong_da_mua"];
 
     for ($i = 1; $i <= $so_luong; $i++) {
+      $id = (int) $data["ma_san_pham"];
       $ma_chi_tiet_san_pham = '';
       $ma_chi_tiet_san_pham .= strtotime("now");
-      $ma_san_pham = (int) $data["ma_san_pham"];
+      $ma_chi_tiet_san_pham .= $id;
 
-      $id = $data["ma_san_pham"];
       $sql = "SELECT COUNT(ma_san_pham) AS so_luong FROM chitietsanpham
               WHERE ma_san_pham=$id GROUP BY ma_san_pham;";
 
@@ -50,7 +50,7 @@ class DetailProductModel
       }
 
       $sql = "INSERT INTO chitietsanpham (`ma_chi_tiet_san_pham`, `ma_san_pham`)
-            VALUES ('$ma_chi_tiet_san_pham', $ma_san_pham);";
+            VALUES ('$ma_chi_tiet_san_pham', $id);";
 
       $result = $this->conn->query($sql);
 

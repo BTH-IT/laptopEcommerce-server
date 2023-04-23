@@ -95,17 +95,13 @@ class DetailProductController
     $errors = [];
 
     if ($is_new) {
-      // if (empty($data["ten_thuong_hieu"])) {
-      //   $errors[] = "tên thương hiệu là bắt buộc";
-      // }
+      if (empty($data["ma_san_pham"])) {
+        $errors[] = "mã sản phẩm là bắt buộc";
+      }
 
-      // if (empty($data["icon"])) {
-      //   $errors[] = "icon thương hiệu là bắt buộc";
-      // }
-
-      // if (empty($data["hinh_anh"])) {
-      //   $errors[] = "hình ảnh là bắt buộc";
-      // }
+      if (empty($data["so_luong_da_mua"])) {
+        $errors[] = "số lượng đã mua là bắt buộc";
+      }
     }
 
     return $errors;

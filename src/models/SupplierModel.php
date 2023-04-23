@@ -8,7 +8,26 @@ class SupplierModel
 
     public function getAll(): array
     {
-        $sql = "SELECT * FROM nhacungcap";
+        $sql = "SELECT * FROM nhacungcap WHERE hien_thi=1";
+
+        $searching = $_GET["searching"] ?? null;
+
+        if ($searching) {
+            $sql .= " AND ma_nha_cung_cap LIKE '%$searching%' OR ten_nha_cung_cap LIKE '%$searching%'";
+        }
+
+        $sortName = $_GET["sortName"] ?? "ma_nha_cung_cap";
+        $sortAction = $_GET["sortAction"] ?? "";
+
+        switch ($sortName) {
+            case 'ma_nha_cung_cap':
+                $sql .= " ORDER BY ma_nha_cung_cap " . "$sortAction;";
+                break;
+
+            case 'ten_nha_cung_cap':
+                $sql .= " ORDER BY ten_nha_cung_cap " . "$sortAction;";
+                break;
+        }
 
         $rows = mysqli_query($this->conn, $sql);
 
@@ -49,7 +68,7 @@ class SupplierModel
 
     public function get(int $id): array|false
     {
-        $sql = "SELECT * FROM nhacungcap WHERE ma_nha_cung_cap = $id";
+        $sql = "SELECT * FROM nhacungcap WHERE ma_nha_cung_cap = $id AND hien_thi=1";
 
         $result = mysqli_query($this->conn, $sql);
 
@@ -93,7 +112,7 @@ class SupplierModel
 
     public function delete(int $id): string
     {
-        $sql = "DELETE FROM nhacungcap WHERE ma_nha_cung_cap = $id;";
+        $sql = "UPDATE nhacungcap SET hien_thi=0 WHERE ma_nha_cung_cap = $id;";
 
         $result = mysqli_query($this->conn, $sql);
 

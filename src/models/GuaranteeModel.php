@@ -6,9 +6,48 @@ class GuaranteeModel
     {
     }
 
-    public function getAll(): array
+    public function getAll($query = null): array
     {
-        $sql = "SELECT * FROM baohanh";
+        $sql = "SELECT * FROM baohanh WHERE hien_thi=1";
+
+        $arrQuery = [];
+
+        if ($query != null) {
+            parse_str($query, $q);
+
+            if (isset($q["from"]) && isset($q["to"])) {
+                $from = date("Y-m-d H:i:s", $q["from"]);
+                $to = date("Y-m-d H:i:s", $q["to"]);
+                $arrQuery[] = "`thoi_gian_dat_mua` BETWEEN '$from' AND '$to'";
+            }
+
+            if (isset($q["searching"])) {
+                $searching = $q["searching"];
+                $sql .= " AND ma_bao_hanh LIKE '%$searching%' OR ma_chi_tiet_bao_hanh LIKE '%$searching%' OR ma_khach_hang LIKE '%$searching%'";
+            }
+        }
+
+        for ($i = 0; $i < count($arrQuery); $i++) {
+            $value = $arrQuery[$i];
+            $sql .= " AND $value";
+        }
+
+        $sortName = $_GET["sortName"] ?? "ma_bao_hanh";
+        $sortAction = $_GET["sortAction"] ?? "";
+
+        switch ($sortName) {
+            case 'ma_bao_hanh':
+                $sql .= " ORDER BY ma_bao_hanh " . "$sortAction;";
+                break;
+
+            case 'ma_chi_tiet_san_pham':
+                $sql .= " ORDER BY ma_chi_tiet_san_pham " . "$sortAction;";
+                break;
+
+            case 'ma_khach_hang':
+                $sql .= " ORDER BY ma_khach_hang " . "$sortAction;";
+                break;
+        }
 
         $rows = mysqli_query($this->conn, $sql);
 
@@ -51,7 +90,7 @@ class GuaranteeModel
 
     public function get(int $id): array|false
     {
-        $sql = "SELECT * FROM baohanh WHERE ma_bao_hanh = $id";
+        $sql = "SELECT * FROM baohanh WHERE hien_thi=1 AND ma_bao_hanh = $id";
 
         $result = mysqli_query($this->conn, $sql);
 
@@ -105,7 +144,7 @@ class GuaranteeModel
 
     public function delete(int $id): string
     {
-        $sql = "DELETE FROM baohanh WHERE ma_bao_hanh = $id;";
+        $sql = "UPDATE baohanh SET hien_thi=0 WHERE ma_bao_hanh = $id;";
 
         $result = mysqli_query($this->conn, $sql);
 

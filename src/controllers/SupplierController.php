@@ -115,7 +115,7 @@ class SupplierController
                 // trả về array và nếu null thì array trở thành rỗng
                 $data = (array) json_decode($data, true);
 
-                // $errors = $this->getValidationErrors($data);
+                $errors = $this->getValidationErrors($data);
 
                 if (!empty($errors)) {
                     http_response_code(422);
@@ -141,12 +141,19 @@ class SupplierController
         $errors = [];
 
         if ($is_new) {
-            if (empty($data["ten_nguoi_dung"])) {
-                $errors[] = "tên người dùng là bắt buộc";
+            if (empty($data["ten_nha_cung_cap"])) {
+                $errors[] = "tên nhà cung cấp là bắt buộc";
             }
 
-            if (empty($data["mat_khau"])) {
-                $errors[] = "mật khẩu là bắt buộc";
+            if (empty($data["so_dien_thoai"])) {
+                $errors[] = "số điện thoại là bắt buộc";
+            } else {
+                if (preg_match('/^[0-9]{10}+$/', $data["so_dien_thoai"]))
+                    $errors[] = "số điện thoại không đúng";
+            }
+
+            if (empty($data["dia_chi"])) {
+                $errors[] = "địa chỉ là bắt buộc";
             }
         }
 

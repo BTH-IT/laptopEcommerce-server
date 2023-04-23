@@ -137,6 +137,17 @@ class DetailPermissionController
     $errors = [];
 
     if ($is_new) {
+      if (empty($data["ma_nhom_quyen"])) {
+        $errors[] = "mã nhóm quyền là bắt buộc";
+      }
+
+      if (empty($data["ma_quyen_hang"])) {
+        $errors[] = "mã quyền hạng là bắt buộc";
+      }
+
+      if (empty($data["ma_chuc_nang"])) {
+        $errors[] = "mã chức năng là bắt buộc";
+      }
     }
 
     return $errors;

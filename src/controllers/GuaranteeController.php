@@ -102,6 +102,10 @@ class GuaranteeController
 
                 // if (!$isValid) break;
 
+                if (isset($_SERVER["QUERY_STRING"])) {
+                    echo json_encode($this->guaranteeModel->getAll($_SERVER["QUERY_STRING"]));
+                    break;
+                }
                 echo json_encode($this->guaranteeModel->getAll());
                 break;
             case "POST":
@@ -115,7 +119,7 @@ class GuaranteeController
                 // trả về array và nếu null thì array trở thành rỗng
                 $data = (array) json_decode($data, true);
 
-                // $errors = $this->getValidationErrors($data);
+                $errors = $this->getValidationErrors($data);
 
                 if (!empty($errors)) {
                     http_response_code(422);
@@ -141,12 +145,20 @@ class GuaranteeController
         $errors = [];
 
         if ($is_new) {
-            if (empty($data["ten_nguoi_dung"])) {
-                $errors[] = "tên người dùng là bắt buộc";
+            if (empty($data["ma_chi_tiet_san_pham"])) {
+                $errors[] = "mã chi tiết sản phẩm là bắt buộc";
             }
 
-            if (empty($data["mat_khau"])) {
-                $errors[] = "mật khẩu là bắt buộc";
+            if (empty($data["ma_khach_hang"])) {
+                $errors[] = "mã khách hàng là bắt buộc";
+            }
+
+            if (empty($data["ngay_lap"])) {
+                $errors[] = "ngày lập là bắt buộc";
+            }
+
+            if (empty($data["ngay_het_han"])) {
+                $errors[] = "ngày hết hạn là bắt buộc";
             }
         }
 

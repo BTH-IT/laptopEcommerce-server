@@ -38,19 +38,21 @@ switch ($urlTarget[0]) {
     // $perAccounts = array_filter(
     //   $perArr,
     //   function ($per) {
-    //     return $per["ten_quyen_hang"] == 'accounts';
+    //     return $per["ten_quyen_hang"] == 'guarantee';
     //   }
     // );
 
-    $perAccounts = [];
+    $perGuarantee = [];
 
     $id = $url[4] ?? null;
 
     $guaranteeModel = new GuaranteeModel($database->connect);
 
-    $guaranteeController = new GuaranteeController($guaranteeModel, $perAccounts);
+    $guaranteeController = new GuaranteeController($guaranteeModel, $perGuarantee);
 
     $guaranteeController->processRequest($_SERVER["REQUEST_METHOD"], $id);
+
+    $database->connect->close();
     break;
 
   case "products":
@@ -64,42 +66,34 @@ switch ($urlTarget[0]) {
     //     return $per["ten_quyen_hang"] == 'products';
     //   }
     // );
-    $perProducts = [];
 
     $productModel = new ProductModel($database->connect);
 
     $productController = new ProductController($productModel, $perProducts);
 
     $productController->processRequest($_SERVER["REQUEST_METHOD"], $id);
+
+    $database->connect->close();
     break;
 
   case "brands":
 
+    $database->connect->close();
     break;
 
   case "accounts":
-    // $perAccounts = array_filter(
-    //   $perArr,
-    //   function ($per) {
-    //     return $per["ten_quyen_hang"] == 'accounts';
-    //   }
-    // );
 
-    $id = $url[4] ?? null;
-
-    $accountModel = new AccountModel($database->connect);
-
-    $accountController = new AccountController($accountModel, $perAccounts);
-
-    $accountController->processRequest($_SERVER["REQUEST_METHOD"], $id);
+    $database->connect->close();
     break;
 
   case "customers":
 
+    $database->connect->close();
     break;
 
   case "employees":
 
+    $database->connect->close();
     break;
 
   case "orders":
@@ -110,15 +104,17 @@ switch ($urlTarget[0]) {
     //   }
     // );
 
-    $perAccounts = [];
+    $perOrders = [];
 
     $id = $url[4] ?? null;
 
     $orderModel = new OrderModel($database->connect);
 
-    $orderController = new OrderController($orderModel, $perAccounts);
+    $orderController = new OrderController($orderModel, $perOrders);
 
     $orderController->processRequest($_SERVER["REQUEST_METHOD"], $id);
+
+    $database->connect->close();
     break;
 
   case "import-orders":
@@ -129,24 +125,26 @@ switch ($urlTarget[0]) {
     //   }
     // );
 
-    $perAccounts = [];
+    $perImportOrders = [];
 
     $id = $url[4] ?? null;
 
-    $importModel = new ImportOrderModel($database->connect);
+    $importOrderModel = new ImportOrderModel($database->connect);
 
-    $importController = new ImportOrderController($importModel, $perAccounts);
+    $importOrderController = new ImportOrderController($importOrderModel, $perImportOrders);
 
-    $importController->processRequest($_SERVER["REQUEST_METHOD"], $id);
+    $importOrderController->processRequest($_SERVER["REQUEST_METHOD"], $id);
+
+    $database->connect->close();
     break;
 
   case "images":
-    $perImages = array_filter(
-      $perArr,
-      function ($per) {
-        return $per["ten_quyen_hang"] == 'images';
-      }
-    );
+    // $perImages = array_filter(
+    //   $perArr,
+    //   function ($per) {
+    //     return $per["ten_quyen_hang"] == 'images';
+    //   }
+    // );
 
     $id = $url[4] ?? null;
 
@@ -155,6 +153,8 @@ switch ($urlTarget[0]) {
     $imageController = new ImageController($imageModel, $perImages);
 
     $imageController->processRequest($_SERVER["REQUEST_METHOD"], $id);
+
+    $database->connect->close();
     break;
 
   case "auth":
@@ -165,6 +165,8 @@ switch ($urlTarget[0]) {
     $authController = new AuthController($authModel);
 
     $authController->processRequest($_SERVER["REQUEST_METHOD"], $action);
+
+    $database->connect->close();
     break;
 
   case "auth-group":
@@ -182,6 +184,8 @@ switch ($urlTarget[0]) {
     $authGroupController = new AuthGroupController($authGroupModel, $perAuthGroups);
 
     $authGroupController->processRequest($_SERVER["REQUEST_METHOD"], $id);
+
+    $database->connect->close();
     break;
 
   case "decentralization":
@@ -201,30 +205,32 @@ switch ($urlTarget[0]) {
     $detailPermissionController = new DetailPermissionController($detailPermissionModel, $perDecentralization);
 
     $detailPermissionController->processRequest($_SERVER["REQUEST_METHOD"], $roleId, $perId, $actionId);
+
+    $database->connect->close();
     break;
 
   case "suppliers":
     // $perAccounts = array_filter(
     //   $perArr,
     //   function ($per) {
-    //     return $per["ten_quyen_hang"] == 'accounts';
+    //     return $per["ten_quyen_hang"] == 'suppliers';
     //   }
     // );
 
-    $perAccounts = [];
+    $perSuppliers = [];
 
     $id = $url[4] ?? null;
 
     $supplierModel = new SupplierModel($database->connect);
 
-    $supplierController = new SupplierController($supplierModel, $perAccounts);
+    $supplierController = new SupplierController($supplierModel, $perSuppliers);
 
     $supplierController->processRequest($_SERVER["REQUEST_METHOD"], $id);
+
+    $database->connect->close();
     break;
 
   default:
     http_response_code(404);
     exit;
 }
-
-$database->connect->close();

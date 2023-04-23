@@ -9,12 +9,31 @@ class ProductModel
   public function getAll(): array
   {
     $search = $_GET["search"] ?? null;
+    $searching = $_GET["searching"] ?? null;
 
     $sql = "SELECT * FROM sanpham WHERE hien_thi=1";
 
     if ($search) {
       $sql .= " AND `ten_san_pham` LIKE '%$search%'";
     }
+
+    if ($searching) {
+      $sql .= " AND ma_san_pham LIKE '%$searching%' OR ten_san_pham LIKE '%$searching%' OR thuong_hieu LIKE '%$searching%'";
+    }
+
+    $sortName = $_GET["sortName"] ?? "ma_san_pham";
+    $sortAction = $_GET["sortAction"] ?? "";
+
+    switch ($sortName) {
+      case 'ma_san_pham':
+        $sql .= " ORDER BY ma_san_pham " . "$sortAction;";
+        break;
+
+      case 'ten_san_pham':
+        $sql .= " ORDER BY ten_san_pham " . "$sortAction;";
+        break;
+    }
+
     $result = mysqli_query($this->conn, $sql);
 
     $data = [];
@@ -115,13 +134,6 @@ class ProductModel
     $minPrice = isset($_GET["min_price"]) ? (float) $_GET["min_price"] : null;
     $maxPrice = isset($_GET["max_price"]) ? (float) $_GET["max_price"] : null;
     $outstanding = isset($_GET["noi_bat"]) ? 1 : null;
-
-    // if (
-    //   $minPrice != null || $maxPrice || $brand || $seriesLaptop || $color
-    //   || $seriesCPU || $chip || $sizeRam || $weight || $name || $outstanding !== null
-    // ) {
-    //   $sql .= " WHERE";
-    // }
 
     $whereArr = [];
 
@@ -433,7 +445,7 @@ class ProductModel
 
   public function delete(int $id): string
   {
-    $sql = "UPDATE sanpham SET hien_thi=0 WHERE ma_san_pham=$id";
+    $sql = "UPDATE sanpham SET hien_thi=0 WHERE ma_san_pham=$id;";
 
     $result = mysqli_query($this->conn, $sql);
 

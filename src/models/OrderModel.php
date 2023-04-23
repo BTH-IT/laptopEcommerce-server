@@ -41,6 +41,11 @@ class OrderModel
                 $to = date("Y-m-d H:i:s", $q["to"]);
                 $arrQuery[] = "`thoi_gian_dat_mua` BETWEEN '$from' AND '$to'";
             }
+
+            if (isset($q["searching"])) {
+                $searching = $q["searching"];
+                $arrQuery[] = "`ma_don_hang` LIKE '%$searching%'";
+            }
         }
 
         for ($i = 0; $i < count($arrQuery); $i++) {
@@ -48,7 +53,22 @@ class OrderModel
             $sql .= " AND $value";
         }
 
-        $sql .= ";";
+        $sortName = $_GET["sortName"] ?? "ma_don_hang";
+        $sortAction = $_GET["sortAction"] ?? "";
+
+        switch ($sortName) {
+            case 'ma_don_hang':
+                $sql .= " ORDER BY ma_don_hang " . "$sortAction;";
+                break;
+
+            case 'trang_thai':
+                $sql .= " ORDER BY trang_thai " . "$sortAction;";
+                break;
+
+            case 'ngay_lap':
+                $sql .= " ORDER BY ngay_lap " . "$sortAction;";
+                break;
+        }
 
         $rows = mysqli_query($this->conn, $sql);
 

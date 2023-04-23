@@ -10,6 +10,25 @@ class AuthGroupModel
   {
     $sql = "SELECT * FROM nhomquyen";
 
+    $searching = $_GET["searching"] ?? null;
+
+    if ($searching) {
+      $sql .= " WHERE ma_nhom_quyen LIKE '%$searching%' OR ten_nhom_quyen LIKE '%$searching%'";
+    }
+
+    $sortName = $_GET["sortName"] ?? "ma_nhom_quyen";
+    $sortAction = $_GET["sortAction"] ?? "";
+
+    switch ($sortName) {
+      case 'ma_nhom_quyen':
+        $sql .= " ORDER BY ma_nhom_quyen " . "$sortAction;";
+        break;
+
+      case 'ten_nhom_quyen':
+        $sql .= " ORDER BY ten_nhom_quyen " . "$sortAction;";
+        break;
+    }
+
     $rows = mysqli_query($this->conn, $sql);
 
     $data = [];
@@ -72,18 +91,61 @@ class AuthGroupModel
       while ($rowPermission = mysqli_fetch_assoc($rowsPermission)) {
         $ma_quyen_hang = (int) $rowPermission["ma_quyen_hang"];
 
-        $sqlAction = "SELECT * FROM chucnang";
+        switch ($ma_quyen_hang) {
+          case 1:
+            $sql = "INSERT INTO chitietquyenhang (`ma_nhom_quyen`, `ma_quyen_hang`,
+                  `ma_chuc_nang`, `trang_thai`)
+                  VALUES ($ma_nhom_quyen, $ma_quyen_hang, 1, 0);";
 
-        $rowsAction = $this->conn->query($sqlAction);
+            $result = $this->conn->query($sql);
+            break;
+          case 2:
+            $sql = "INSERT INTO chitietquyenhang (`ma_nhom_quyen`, `ma_quyen_hang`,
+                  `ma_chuc_nang`, `trang_thai`)
+                  VALUES ($ma_nhom_quyen, $ma_quyen_hang, 1, 0);";
 
-        while ($rowAction = mysqli_fetch_assoc($rowsAction)) {
-          $ma_chuc_nang = (int) $rowAction["ma_chuc_nang"];
+            $result = $this->conn->query($sql);
 
-          $sql = "INSERT INTO chitietquyenhang (`ma_nhom_quyen`, `ma_quyen_hang`,
+            $sql = "INSERT INTO chitietquyenhang (`ma_nhom_quyen`, `ma_quyen_hang`,
+                  `ma_chuc_nang`, `trang_thai`)
+                  VALUES ($ma_nhom_quyen, $ma_quyen_hang, 3, 0);";
+
+            $result = $this->conn->query($sql);
+            break;
+          case 11:
+            $sql = "INSERT INTO chitietquyenhang (`ma_nhom_quyen`, `ma_quyen_hang`,
+                  `ma_chuc_nang`, `trang_thai`)
+                  VALUES ($ma_nhom_quyen, $ma_quyen_hang, 1, 0);";
+
+            $result = $this->conn->query($sql);
+
+            $sql = "INSERT INTO chitietquyenhang (`ma_nhom_quyen`, `ma_quyen_hang`,
+                  `ma_chuc_nang`, `trang_thai`)
+                  VALUES ($ma_nhom_quyen, $ma_quyen_hang, 2, 0);";
+
+            $result = $this->conn->query($sql);
+
+            $sql = "INSERT INTO chitietquyenhang (`ma_nhom_quyen`, `ma_quyen_hang`,
+                  `ma_chuc_nang`, `trang_thai`)
+                  VALUES ($ma_nhom_quyen, $ma_quyen_hang, 4, 0);";
+
+            $result = $this->conn->query($sql);
+            break;
+          default:
+            $sqlAction = "SELECT * FROM chucnang";
+
+            $rowsAction = $this->conn->query($sqlAction);
+
+            while ($rowAction = mysqli_fetch_assoc($rowsAction)) {
+              $ma_chuc_nang = (int) $rowAction["ma_chuc_nang"];
+
+              $sql = "INSERT INTO chitietquyenhang (`ma_nhom_quyen`, `ma_quyen_hang`,
                   `ma_chuc_nang`, `trang_thai`)
                   VALUES ($ma_nhom_quyen, $ma_quyen_hang, $ma_chuc_nang, 0);";
 
-          $result = $this->conn->query($sql);
+              $result = $this->conn->query($sql);
+            }
+            break;
         }
       }
 

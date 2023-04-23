@@ -102,6 +102,10 @@ class ImportOrderController
 
                 // if (!$isValid) break;
 
+                if (isset($_SERVER["QUERY_STRING"])) {
+                    echo json_encode($this->importOrderModel->getAll($_SERVER["QUERY_STRING"]));
+                    break;
+                }
                 echo json_encode($this->importOrderModel->getAll());
                 break;
             case "POST":
@@ -115,7 +119,7 @@ class ImportOrderController
                 // trả về array và nếu null thì array trở thành rỗng
                 $data = (array) json_decode($data, true);
 
-                // $errors = $this->getValidationErrors($data);
+                $errors = $this->getValidationErrors($data);
 
                 if (!empty($errors)) {
                     http_response_code(422);
@@ -141,12 +145,20 @@ class ImportOrderController
         $errors = [];
 
         if ($is_new) {
-            if (empty($data["ten_nguoi_dung"])) {
-                $errors[] = "tên người dùng là bắt buộc";
+            if (empty($data["ma_nha_cung_cap"])) {
+                $errors[] = "mã nhà cung cấp là bắt buộc";
             }
 
-            if (empty($data["mat_khau"])) {
-                $errors[] = "mật khẩu là bắt buộc";
+            if (empty($data["ma_nhan_vien"])) {
+                $errors[] = "mã nhân viên là bắt buộc";
+            }
+
+            if (empty($data["ngay_lap"])) {
+                $errors[] = "ngày lập là bắt buộc";
+            }
+
+            if (empty($data["danh_sach_san_pham_nhap_hang"])) {
+                $errors[] = "danh sách các sản phẩm nhập hàng là bắt buộc";
             }
         }
 

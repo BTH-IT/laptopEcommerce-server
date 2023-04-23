@@ -134,7 +134,7 @@ class AuthGroupController
 
     if ($is_new) {
       if (empty($data["ten_nhom_quyen"])) {
-        $errors[] = "tên người dùng là bắt buộc";
+        $errors[] = "tên nhóm quyền là bắt buộc";
       }
     }
 
