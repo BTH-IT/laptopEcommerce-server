@@ -8,8 +8,7 @@ class ImportOrderModel
 
     public function getAll($query = null): array
     {
-        $sql = "SELECT * FROM phieunhap WHERE hien_thi=1";
-
+        $sql = "SELECT * FROM phieunhap";
         $arrQuery = [];
 
         if ($query != null) {
@@ -23,18 +22,25 @@ class ImportOrderModel
             if (isset($q["from"]) && isset($q["to"])) {
                 $from = date("Y-m-d H:i:s", $q["from"]);
                 $to = date("Y-m-d H:i:s", $q["to"]);
-                $arrQuery[] = "`ngay_lap` BETWEEN '$from' AND '$to'";
+                $arrQuery[] = "(`ngay_lap` BETWEEN '$from' AND '$to')";
             }
 
             if (isset($q["searching"])) {
                 $searching = $q["searching"];
-                $arrQuery[] = "`ma_phieu_nhap` LIKE '%$searching%'";
+                $arrQuery[] = "(ma_phieu_nhap LIKE '%$searching%'
+                                OR ma_nhan_vien LIKE '%$searching%'
+                                OR ma_nha_cung_cap LIKE '%$searching%')
+        ";
             }
         }
 
         for ($i = 0; $i < count($arrQuery); $i++) {
             $value = $arrQuery[$i];
-            $sql .= " AND $value";
+            if ($i == 0) {
+                $sql .= " WHERE $value";
+            } else {
+                $sql .= " AND $value";
+            }
         }
 
         $sortName = $_GET["sortName"] ?? "ma_phieu_nhap";
@@ -45,42 +51,57 @@ class ImportOrderModel
                 $sql .= " ORDER BY ma_phieu_nhap " . "$sortAction;";
                 break;
 
+            case 'ma_nha_cung_cap':
+                $sql .= " ORDER BY ma_nha_cung_cap " . "$sortAction;";
+                break;
+
+            case 'ma_nhan_vien':
+                $sql .= " ORDER BY ma_nhan_vien " . "$sortAction;";
+                break;
+
             case 'ngay_lap':
                 $sql .= " ORDER BY ngay_lap " . "$sortAction;";
                 break;
         }
 
-        $rows = mysqli_query($this->conn, $sql);
+        $result = mysqli_query($this->conn, $sql);
+
+        if ($result->num_rows <= 0) {
+            return [];
+        }
 
         $data = [];
 
-        while ($row = mysqli_fetch_assoc($rows)) {
-            $import = [];
-            $import["ma_phieu_nhap"] = (int) $row["ma_phieu_nhap"];
-            $import["ma_nha_cung_cap"] = (int) $row["ma_nha_cung_cap"];
-            $import["ma_nhan_vien"] = $row["ma_nhan_vien"];
-            $import["ngay_lap"] = strtotime($row["ngay_lap"]) * 1000;
-            $import["hien_thi"] = (bool) $row["hien_thi"];
-            $import["tong_tien"] = 0;
+        while ($row = mysqli_fetch_assoc($result)) {
+            $row["danh_sach_san_pham_nhap_hang"] = [];
+            $row["tong_tien"] = 0;
 
-            $importID = $import["ma_phieu_nhap"];
-            $sql = "SELECT * FROM chitietphieunhap as ctpn, sanpham as sp 
-                    WHERE ctpn.ma_san_pham = sp.ma_san_pham AND ctpn.ma_phieu_nhap = $importID;";
-            $rows2 = mysqli_query($this->conn, $sql);
-            $import["danh_sach_san_pham_nhap_hang"] = [];
+            $row["ma_phieu_nhap"] = (int) $row["ma_phieu_nhap"];
+            $row["ngay_lap"] = strtotime($row["ngay_lap"]) * 1000;
+            $row["hien_thi"] = (bool) $row["hien_thi"];
 
-            while ($row2 = mysqli_fetch_assoc($rows2)) {
+            $id = $row["ma_phieu_nhap"];
+
+            $sql = "SELECT * FROM phieunhap, chitietphieunhap, sanpham
+                    WHERE phieunhap.ma_phieu_nhap = chitietphieunhap.ma_phieu_nhap
+                    AND chitietphieunhap.ma_san_pham = sanpham.ma_san_pham
+                    AND phieunhap.ma_phieu_nhap = $id;";
+
+            $rows1 = mysqli_query($this->conn, $sql);
+
+            while ($row1 = mysqli_fetch_assoc($rows1)) {
                 $product = [];
-                $product["ten_san_pham"] = $row2["ten_san_pham"];
-                $product["hinh_anh"] = $row2["hinh_anh"];
-                $product["don_gia"] = (float) $row2["don_gia"];
-                $product["so_luong_nhap_hang"] = $row2["so_luong_nhap_hang"];
-
-                $import["danh_sach_san_pham_nhap_hang"][] = $product;
-                $import["tong_tien"] += $product["don_gia"] * $product["so_luong_nhap_hang"];
+                $product["ma_san_pham"] = (int) $row1["ma_san_pham"];
+                $product["ten_san_pham"] = $row1["ten_san_pham"];
+                $product["hinh_anh"] = json_decode($row1["hinh_anh"], true)[0];
+                $product["don_gia"] = (float) $row1["don_gia"];
+                $product["thuong_hieu"] = $row1["thuong_hieu"];
+                $product["so_luong_nhap_hang"] = (int) $row1["so_luong_nhap_hang"];
+                $row["danh_sach_san_pham_nhap_hang"][] = $product;
+                $row["tong_tien"] += $product["don_gia"] * $product["so_luong_nhap_hang"];
             }
 
-            $data[] = $import;
+            $data[] = $row;
         }
 
         return $data;
@@ -90,68 +111,72 @@ class ImportOrderModel
     {
         $ma_nha_cung_cap = (int) $data["ma_nha_cung_cap"];
         $ma_nhan_vien = $data["ma_nhan_vien"];
-        $ngay_lap = date("Y-m-d H:i:s", $data["ngay_lap"] / 1000);
+        $danh_sach_san_pham_nhap_hang = $data["danh_sach_san_pham_nhap_hang"];
+        $ngay_lap = date("Y-m-d H:i:s", intval($data["ngay_lap"] / 1000));
 
         $sql = "INSERT INTO phieunhap (`ma_nha_cung_cap`, `ma_nhan_vien`, `ngay_lap`)
-                VALUES ($ma_nha_cung_cap, '$ma_nhan_vien', '$ngay_lap');";
+            VALUES ($ma_nha_cung_cap, '$ma_nhan_vien', '$ngay_lap');";
 
         $result = $this->conn->query($sql);
 
-        if ($result === TRUE) {
-            $ma_phieu_nhap = $this->conn->insert_id;
-            foreach ($data["danh_sach_san_pham_nhap_hang"] as $product) {
-                $ma_san_pham = (int) $product["ma_san_pham"];
-                $so_luong_nhap_hang = $product["so_luong_nhap_hang"];
-                $don_gia = (float) $product["don_gia"];
 
-                $sql = "INSERT INTO chitietphieunhap (`ma_san_pham`, `ma_phieu_nhap`, `so_luong_nhap_hang`, `don_gia`) 
-                        VALUES ($ma_san_pham, $ma_phieu_nhap, '$so_luong_nhap_hang', '$don_gia');";
+        if ($result === TRUE) {
+            $last_id = $this->conn->insert_id;
+
+            foreach ($danh_sach_san_pham_nhap_hang as $product) {
+                $ma_san_pham =  (int) $product["ma_san_pham"];
+                $so_luong_nhap_hang = (int) $product["so_luong"];
+                $don_gia = (float) $product["gia_nhap"];
+
+                $sql = "INSERT INTO chitietphieunhap (`ma_san_pham`, `ma_phieu_nhap`, `so_luong_nhap_hang`,
+                        `don_gia`) VALUES ($ma_san_pham, $last_id, $so_luong_nhap_hang, $don_gia);";
+
                 $result = $this->conn->query($sql);
             }
-            return "New record created successfully. Last inserted ID is: " . $ma_phieu_nhap;
+
+            return $last_id;
         } else {
             return $this->conn->error;
         }
     }
 
-    public function get(int $id): array|false
+    public function get(int $id): array | false
     {
-        $sql = "SELECT * FROM phieunhap WHERE hien_thi=1 AND ma_phieu_nhap=$id";
+        $sql = "SELECT * FROM phieunhap WHERE ma_phieu_nhap=$id";
 
-        $result = mysqli_query($this->conn, $sql);
+        $result = $this->conn->query($sql);
 
         if ($result->num_rows <= 0) {
-            return false;
+            return [];
         }
 
         $data = mysqli_fetch_assoc($result);
 
-        $import = [];
-        $import["ma_phieu_nhap"] = (int) $data["ma_phieu_nhap"];
-        $import["ma_nha_cung_cap"] = (int) $data["ma_nha_cung_cap"];
-        $import["ma_nhan_vien"] = $data["ma_nhan_vien"];
-        $import["ngay_lap"] = strtotime($data["ngay_lap"]) * 1000;
-        $import["hien_thi"] = (bool) $data["hien_thi"];
-        $import["tong_tien"] = 0;
+        $data["danh_sach_san_pham_nhap_hang"] = [];
+        $data["tong_tien"] = 0;
 
-        $importID = $import["ma_phieu_nhap"];
-        $sql = "SELECT * FROM chitietphieunhap as ctpn, sanpham as sp 
-                WHERE ctpn.ma_san_pham = sp.ma_san_pham AND ctpn.ma_phieu_nhap = $importID;";
-        $rows2 = mysqli_query($this->conn, $sql);
-        $import["danh_sach_san_pham_nhap_hang"] = [];
+        $data["ma_phieu_nhap"] = (int) $data["ma_phieu_nhap"];
+        $data["hien_thi"] = (bool) $data["hien_thi"];
+        $data["ngay_lap"] = strtotime($data["ngay_lap"]);
 
-        while ($row2 = mysqli_fetch_assoc($rows2)) {
+        $sql = "SELECT * FROM phieunhap, chitietphieunhap, sanpham
+            WHERE phieunhap.ma_phieu_nhap = chitietphieunhap.ma_phieu_nhap
+            AND chitietphieunhap.ma_san_pham = sanpham.ma_san_pham
+            AND phieunhap.ma_phieu_nhap = $id;";
+
+        $rows = mysqli_query($this->conn, $sql);
+
+        while ($row = mysqli_fetch_assoc($rows)) {
             $product = [];
-            $product["ten_san_pham"] = $row2["ten_san_pham"];
-            $product["hinh_anh"] = $row2["hinh_anh"];
-            $product["don_gia"] = (float) $row2["don_gia"];
-            $product["so_luong_nhap_hang"] = $row2["so_luong_nhap_hang"];
-
-            $import["danh_sach_san_pham_nhap_hang"][] = $product;
-            $import["tong_tien"] += $product["don_gia"] * $product["so_luong_nhap_hang"];
+            $product["ma_san_pham"] = (int) $row["ma_san_pham"];
+            $product["ten_san_pham"] = $row["ten_san_pham"];
+            $product["hinh_anh"] = json_decode($row["hinh_anh"], true)[0];
+            $product["don_gia"] = (float) $row["don_gia"];
+            $product["so_luong_nhap_hang"] = (int) $row["so_luong_nhap_hang"];
+            $product["thuong_hieu"] = $row["thuong_hieu"];
+            $data["danh_sach_san_pham_nhap_hang"][] = $product;
+            $data["tong_tien"] += $product["don_gia"] * $product["so_luong_nhap_hang"];
         }
-
-        $data = $import;
 
         return $data;
     }
@@ -170,17 +195,15 @@ class ImportOrderModel
         $ma_phieu_nhap = (int) $data["ma_phieu_nhap"];
         $ma_nha_cung_cap = (int) $data["ma_nha_cung_cap"];
         $ma_nhan_vien = $data["ma_nhan_vien"];
-        $ngay_lap = date("Y-m-d H:i:s", $data["ngay_lap"] / 1000);
-        $hien_thi = (bool) $data["hien_thi"] ? 1 : 0;
+        $ngay_lap = date("Y-m-d H:i:s", intval($data["ngay_lap"] / 1000));
 
-        $sql = "UPDATE phieunhap 
-                SET ma_nha_cung_cap='$ma_nha_cung_cap', ma_nhan_vien='$ma_nhan_vien'
-                , ngay_lap='$ngay_lap', hien_thi=$hien_thi
-                WHERE ma_phieu_nhap=$ma_phieu_nhap;";
+        $sql = "UPDATE phieunhap SET ma_nha_cung_cap=$ma_nha_cung_cap, ma_nhan_vien='$ma_nhan_vien',
+            ngay_lap='$ngay_lap' WHERE ma_phieu_nhap=$ma_phieu_nhap;";
+
         $result = mysqli_query($this->conn, $sql);
 
         if ($result) {
-            return "Successfully";
+            return "success";
         } else {
             return $this->conn->error;
         }
@@ -188,12 +211,38 @@ class ImportOrderModel
 
     public function delete(int $id): string
     {
-        $sql = "UPDATE phieunhap SET hien_thi=0 WHERE ma_phieu_nhap=$id;";
+        $sql = "DELETE FROM phieunhap WHERE ma_phieu_nhap=$id;";
 
         $result = mysqli_query($this->conn, $sql);
 
-
         if ($result) {
+            $sql = "SELECT * FROM phieunhap, chitietphieunhap, sanpham
+            WHERE phieunhap.ma_phieu_nhap = chitietphieunhap.ma_phieu_nhap
+            AND chitietphieunhap.ma_san_pham = sanpham.ma_san_pham
+            AND phieunhap.ma_phieu_nhap = $id;";
+
+            $rows = mysqli_query($this->conn, $sql);
+
+            while ($row = mysqli_fetch_assoc($rows)) {
+                $ma_san_pham = (int) $row["ma_san_pham"];
+                $so_luong_nhap_hang = (int) $row["so_luong_nhap_hang"];
+
+                for ($i = 1; $i <= $so_luong_nhap_hang; $i++) {
+                    $sql = "SELECT * FROM chitietsanpham WHERE ma_san_pham=$ma_san_pham LIMIT 1;";
+
+                    $result = mysqli_query($this->conn, $sql);
+
+                    $row = mysqli_fetch_assoc($result);
+
+                    $ma_chi_tiet_san_pham = $row["ma_chi_tiet_san_pham"];
+
+                    if ($result == TRUE) {
+                        $sql = "DELETE FROM chitietsanpham WHERE ma_chi_tiet_san_pham='$ma_chi_tiet_san_pham';";
+
+                        $result = mysqli_query($this->conn, $sql);
+                    }
+                }
+            }
             return "success";
         } else {
             return $this->conn->error;

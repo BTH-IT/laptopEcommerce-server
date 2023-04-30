@@ -8,9 +8,12 @@ use Firebase\JWT\Key;
 function decodeToken()
 {
   $allHeaders = getallheaders();
+  if (!isset($allHeaders["Authorization"])) return false;
   $bearerJWT = $allHeaders["Authorization"];
   $secret_key = 'laptop ecommerce';
   $jwt = explode(" ", $bearerJWT)[1];
+
+  if ($jwt == 'undefined' || $jwt == 'null') return false;
   $decoded = JWT::decode($jwt, new Key($secret_key, 'HS256'));
   $data = (array) $decoded;
   $data["data"] = (array) $data["data"];

@@ -1,33 +1,8 @@
 <?php
 class ImageController
 {
-  public function __construct(private ImageModel $imageModel, private array $perArr)
+  public function __construct(private ImageModel $imageModel)
   {
-  }
-
-  public function checkPermission(string $feature): bool
-  {
-    if (count($this->perArr) <= 0) {
-      echo json_encode([
-        "message" => "Do not have access"
-      ]);
-      return false;
-    }
-
-    $permission = array_filter($this->perArr, function ($per) use ($feature) {
-      $per = json_decode(json_encode($per), true);
-      return $per["ten_chuc_nang"] == $feature;
-    });
-
-
-    if (!array_values($permission)[0]["trang_thai_quyen_hang"]) {
-      echo json_encode([
-        "message" => "Do not have access"
-      ]);
-      return false;
-    }
-
-    return true;
   }
 
   public function processRequest(string $method, ?string $id): void
@@ -56,10 +31,6 @@ class ImageController
         echo json_encode($image);
         break;
       case "PATCH":
-        $isValid = $this->checkPermission("UPDATE");
-
-        if (!$isValid) break;
-
         // lấy dữ liệu từ phía client gửi cho server (dạng json)
         $data = file_get_contents("php://input");
 
@@ -74,10 +45,6 @@ class ImageController
         ]);
         break;
       case 'DELETE':
-        $isValid = $this->checkPermission("DELETE");
-
-        if (!$isValid) break;
-
         $rows = $this->imageModel->delete($id);
 
         echo json_encode([
@@ -98,23 +65,11 @@ class ImageController
         echo json_encode($this->imageModel->getAll());
         break;
       case "POST":
-        $isValid = $this->checkPermission("CREATE");
-
-        if (!$isValid) break;
-
         // lấy dữ liệu từ phía client gửi cho server (dạng json)
         $data = file_get_contents("php://input");
 
         // trả về array và nếu null thì array trở thành rỗng
         $data = (array) json_decode($data, true);
-
-        // $errors = $this->getValidationErrors($data);
-
-        // if (!empty($errors)) {
-        //   http_response_code(422);
-        //   echo json_encode(["errors" => $errors]);
-        //   break;
-        // }
 
         $id = $this->imageModel->create($data);
 
@@ -127,34 +82,5 @@ class ImageController
         http_response_code(405);
         header("Allow: GET, POST");
     }
-  }
-
-  private function getValidationErrors(array $data, bool $is_new = true): array
-  {
-    $errors = [];
-
-    if ($is_new) {
-      if (empty($data["so_dien_thoai"])) {
-        $errors[] = "số điện thoại là bắt buộc";
-      }
-
-      if (empty($data["danh_sach_san_pham_da_mua"])) {
-        $errors[] = "danh sách sản phẩm là bắt buộc";
-      }
-
-      if (empty($data["thoi_gian_dat_mua"])) {
-        $errors[] = "thời gian đặt mua là bắt buộc";
-      }
-
-      if (empty($data["tong_tien"])) {
-        $errors[] = "tổng tiền là bắt buộc";
-      }
-
-      if (empty($data["dia_chi"])) {
-        $errors[] = "địa chỉ là bắt buộc";
-      }
-    }
-
-    return $errors;
   }
 }

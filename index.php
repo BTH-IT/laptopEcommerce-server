@@ -1,14 +1,14 @@
 <?php
-
 // gần giống strict mode bên JS
 declare(strict_types=1);
 
 require_once "./src/utils/cors.php";
 require_once "./src/config/Database.php";
-require_once "./src/config/ErrorHandler.php";
 require_once "./src/config/Middleware.php";
+require_once "./src/config/ErrorHandler.php";
 
 cors();
+
 
 // hàm tự động require các file cần thiết vào file index.php
 spl_autoload_register(function ($class) {
@@ -33,18 +33,26 @@ $urlTarget = explode("?", $url[3]);
 
 $database = new Database();
 
+$dataToken = decodeToken();
+
+$perProducts = [];
+$perArr = [];
+
+if ($dataToken) {
+  $data = $dataToken["data"];
+  $perArr = json_decode(json_encode($data["permission"]), true);
+}
+
 switch ($urlTarget[0]) {
   case "guarantee":
-    // $perAccounts = array_filter(
-    //   $perArr,
-    //   function ($per) {
-    //     return $per["ten_quyen_hang"] == 'guarantee';
-    //   }
-    // );
-
-    $perGuarantee = [];
-
     $id = $url[4] ?? null;
+
+    $perGuarantee = array_filter(
+      $perArr,
+      function ($per) {
+        return $per["ten_quyen_hang"] == 'guarantee';
+      }
+    );
 
     $guaranteeModel = new GuaranteeModel($database->connect);
 
@@ -52,20 +60,18 @@ switch ($urlTarget[0]) {
 
     $guaranteeController->processRequest($_SERVER["REQUEST_METHOD"], $id);
 
+
     $database->connect->close();
     break;
-
   case "products":
     $id = $url[4] ?? null;
 
-    $perProducts = [];
-
-    // $perProducts = array_filter(
-    //   $perArr,
-    //   function ($per) {
-    //     return $per["ten_quyen_hang"] == 'products';
-    //   }
-    // );
+    $perProducts = array_filter(
+      $perArr,
+      function ($per) {
+        return $per["ten_quyen_hang"] == 'products';
+      }
+    );
 
     $productModel = new ProductModel($database->connect);
 
@@ -77,34 +83,92 @@ switch ($urlTarget[0]) {
     break;
 
   case "brands":
+    $perBrands = array_filter(
+      $perArr,
+      function ($per) {
+        return $per["ten_quyen_hang"] == 'brands';
+      }
+    );
+
+    $id = $url[4] ?? null;
+
+    $brandModel = new BrandModel($database->connect);
+
+    $brandController = new BrandController($brandModel, $perBrands);
+
+    $brandController->processRequest($_SERVER["REQUEST_METHOD"], $id);
+
 
     $database->connect->close();
     break;
 
   case "accounts":
+    $perAccounts = array_filter(
+      $perArr,
+      function ($per) {
+        return $per["ten_quyen_hang"] == 'accounts';
+      }
+    );
+
+    $id = $url[4] ?? null;
+
+    $accountModel = new AccountModel($database->connect);
+
+    $accountController = new AccountController($accountModel, $perAccounts);
+
+    $accountController->processRequest($_SERVER["REQUEST_METHOD"], $id);
+
 
     $database->connect->close();
     break;
 
   case "customers":
+    $perCustomer = array_filter(
+      $perArr,
+      function ($per) {
+        return $per["ten_quyen_hang"] == 'customers';
+      }
+    );
+
+    $id = $url[4] ?? null;
+
+    $customerModel = new CustomerModel($database->connect);
+
+    $customerController = new CustomerController($customerModel, $perCustomer);
+
+    $customerController->processRequest($_SERVER["REQUEST_METHOD"], $id);
+
 
     $database->connect->close();
     break;
 
   case "employees":
+    $perEmployee = array_filter(
+      $perArr,
+      function ($per) {
+        return $per["ten_quyen_hang"] == 'employees';
+      }
+    );
+
+    $id = $url[4] ?? null;
+
+    $employeeModel = new EmployeeModel($database->connect);
+
+    $employeeController = new EmployeeController($employeeModel, $perEmployee);
+
+    $employeeController->processRequest($_SERVER["REQUEST_METHOD"], $id);
+
 
     $database->connect->close();
     break;
 
   case "orders":
-    // $perAccounts = array_filter(
-    //   $perArr,
-    //   function ($per) {
-    //     return $per["ten_quyen_hang"] == 'accounts';
-    //   }
-    // );
-
-    $perOrders = [];
+    $perOrders = array_filter(
+      $perArr,
+      function ($per) {
+        return $per["ten_quyen_hang"] == 'orders';
+      }
+    );
 
     $id = $url[4] ?? null;
 
@@ -117,15 +181,33 @@ switch ($urlTarget[0]) {
     $database->connect->close();
     break;
 
-  case "import-orders":
-    // $perAccounts = array_filter(
-    //   $perArr,
-    //   function ($per) {
-    //     return $per["ten_quyen_hang"] == 'accounts';
-    //   }
-    // );
+  case "detail-orders":
+    $perOrders = array_filter(
+      $perArr,
+      function ($per) {
+        return $per["ten_quyen_hang"] == 'orders';
+      }
+    );
 
-    $perImportOrders = [];
+    $orderId = $url[4] ?? null;
+    $productId = $url[5] ?? null;
+
+    $detailOrderModel = new DetailOrderModel($database->connect);
+
+    $detailOrderController = new DetailOrderController($detailOrderModel, $perOrders);
+
+    $detailOrderController->processRequest($_SERVER["REQUEST_METHOD"], $orderId, $productId);
+
+    $database->connect->close();
+    break;
+
+  case "import-orders":
+    $perImportOrders = array_filter(
+      $perArr,
+      function ($per) {
+        return $per["ten_quyen_hang"] == 'import-orders';
+      }
+    );
 
     $id = $url[4] ?? null;
 
@@ -139,22 +221,28 @@ switch ($urlTarget[0]) {
     break;
 
   case "images":
-    // $perImages = array_filter(
-    //   $perArr,
-    //   function ($per) {
-    //     return $per["ten_quyen_hang"] == 'images';
-    //   }
-    // );
-
     $id = $url[4] ?? null;
 
     $imageModel = new ImageModel($database->connect);
 
-    $imageController = new ImageController($imageModel, $perImages);
+    $imageController = new ImageController($imageModel);
 
     $imageController->processRequest($_SERVER["REQUEST_METHOD"], $id);
 
     $database->connect->close();
+    break;
+
+  case "detail-products":
+    $id = $url[4] ?? null;
+
+    $detailProductModel = new DetailProductModel($database->connect);
+
+    $detailProductController = new DetailProductController($detailProductModel);
+
+    $detailProductController->processRequest($_SERVER["REQUEST_METHOD"], $id);
+
+    $database->connect->close();
+
     break;
 
   case "auth":
@@ -167,13 +255,14 @@ switch ($urlTarget[0]) {
     $authController->processRequest($_SERVER["REQUEST_METHOD"], $action);
 
     $database->connect->close();
+
     break;
 
   case "auth-group":
     $perAuthGroups = array_filter(
       $perArr,
       function ($per) {
-        return $per["ten_quyen_hang"] == 'auth-group';
+        return $per["ten_quyen_hang"] == 'auth-groups';
       }
     );
 
@@ -186,6 +275,7 @@ switch ($urlTarget[0]) {
     $authGroupController->processRequest($_SERVER["REQUEST_METHOD"], $id);
 
     $database->connect->close();
+
     break;
 
   case "decentralization":
@@ -207,17 +297,16 @@ switch ($urlTarget[0]) {
     $detailPermissionController->processRequest($_SERVER["REQUEST_METHOD"], $roleId, $perId, $actionId);
 
     $database->connect->close();
+
     break;
 
   case "suppliers":
-    // $perAccounts = array_filter(
-    //   $perArr,
-    //   function ($per) {
-    //     return $per["ten_quyen_hang"] == 'suppliers';
-    //   }
-    // );
-
-    $perSuppliers = [];
+    $perSuppliers = array_filter(
+      $perArr,
+      function ($per) {
+        return $per["ten_quyen_hang"] == 'suppliers';
+      }
+    );
 
     $id = $url[4] ?? null;
 
