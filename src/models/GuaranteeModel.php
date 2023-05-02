@@ -18,12 +18,12 @@ class GuaranteeModel
             if (isset($q["from"]) && isset($q["to"])) {
                 $from = date("Y-m-d H:i:s", $q["from"]);
                 $to = date("Y-m-d H:i:s", $q["to"]);
-                $arrQuery[] = "`thoi_gian_dat_mua` BETWEEN '$from' AND '$to'";
+                $arrQuery[] = "`ngay_lap` BETWEEN '$from' AND '$to'";
             }
 
             if (isset($q["searching"])) {
                 $searching = $q["searching"];
-                $sql .= " AND ma_bao_hanh LIKE '%$searching%' OR ma_chi_tiet_bao_hanh LIKE '%$searching%' OR ma_khach_hang LIKE '%$searching%'";
+                $sql .= " AND ma_bao_hanh LIKE '%$searching%' OR ma_chi_tiet_san_pham LIKE '%$searching%' OR ma_khach_hang LIKE '%$searching%'";
             }
         }
 

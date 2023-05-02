@@ -103,7 +103,9 @@ class OrderModel
 
             while ($row2 = mysqli_fetch_assoc($rows2)) {
                 $product = [];
+                $product["ma_san_pham"] = $row2["ma_san_pham"];
                 $product["ten_san_pham"] = $row2["ten_san_pham"];
+                $product["thuong_hieu"] = $row2["thuong_hieu"];
                 $product["hinh_anh"] = json_decode($row2["hinh_anh"], true)[0];
                 $product["don_gia"] = (float) $row2["don_gia"];
                 $product["giam_gia_san_pham"] = (int) $row2["giam_gia_san_pham"];
@@ -187,10 +189,11 @@ class OrderModel
         $order["thoi_gian_dat_mua"] = strtotime($data["thoi_gian_dat_mua"]) * 1000;
         $order["trang_thai"] = $data["trang_thai"];
         $order["hien_thi"] = (bool) $data["hien_thi"];
+        $order["tong_tien"] = 0;
 
         $orderID = $order["ma_don_hang"];
         $sql = "SELECT sanpham.ma_san_pham, sanpham.ten_san_pham, sanpham.hinh_anh,
-                chitiethoadon.don_gia, chitiethoadon.giam_gia_san_pham,
+                chitiethoadon.don_gia, chitiethoadon.giam_gia_san_pham,sanpham.thuong_hieu
                 COUNT(chitiethoadon.ma_san_pham) as so_luong_da_mua, chitiethoadon.thoi_gian_bao_hanh
                 FROM donhang, chitiethoadon, sanpham
                 WHERE donhang.ma_don_hang = chitiethoadon.ma_don_hang
@@ -198,7 +201,7 @@ class OrderModel
                 AND donhang.ma_don_hang = $orderID
                 GROUP BY sanpham.ma_san_pham, sanpham.ten_san_pham, sanpham.hinh_anh,
                 chitiethoadon.don_gia, chitiethoadon.giam_gia_san_pham,
-                chitiethoadon.thoi_gian_bao_hanh;";
+                chitiethoadon.thoi_gian_bao_hanh, sanpham.thuong_hieu;";
 
         $rows2 = mysqli_query($this->conn, $sql);
         $order["danh_sach_san_pham_da_mua"] = [];
@@ -209,10 +212,11 @@ class OrderModel
             $product["ten_san_pham"] = $row2["ten_san_pham"];
             $product["hinh_anh"] = json_decode($row2["hinh_anh"], true)[0];
             $product["don_gia"] = (float) $row2["don_gia"];
+            $product["thuong_hieu"] = $row2["thuong_hieu"];
             $product["giam_gia_san_pham"] = (int) $row2["giam_gia_san_pham"];
-            $product["ten_san_pham"] = $row2["ten_san_pham"];
             $product["so_luong_da_mua"] = (int) $row2["so_luong_da_mua"];
             $product["thoi_gian_bao_hanh"] = (int) $row2["thoi_gian_bao_hanh"];
+            $order["tong_tien"] += ($product["don_gia"] * (100 - $product["giam_gia_san_pham"]) / 100) * $product["so_luong_da_mua"];
 
             $order["danh_sach_san_pham_da_mua"][] = $product;
         }

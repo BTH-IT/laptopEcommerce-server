@@ -50,6 +50,7 @@ class ProductModel
       $row["updated_at"] = $row["updated_at"] ? strtotime($row["updated_at"]) : null;
       $row["dung_luong_ram"] = (int) $row["dung_luong_ram"];
       $row["so_luong_da_ban"] = (int) $row["so_luong_da_ban"];
+      $row["den_led"] = (bool) $row["den_led"];
       $row["noi_bat"] = (bool) $row["noi_bat"];
       $row["hien_thi"] = (bool) $row["hien_thi"];
 
@@ -233,6 +234,7 @@ class ProductModel
       $row["updated_at"] = $row["updated_at"] ? strtotime($row["updated_at"]) : null;
       $row["dung_luong_ram"] = (int) $row["dung_luong_ram"];
       $row["so_luong_da_ban"] = (int) $row["so_luong_da_ban"];
+      $row["den_led"] = (bool) $row["den_led"];
       $row["noi_bat"] = (bool) $row["noi_bat"];
       $row["hien_thi"] = (bool) $row["hien_thi"];
 
@@ -303,7 +305,7 @@ class ProductModel
     $part_number = $data["part_number"];
     $mau_sac = $data["mau_sac"];
     $phu_kien_di_kem = $data["phu_kien_di_kem"];
-    $den_led = $data["den_led"];
+    $den_led = (bool) $data["den_led"] ? 1 : 0;
     $man_hinh_cam_ung = (bool) $data["man_hinh_cam_ung"] ? 1 : 0;
     $dung_luong_ram = (int) $data["dung_luong_ram"];
     $so_luong_da_ban = 0;
@@ -352,9 +354,10 @@ class ProductModel
     $data["giam_gia"] = (int) $data["giam_gia"];
     $data["created_at"] = strtotime($data["created_at"]);
     $data["khoi_luong"] = (int) $data["khoi_luong"];
-    $data["man_hinh_cam_ung"] = (bool) $data["man_hinh_cam_ung"] ? 1 : 0;
+    $data["man_hinh_cam_ung"] = (bool) $data["man_hinh_cam_ung"];
     $data["dung_luong_ram"] = (int) $data["dung_luong_ram"];
     $data["so_luong_da_ban"] = (int) $data["so_luong_da_ban"];
+    $data["den_led"] = (bool) $data["den_led"];
     $data["noi_bat"] = (bool) $data["noi_bat"];
     $data["hien_thi"] = (bool) $data["hien_thi"];
 
@@ -416,7 +419,7 @@ class ProductModel
     $part_number = $data["part_number"];
     $mau_sac = $data["mau_sac"];
     $phu_kien_di_kem = $data["phu_kien_di_kem"];
-    $den_led = $data["den_led"];
+    $den_led = (bool) $data["den_led"] ? 1 : 0;
     $man_hinh_cam_ung = (bool) $data["man_hinh_cam_ung"] ? 1 : 0;
     $dung_luong_ram = (int) $data["dung_luong_ram"];
     $so_luong_da_ban = (int) $data["so_luong_da_ban"];
