@@ -193,7 +193,7 @@ class OrderModel
 
         $orderID = $order["ma_don_hang"];
         $sql = "SELECT sanpham.ma_san_pham, sanpham.ten_san_pham, sanpham.hinh_anh,
-                chitiethoadon.don_gia, chitiethoadon.giam_gia_san_pham,sanpham.thuong_hieu
+                chitiethoadon.don_gia, chitiethoadon.giam_gia_san_pham, sanpham.thuong_hieu,
                 COUNT(chitiethoadon.ma_san_pham) as so_luong_da_mua, chitiethoadon.thoi_gian_bao_hanh
                 FROM donhang, chitiethoadon, sanpham
                 WHERE donhang.ma_don_hang = chitiethoadon.ma_don_hang
