@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 30, 2023 at 08:00 PM
+-- Generation Time: May 04, 2023 at 06:35 PM
 -- Server version: 8.0.31
 -- PHP Version: 8.2.0
 
@@ -32,19 +32,18 @@ CREATE TABLE `baohanh` (
   `ma_chi_tiet_san_pham` varchar(256) NOT NULL,
   `ma_khach_hang` varchar(256) NOT NULL,
   `ngay_lap` timestamp NULL DEFAULT NULL,
-  `ngay_het_han` timestamp NULL DEFAULT NULL,
-  `hien_thi` tinyint DEFAULT '1'
+  `ngay_het_han` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 --
 -- Dumping data for table `baohanh`
 --
 
-INSERT INTO `baohanh` (`ma_bao_hanh`, `ma_chi_tiet_san_pham`, `ma_khach_hang`, `ngay_lap`, `ngay_het_han`, `hien_thi`) VALUES
-(7, '1234321', 'bttan', '2023-04-26 02:59:42', '2025-04-26 02:59:42', 1),
-(8, '132123', 'bttan', '2023-04-26 02:59:42', '2025-04-26 02:59:42', 1),
-(9, '12312', 'bttan', '2023-04-26 02:59:42', '2025-04-26 02:59:42', 1),
-(10, '123131233', 'bttan', '2023-04-26 02:59:42', '2025-04-26 02:59:42', 1);
+INSERT INTO `baohanh` (`ma_bao_hanh`, `ma_chi_tiet_san_pham`, `ma_khach_hang`, `ngay_lap`, `ngay_het_han`) VALUES
+(7, '1234321', 'bttan', '2023-04-26 02:59:42', '2025-04-26 02:59:42'),
+(8, '132123', 'bttan', '2023-04-26 02:59:42', '2025-04-26 02:59:42'),
+(9, '12312', 'bttan', '2023-04-26 02:59:42', '2025-04-26 02:59:42'),
+(10, '123131233', 'bttan', '2023-04-26 02:59:42', '2025-04-26 02:59:42');
 
 -- --------------------------------------------------------
 
@@ -698,21 +697,20 @@ CREATE TABLE `taikhoan` (
   `ten_dang_nhap` varchar(45) NOT NULL,
   `ma_nhom_quyen` int DEFAULT NULL,
   `mat_khau` longtext,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `hien_thi` tinyint NOT NULL DEFAULT '1'
+  `created_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 --
 -- Dumping data for table `taikhoan`
 --
 
-INSERT INTO `taikhoan` (`ma_tai_khoan`, `ten_dang_nhap`, `ma_nhom_quyen`, `mat_khau`, `created_at`, `hien_thi`) VALUES
-(1, 'bttan', 0, '$2y$10$12QGE/POO4/oaU.g7Fq3juFcl8AAJyJEZAxRpq.pLLWsieYHV8qOy', '2023-03-24 11:32:15', 1),
-(2, 'bttan1', 0, '$2y$10$npvkuJLXKjOKDFz3vgV2OOUKyopzReaY5.1wpHqQy49oBtwgPZD1.', '2023-03-24 11:38:09', 1),
-(3, 'hung', 1, '$2y$10$T4R2dSyO2owZoX29PUEMDe2TLHgTcRH/WD.Duw3gTGxT5200hzkdq', '2023-04-02 10:08:23', 1),
-(4, 'lam', 11, '$2y$10$FH.XFfsp.whb6EOQ.LyLI.kCMOfQZ.Rg.Q7BqWn8UK/4fRxVbLmxq', '2023-04-06 04:35:50', 1),
-(6, 'huy', 11, '$2y$10$fgElQGaKTqah1nqaCDrM5uddEZvWi0lUy.7Ts7Je17fUablL1tipm', '2023-04-07 03:59:03', 1),
-(7, 'hieu', 6, '$2y$10$rmWN.HAj9PszOfuNhw2kuuERu6JD0NuxMT.0F.SJBe/re5MxcZGTq', '2023-04-08 01:59:07', 1);
+INSERT INTO `taikhoan` (`ma_tai_khoan`, `ten_dang_nhap`, `ma_nhom_quyen`, `mat_khau`, `created_at`) VALUES
+(1, 'bttan', 0, '$2y$10$12QGE/POO4/oaU.g7Fq3juFcl8AAJyJEZAxRpq.pLLWsieYHV8qOy', '2023-03-24 11:32:15'),
+(2, 'bttan1', 0, '$2y$10$npvkuJLXKjOKDFz3vgV2OOUKyopzReaY5.1wpHqQy49oBtwgPZD1.', '2023-03-24 11:38:09'),
+(3, 'hung', 1, '$2y$10$T4R2dSyO2owZoX29PUEMDe2TLHgTcRH/WD.Duw3gTGxT5200hzkdq', '2023-04-02 10:08:23'),
+(4, 'lam', 11, '$2y$10$FH.XFfsp.whb6EOQ.LyLI.kCMOfQZ.Rg.Q7BqWn8UK/4fRxVbLmxq', '2023-04-06 04:35:50'),
+(6, 'huy', 11, '$2y$10$fgElQGaKTqah1nqaCDrM5uddEZvWi0lUy.7Ts7Je17fUablL1tipm', '2023-04-07 03:59:03'),
+(7, 'hieu', 6, '$2y$10$rmWN.HAj9PszOfuNhw2kuuERu6JD0NuxMT.0F.SJBe/re5MxcZGTq', '2023-04-08 01:59:07');
 
 -- --------------------------------------------------------
 

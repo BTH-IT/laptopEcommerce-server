@@ -5,7 +5,7 @@ class Database
   public $connect;
   protected $severname = "localhost";
   protected $username = "root";
-  protected $password = "";
+  protected $password = "hung";
   protected $dbname = "ecommerce";
 
   function __construct()

@@ -8,7 +8,7 @@ class GuaranteeModel
 
     public function getAll($query = null): array
     {
-        $sql = "SELECT * FROM baohanh WHERE hien_thi=1";
+        $sql = "SELECT * FROM baohanh";
 
         $arrQuery = [];
 
@@ -23,13 +23,19 @@ class GuaranteeModel
 
             if (isset($q["searching"])) {
                 $searching = $q["searching"];
-                $sql .= " AND ma_bao_hanh LIKE '%$searching%' OR ma_chi_tiet_san_pham LIKE '%$searching%' OR ma_khach_hang LIKE '%$searching%'";
+                $sql .= "(ma_bao_hanh LIKE '%$searching%'
+                        OR ma_chi_tiet_san_pham LIKE '%$searching%'
+                        OR ma_khach_hang LIKE '%$searching%')";
             }
         }
 
         for ($i = 0; $i < count($arrQuery); $i++) {
             $value = $arrQuery[$i];
-            $sql .= " AND $value";
+            if ($i == 0) {
+                $sql .= " WHERE $value";
+            } else {
+                $sql .= " AND $value";
+            }
         }
 
         $sortName = $_GET["sortName"] ?? "ma_bao_hanh";
@@ -90,7 +96,7 @@ class GuaranteeModel
 
     public function get(int $id): array|false
     {
-        $sql = "SELECT * FROM baohanh WHERE hien_thi=1 AND ma_bao_hanh = $id";
+        $sql = "SELECT * FROM baohanh WHERE ma_bao_hanh = $id";
 
         $result = mysqli_query($this->conn, $sql);
 
@@ -129,10 +135,9 @@ class GuaranteeModel
         $ngay_lap = date("Y-m-d H:i:s", $data["ngay_lap"] / 1000);
         $ngay_het_han = date("Y-m-d H:i:s", $data["ngay_het_han"] / 1000);
 
-        $sql = "UPDATE baohanh 
-                SET ma_chi_tiet_san_pham='$ma_chi_tiet_san_pham', ma_khach_hang='$ma_khach_hang'
-                , ngay_lap='$ngay_lap', ngay_het_han='$ngay_het_han'
-                WHERE ma_bao_hanh=$ma_bao_hanh;";
+        $sql = "UPDATE baohanh SET ma_chi_tiet_san_pham='$ma_chi_tiet_san_pham',
+                ma_khach_hang='$ma_khach_hang', ngay_lap='$ngay_lap',
+                ngay_het_han='$ngay_het_han' WHERE ma_bao_hanh=$ma_bao_hanh;";
         $result = mysqli_query($this->conn, $sql);
 
         if ($result) {
@@ -144,7 +149,7 @@ class GuaranteeModel
 
     public function delete(int $id): string
     {
-        $sql = "UPDATE baohanh SET hien_thi=0 WHERE ma_bao_hanh = $id;";
+        $sql = "DELETE FROM baohanh WHERE ma_bao_hanh=$id;";
 
         $result = mysqli_query($this->conn, $sql);
 

@@ -31,12 +31,12 @@ class EmployeeModel
 
       if ($q != null && isset($q["searching"])) {
         $searching = $q["searching"];
-        $sql .= " AND ma_nhan_vien LIKE '%$searching%'
+        $sql .= " AND (ma_nhan_vien LIKE '%$searching%'
                   OR ten_nhan_vien LIKE '%$searching%'
                   OR ngay_sinh LIKE '%$searching%'
                   OR gioi_tinh LIKE '%$searching%'
                   OR so_dien_thoai LIKE '%$searching%'
-                  OR muc_luong LIKE '%$searching%'
+                  OR muc_luong LIKE '%$searching%')
         ";
       }
 
@@ -110,7 +110,7 @@ class EmployeeModel
 
   public function get(string $id): array | false
   {
-    $sql = "SELECT * FROM nhanvien WHERE ma_nhan_vien='$id';";
+    $sql = "SELECT * FROM nhanvien WHERE ma_nhan_vien='$id' AND hien_thi=1;";
 
     $result = $this->conn->query($sql);
 
@@ -157,7 +157,7 @@ class EmployeeModel
 
   public function delete(string $id): string
   {
-    $sql = "DELETE FROM nhanvien WHERE ma_nhan_vien='$id';";
+    $sql = "UPDATE nhanvien SET hien_thi=0 WHERE ma_nhan_vien='$id';";
 
     $result = mysqli_query($this->conn, $sql);
 

@@ -8,14 +8,14 @@ class AccountModel
 
   public function getAll(): array
   {
-    $sql = "SELECT * FROM taikhoan WHERE hien_thi=1";
+    $sql = "SELECT * FROM taikhoan";
 
     $searching = $_GET["searching"] ?? null;
 
     if ($searching) {
-      $sql .= " AND ten_dang_nhap LIKE '%$searching%'
+      $sql .= " AND (ten_dang_nhap LIKE '%$searching%'
                 OR ma_nhom_quyen LIKE '%$searching%'
-                OR ngay_cap LIKE '%%$searching%'";
+                OR ngay_cap LIKE '%%$searching%')";
     }
 
     $sortName = $_GET["sortName"] ?? "ten_dang_nhap";
@@ -48,7 +48,6 @@ class AccountModel
       $account["ma_tai_khoan"] = (int) $row["ma_tai_khoan"];
       $account["ten_dang_nhap"] = $row["ten_dang_nhap"];
       $account["ma_nhom_quyen"] = (int) $row["ma_nhom_quyen"];
-      $account["hien_thi"] = (bool) $row["hien_thi"];
       $account["created_at"] = strtotime($row["created_at"]) * 1000;
       $data[] = $account;
     }
@@ -80,7 +79,7 @@ class AccountModel
 
   public function get(string $id): array | false
   {
-    $sql = "SELECT * FROM taikhoan WHERE ten_dang_nhap='$id' AND hien_thi=1;";
+    $sql = "SELECT * FROM taikhoan WHERE ten_dang_nhap='$id'";
 
     $result = $this->conn->query($sql);
 
@@ -95,7 +94,6 @@ class AccountModel
     $account["ten_dang_nhap"] = $data["ten_dang_nhap"];
     $account["ma_nhom_quyen"] = (int) $data["ma_nhom_quyen"];
     $account["mat_khau"] = $data["mat_khau"];
-    $account["hien_thi"] = (bool) $data["hien_thi"];
     $account["created_at"] = strtotime($data["created_at"]) * 1000;
 
 
@@ -137,7 +135,7 @@ class AccountModel
 
   public function delete(string $id): string
   {
-    $sql = "UPDATE taikhoan SET hien_thi=0 WHERE ten_dang_nhap='$id';";
+    $sql = "DELETE FROM taikhoan WHERE ten_dang_nhap='$id';";
 
     $result = mysqli_query($this->conn, $sql);
 
