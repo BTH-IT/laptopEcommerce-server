@@ -52,6 +52,7 @@ class AuthModel
       $infor["gioi_tinh"] = (bool) $row["gioi_tinh"] ? "Nam" : "Nữ";
       $infor["so_dien_thoai"] = $row["so_dien_thoai"];
       $infor["dia_chi"] = $row["dia_chi"];
+      $infor["avatar"] = $row["avatar"];
     } else {
       $sql = "SELECT COUNT(*) AS num_rows FROM nhanvien
               WHERE ma_nhan_vien='$ten_dang_nhap' LIMIT 1;";
