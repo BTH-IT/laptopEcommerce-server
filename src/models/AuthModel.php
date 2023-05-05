@@ -161,6 +161,7 @@ class AuthModel
     $gioi_tinh = (int) $data["gioi_tinh"];
     $so_dien_thoai = $data["so_dien_thoai"];
     $dia_chi = $data["dia_chi"];
+    $avatar = $data["avatar"];
     $mat_khau = password_hash($data["mat_khau"], PASSWORD_DEFAULT);
     $created_at = date("Y-m-d H:i:s", strtotime("now"));
 
@@ -178,8 +179,8 @@ class AuthModel
     $result = $this->conn->query($sql);
 
     $sql = "INSERT INTO khachhang (`ma_khach_hang`, `ten_khach_hang`, `ngay_sinh`, `gioi_tinh`,
-            `so_dien_thoai`, `dia_chi`) VALUES ('$ten_dang_nhap', '$ten_khach_hang',
-            '$ngay_sinh', $gioi_tinh, '$so_dien_thoai', '$dia_chi');";
+            `so_dien_thoai`, `dia_chi`, `avatar`) VALUES ('$ten_dang_nhap', '$ten_khach_hang',
+            '$ngay_sinh', $gioi_tinh, '$so_dien_thoai', '$dia_chi', `$avatar`);";
 
     $result = $this->conn->query($sql);
 
