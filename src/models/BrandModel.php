@@ -89,14 +89,25 @@ class BrandModel
     $icon = $data["icon"];
     $hinh_anh = $data["hinh_anh"];
 
-    $sql = "UPDATE thuonghieu SET ten_thuong_hieu='$ten_thuong_hieu', icon='$icon'
-            , hinh_anh='$hinh_anh' WHERE ma_thuong_hieu=$ma_thuong_hieu";
+    $sql = "UPDATE thuonghieu SET ten_thuong_hieu='$ten_thuong_hieu', icon='$icon',
+            hinh_anh='$hinh_anh' WHERE ma_thuong_hieu=$ma_thuong_hieu;";
 
     $result = mysqli_query($this->conn, $sql);
 
 
     if ($result) {
-      return "success";
+      $oldName = $current["ten_thuong_hieu"];
+      $newName = $new["ten_thuong_hieu"];
+
+      $sql = "UPDATE sanpham SET thuong_hieu='$newName' WHERE thuong_hieu='$oldName';";
+
+      $result = mysqli_query($this->conn, $sql);
+
+      if ($result) {
+        return "success";
+      }
+
+      return $this->conn->error;
     } else {
       return $this->conn->error;
     }

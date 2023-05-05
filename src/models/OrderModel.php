@@ -65,8 +65,8 @@ class OrderModel
                 $sql .= " ORDER BY trang_thai " . "$sortAction;";
                 break;
 
-            case 'ngay_lap':
-                $sql .= " ORDER BY ngay_lap " . "$sortAction;";
+            case 'thoi_gian_dat_mua':
+                $sql .= " ORDER BY thoi_gian_dat_mua " . "$sortAction;";
                 break;
         }
 
@@ -244,8 +244,9 @@ class OrderModel
         $trang_thai = $data["trang_thai"];
         $hien_thi = (bool) $data["hien_thi"] ? 1 : 0;
         $sql = "UPDATE donhang 
-                SET ma_khach_hang='$ma_khach_hang', ma_nhan_vien=" . ($ma_nhan_vien ? "'$ma_nhan_vien'" : "DEFAULT") . ", hinh_thuc_thanh_toan='$hinh_thuc_thanh_toan'
-                , thoi_gian_dat_mua='$thoi_gian_dat_mua', trang_thai='$trang_thai', hien_thi=$hien_thi
+                SET ma_khach_hang='$ma_khach_hang', ma_nhan_vien='$ma_nhan_vien',
+                hinh_thuc_thanh_toan='$hinh_thuc_thanh_toan', thoi_gian_dat_mua='$thoi_gian_dat_mua',
+                trang_thai='$trang_thai', hien_thi=$hien_thi
                 WHERE ma_don_hang=$ma_don_hang;";
         $result = mysqli_query($this->conn, $sql);
 

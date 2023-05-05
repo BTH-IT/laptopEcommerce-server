@@ -53,16 +53,16 @@ class GuaranteeController
 
         switch ($method) {
             case "GET":
-                // $isValid = $this->checkPermission("READ");
+                $isValid = $this->checkPermission("READ");
 
-                // if (!$isValid) break;
+                if (!$isValid) break;
 
                 echo json_encode($import);
                 break;
             case "PATCH":
-                // $isValid = $this->checkPermission("UPDATE");
+                $isValid = $this->checkPermission("UPDATE");
 
-                // if (!$isValid) break;
+                if (!$isValid) break;
 
                 // lấy dữ liệu từ phía client gửi cho server (dạng json)
                 $data = file_get_contents("php://input");
@@ -78,9 +78,9 @@ class GuaranteeController
                 ]);
                 break;
             case 'DELETE':
-                // $isValid = $this->checkPermission("DELETE");
+                $isValid = $this->checkPermission("DELETE");
 
-                // if (!$isValid) break;
+                if (!$isValid) break;
 
                 $rows = $this->guaranteeModel->delete($id);
 
@@ -98,9 +98,9 @@ class GuaranteeController
     {
         switch ($method) {
             case "GET":
-                // $isValid = $this->checkPermission("READ");
+                $isValid = $this->checkPermission("READ");
 
-                // if (!$isValid) break;
+                if (!$isValid) break;
 
                 if (isset($_SERVER["QUERY_STRING"])) {
                     echo json_encode($this->guaranteeModel->getAll($_SERVER["QUERY_STRING"]));
@@ -109,9 +109,9 @@ class GuaranteeController
                 echo json_encode($this->guaranteeModel->getAll());
                 break;
             case "POST":
-                // $isValid = $this->checkPermission("CREATE");
+                $isValid = $this->checkPermission("CREATE");
 
-                // if (!$isValid) break;
+                if (!$isValid) break;
 
                 // lấy dữ liệu từ phía client gửi cho server (dạng json)
                 $data = file_get_contents("php://input");

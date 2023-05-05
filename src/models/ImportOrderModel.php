@@ -78,7 +78,6 @@ class ImportOrderModel
 
             $row["ma_phieu_nhap"] = (int) $row["ma_phieu_nhap"];
             $row["ngay_lap"] = strtotime($row["ngay_lap"]) * 1000;
-            $row["hien_thi"] = (bool) $row["hien_thi"];
 
             $id = $row["ma_phieu_nhap"];
 
@@ -156,7 +155,6 @@ class ImportOrderModel
         $data["tong_tien"] = 0;
 
         $data["ma_phieu_nhap"] = (int) $data["ma_phieu_nhap"];
-        $data["hien_thi"] = (bool) $data["hien_thi"];
         $data["ngay_lap"] = strtotime($data["ngay_lap"]);
 
         $sql = "SELECT * FROM phieunhap, chitietphieunhap, sanpham

@@ -156,14 +156,10 @@ class EmployeeController
         }
       }
 
-      if (empty($data["dia_chi"])) {
-        $errors[] = "địa chỉ là bắt buộc";
-      }
-
       if (empty($data["muc_luong"])) {
         $errors[] = "mức lương là bắt buộc";
       } else {
-        if (is_numeric($data["muc_luong"]) || $data["muc_luong"] < 0) {
+        if ($data["muc_luong"] < 0) {
           $errors[] = "mức lương phải là một số và số đó lớn hơn hoặc bằng 0";
         }
       }
