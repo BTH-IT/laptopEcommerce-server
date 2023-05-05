@@ -160,6 +160,10 @@ class ImportOrderController
             if (empty($data["danh_sach_san_pham_nhap_hang"])) {
                 $errors[] = "danh sách các sản phẩm nhập hàng là bắt buộc";
             }
+
+            if (empty($data["ti_le_loi_nhuan"])) {
+                $errors[] = "tỉ lệ lợi nhuận là bắt buộc";
+            }
         }
 
         return $errors;

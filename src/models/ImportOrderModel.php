@@ -62,6 +62,10 @@ class ImportOrderModel
             case 'ngay_lap':
                 $sql .= " ORDER BY ngay_lap " . "$sortAction;";
                 break;
+
+            case 'ti_le_loi_nhuan':
+                $sql .= " ORDER BY ti_le_loi_nhuan " . "$sortAction;";
+                break;
         }
 
         $result = mysqli_query($this->conn, $sql);
@@ -77,6 +81,7 @@ class ImportOrderModel
             $row["tong_tien"] = 0;
 
             $row["ma_phieu_nhap"] = (int) $row["ma_phieu_nhap"];
+            $row["ti_le_loi_nhuan"] = (int) $row["ti_le_loi_nhuan"];
             $row["ngay_lap"] = strtotime($row["ngay_lap"]) * 1000;
 
             $id = $row["ma_phieu_nhap"];
@@ -109,12 +114,13 @@ class ImportOrderModel
     public function create($data): string
     {
         $ma_nha_cung_cap = (int) $data["ma_nha_cung_cap"];
+        $ti_le_loi_nhuan = (int) $data["ti_le_loi_nhuan"];
         $ma_nhan_vien = $data["ma_nhan_vien"];
         $danh_sach_san_pham_nhap_hang = $data["danh_sach_san_pham_nhap_hang"];
         $ngay_lap = date("Y-m-d H:i:s", intval($data["ngay_lap"] / 1000));
 
-        $sql = "INSERT INTO phieunhap (`ma_nha_cung_cap`, `ma_nhan_vien`, `ngay_lap`)
-            VALUES ($ma_nha_cung_cap, '$ma_nhan_vien', '$ngay_lap');";
+        $sql = "INSERT INTO phieunhap (`ma_nha_cung_cap`, `ma_nhan_vien`, `ngay_lap`, `ti_le_loi_nhuan`)
+            VALUES ($ma_nha_cung_cap, '$ma_nhan_vien', '$ngay_lap', $ti_le_loi_nhuan);";
 
         $result = $this->conn->query($sql);
 
@@ -155,6 +161,7 @@ class ImportOrderModel
         $data["tong_tien"] = 0;
 
         $data["ma_phieu_nhap"] = (int) $data["ma_phieu_nhap"];
+        $data["ti_le_loi_nhuan"] = (int) $data["ti_le_loi_nhuan"];
         $data["ngay_lap"] = strtotime($data["ngay_lap"]);
 
         $sql = "SELECT * FROM phieunhap, chitietphieunhap, sanpham
