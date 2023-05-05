@@ -23,7 +23,7 @@ class GuaranteeModel
 
             if (isset($q["searching"])) {
                 $searching = $q["searching"];
-                $sql .= "(ma_bao_hanh LIKE '%$searching%'
+                $arrQuery[] = "(ma_bao_hanh LIKE '%$searching%'
                         OR ma_chi_tiet_san_pham LIKE '%$searching%'
                         OR ma_khach_hang LIKE '%$searching%')";
             }
