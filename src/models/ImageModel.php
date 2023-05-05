@@ -25,7 +25,7 @@ class ImageModel
   {
     $filename = $_FILES["uploadfile"]["name"];
     $tempname = $_FILES["uploadfile"]["tmp_name"];
-    $folder = $_SERVER['DOCUMENT_ROOT'] . '/ecommerce-api/images/' . $filename;
+    $folder = $_SERVER['DOCUMENT_ROOT'] . '/laptopEcommerce-server/images/' . $filename;
 
     $sql = "INSERT INTO hinhanh (`filename`) VALUES ('$filename');";
 

@@ -125,13 +125,12 @@ class OrderModel
     public function create($data): string
     {
         $ma_khach_hang = $data["ma_khach_hang"];
-        $ma_nhan_vien = $data["ma_nhan_vien"];
         $hinh_thuc_thanh_toan = $data["hinh_thuc_thanh_toan"];
         $thoi_gian_dat_mua = date("Y-m-d H:i:s", (int) ($data["thoi_gian_dat_mua"] / 1000));
         $trang_thai = $data["trang_thai"];
 
-        $sql = "INSERT INTO donhang (`ma_khach_hang`, `ma_nhan_vien`, `hinh_thuc_thanh_toan`, `thoi_gian_dat_mua`, `trang_thai`)
-                VALUES ('$ma_khach_hang'," . ($ma_nhan_vien ? "'$ma_nhan_vien'" : "DEFAULT") . ", '$hinh_thuc_thanh_toan', '$thoi_gian_dat_mua'," . ($trang_thai ? "'$trang_thai'" : "DEFAULT") . ");";
+        $sql = "INSERT INTO donhang (`ma_khach_hang`, `hinh_thuc_thanh_toan`, `thoi_gian_dat_mua`, `trang_thai`)
+                VALUES ('$ma_khach_hang', '$hinh_thuc_thanh_toan', '$thoi_gian_dat_mua', '$trang_thai');";
 
         $result = $this->conn->query($sql);
 
@@ -285,7 +284,7 @@ class OrderModel
                 }
 
                 $sql = "INSERT INTO chitietsanpham (`ma_chi_tiet_san_pham`, `ma_san_pham`)
-                      VALUES ('$ma_chi_tiet_san_pham', $ma_san_pham);";
+                        VALUES ('$ma_chi_tiet_san_pham', $ma_san_pham);";
                 $result = $this->conn->query($sql);
             }
         }

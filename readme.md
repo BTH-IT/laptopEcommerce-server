@@ -111,6 +111,28 @@
 
 ========================================================
 
+## DETAIL ORDER (Hưng)
+  # Database Struct
+    int ma_nhom_quyen
+    int ma_quyen_hang
+    int ma_chuc_nang
+    int trang_thai
+
+  # Method GET
+  /detail-orders                                 (action: get list)
+  /detail-orders/:roleGroupId/:perId/:actionId   (action: get detail)
+
+  # Method POST
+  /detail-orders                                 (action: create)
+
+  # Method PUT OR PATCH
+  /detail-orders/:roleGroupId/:perId/:actionId   (action: update)
+
+  # Method DELETE
+  /detail-orders/:roleGroupId/:perId/:actionId   (action: delete)
+
+========================================================
+
 ## AUTH (Hưng)
   # Method POST
   /auth/login          (action: login)
