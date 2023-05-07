@@ -27,6 +27,14 @@ class SupplierModel
             case 'ten_nha_cung_cap':
                 $sql .= " ORDER BY ten_nha_cung_cap " . "$sortAction;";
                 break;
+
+            case 'so_dien_thoai':
+                $sql .= " ORDER BY so_dien_thoai " . "$sortAction;";
+                break;
+
+            case 'dia_chi':
+                $sql .= " ORDER BY dia_chi " . "$sortAction;";
+                break;
         }
 
         $rows = mysqli_query($this->conn, $sql);
@@ -48,13 +56,12 @@ class SupplierModel
 
     public function create($data): string
     {
-        $ma_nha_cung_cap = (int) $data["ma_nha_cung_cap"];
         $ten_nha_cung_cap = $data["ten_nha_cung_cap"];
         $so_dien_thoai = $data["so_dien_thoai"];
         $dia_chi = $data["dia_chi"];
 
-        $sql = "INSERT INTO `nhacungcap` (`ma_nha_cung_cap`, `ten_nha_cung_cap`, `so_dien_thoai`, `dia_chi`)
-                VALUES ($ma_nha_cung_cap, '$ten_nha_cung_cap', '$so_dien_thoai', '$dia_chi');";
+        $sql = "INSERT INTO `nhacungcap` (`ten_nha_cung_cap`, `so_dien_thoai`, `dia_chi`)
+                VALUES ('$ten_nha_cung_cap', '$so_dien_thoai', '$dia_chi');";
 
         $result = $this->conn->query($sql);
 

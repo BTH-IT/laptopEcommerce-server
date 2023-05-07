@@ -53,12 +53,12 @@ class DetailProductModel
             VALUES ('$ma_chi_tiet_san_pham', $id);";
 
       $result = $this->conn->query($sql);
+    }
 
-      if ($result) {
-        return "success";
-      } else {
-        return $this->conn->error;
-      }
+    if ($result) {
+      return "success";
+    } else {
+      return $this->conn->error;
     }
   }
 

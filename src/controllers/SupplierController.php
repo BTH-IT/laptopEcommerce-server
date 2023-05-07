@@ -53,16 +53,16 @@ class SupplierController
 
         switch ($method) {
             case "GET":
-                // $isValid = $this->checkPermission("READ");
+                $isValid = $this->checkPermission("READ");
 
-                // if (!$isValid) break;
+                if (!$isValid) break;
 
                 echo json_encode($supplier);
                 break;
             case "PATCH":
-                // $isValid = $this->checkPermission("UPDATE");
+                $isValid = $this->checkPermission("UPDATE");
 
-                // if (!$isValid) break;
+                if (!$isValid) break;
 
                 // lấy dữ liệu từ phía client gửi cho server (dạng json)
                 $data = file_get_contents("php://input");
@@ -78,9 +78,9 @@ class SupplierController
                 ]);
                 break;
             case 'DELETE':
-                // $isValid = $this->checkPermission("DELETE");
+                $isValid = $this->checkPermission("DELETE");
 
-                // if (!$isValid) break;
+                if (!$isValid) break;
 
                 $rows = $this->supplierModel->delete($id);
 
@@ -98,16 +98,16 @@ class SupplierController
     {
         switch ($method) {
             case "GET":
-                // $isValid = $this->checkPermission("READ");
+                $isValid = $this->checkPermission("READ");
 
-                // if (!$isValid) break;
+                if (!$isValid) break;
 
                 echo json_encode($this->supplierModel->getAll());
                 break;
             case "POST":
-                // $isValid = $this->checkPermission("CREATE");
+                $isValid = $this->checkPermission("CREATE");
 
-                // if (!$isValid) break;
+                if (!$isValid) break;
 
                 // lấy dữ liệu từ phía client gửi cho server (dạng json)
                 $data = file_get_contents("php://input");
@@ -147,9 +147,6 @@ class SupplierController
 
             if (empty($data["so_dien_thoai"])) {
                 $errors[] = "số điện thoại là bắt buộc";
-            } else {
-                if (preg_match('/^[0-9]{10}+$/', $data["so_dien_thoai"]))
-                    $errors[] = "số điện thoại không đúng";
             }
 
             if (empty($data["dia_chi"])) {

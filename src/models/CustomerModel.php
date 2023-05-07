@@ -184,7 +184,13 @@ class CustomerModel
     $result = mysqli_query($this->conn, $sql);
 
     if ($result) {
-      return "Deleted Successfully";
+      $sql = "DELETE FROM taikhoan WHERE ten_dang_nhap='$id';";
+
+      $result = mysqli_query($this->conn, $sql);
+      if ($result) {
+        return "Deleted Successfully";
+      }
+      return $this->conn->error;
     } else {
       return $this->conn->error;
     }

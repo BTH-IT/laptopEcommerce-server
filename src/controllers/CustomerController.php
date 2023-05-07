@@ -136,15 +136,8 @@ class CustomerController
         $errors[] = "ngày sinh là bắt buộc";
       }
 
-      if (empty($data["gioi_tinh"])) {
-        $errors[] = "giới tính là bắt buộc";
-      }
-
       if (empty($data["so_dien_thoai"])) {
         $errors[] = "số điện thoại là bắt buộc";
-      } else {
-        if (preg_match('/^[0-9]{10}+$/', $data["so_dien_thoai"]))
-          $errors[] = "số điện thoại không đúng";
       }
 
       if (empty($data["dia_chi"])) {
