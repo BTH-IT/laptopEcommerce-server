@@ -60,8 +60,6 @@ switch ($urlTarget[0]) {
 
     $guaranteeController->processRequest($_SERVER["REQUEST_METHOD"], $id);
 
-
-    $database->connect->close();
     break;
   case "products":
     $id = $url[4] ?? null;
@@ -79,7 +77,6 @@ switch ($urlTarget[0]) {
 
     $productController->processRequest($_SERVER["REQUEST_METHOD"], $id);
 
-    $database->connect->close();
     break;
 
   case "brands":
@@ -98,8 +95,6 @@ switch ($urlTarget[0]) {
 
     $brandController->processRequest($_SERVER["REQUEST_METHOD"], $id);
 
-
-    $database->connect->close();
     break;
 
   case "accounts":

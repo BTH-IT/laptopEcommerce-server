@@ -8,7 +8,8 @@ class AccountModel
 
   public function getAll(): array
   {
-    $sql = "SELECT * FROM taikhoan";
+    $sql = "SELECT * FROM taikhoan, nhomquyen
+            WHERE taikhoan.ma_nhom_quyen=nhomquyen.ma_nhom_quyen";
 
     $searching = $_GET["searching"] ?? null;
 
@@ -26,8 +27,8 @@ class AccountModel
         $sql .= " ORDER BY ten_dang_nhap " . "$sortAction;";
         break;
 
-      case 'ma_nhom_quyen':
-        $sql .= " ORDER BY ma_nhom_quyen " . "$sortAction;";
+      case 'ten_nhom_quyen':
+        $sql .= " ORDER BY ten_nhom_quyen " . "$sortAction;";
         break;
 
       case 'ngap_cap':
@@ -48,6 +49,7 @@ class AccountModel
       $account["ma_tai_khoan"] = (int) $row["ma_tai_khoan"];
       $account["ten_dang_nhap"] = $row["ten_dang_nhap"];
       $account["ma_nhom_quyen"] = (int) $row["ma_nhom_quyen"];
+      $account["ten_nhom_quyen"] = $row["ten_nhom_quyen"];
       $account["created_at"] = strtotime($row["created_at"]) * 1000;
       $data[] = $account;
     }
@@ -79,7 +81,8 @@ class AccountModel
 
   public function get(string $id): array | false
   {
-    $sql = "SELECT * FROM taikhoan WHERE ten_dang_nhap='$id'";
+    $sql = "SELECT * FROM taikhoan, nhomquyen
+            WHERE taikhoan.ma_nhom_quyen=nhomquyen.ma_nhom_quyen AND ten_dang_nhap='$id'";
 
     $result = $this->conn->query($sql);
 
@@ -93,6 +96,7 @@ class AccountModel
     $account["ma_tai_khoan"] = (int) $data["ma_tai_khoan"];
     $account["ten_dang_nhap"] = $data["ten_dang_nhap"];
     $account["ma_nhom_quyen"] = (int) $data["ma_nhom_quyen"];
+    $account["ten_nhom_quyen"] = $data["ten_nhom_quyen"];
     $account["mat_khau"] = $data["mat_khau"];
     $account["created_at"] = strtotime($data["created_at"]) * 1000;
 
@@ -100,7 +104,7 @@ class AccountModel
     return $account;
   }
 
-  public function update(array $current, array $new): string
+  public function update(array $current, array $new): array
   {
     $data = [];
     foreach ($current as $key => $value) {
@@ -111,7 +115,6 @@ class AccountModel
       }
     }
 
-
     $ten_dang_nhap = $data["ten_dang_nhap"];
     $ma_nhom_quyen = (int) $data["ma_nhom_quyen"];
     $mat_khau = $data["mat_khau"];
@@ -119,6 +122,11 @@ class AccountModel
     if (isset($new["mat_khau_cu"]) && isset($new["mat_khau_moi"])) {
       if (password_verify($new["mat_khau_cu"], $mat_khau)) {
         $mat_khau = password_hash($new["mat_khau_moi"], PASSWORD_DEFAULT);
+      } else {
+        return [
+          "status" => 400,
+          "message" => "Mật khẩu cũ không đúng!!!"
+        ];
       }
     }
 
@@ -127,9 +135,15 @@ class AccountModel
     $result = mysqli_query($this->conn, $sql);
 
     if ($result) {
-      return "Successfully";
+      return [
+        "status" => 200,
+        "message" => "Thay đổi tài khoản thành công"
+      ];
     } else {
-      return $this->conn->error;
+      return [
+        "status" => 500,
+        "message" => "Oops! Đã xảy ra lỗi gì đó rồi!"
+      ];
     }
   }
 

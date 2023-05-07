@@ -64,12 +64,10 @@ class AccountController
         // trả về array và nếu null thì array trở thành rỗng
         $data = (array) json_decode($data, true);
 
-        $rows = $this->accountModel->update($account, $data);
+        $rs = $this->accountModel->update($account, $data);
 
-        echo json_encode([
-          "message" => "account $id updated",
-          "rows" => $rows
-        ]);
+        http_response_code($rs["status"]);
+        echo json_encode($rs);
         break;
       case 'DELETE':
         $isValid = $this->checkPermission("DELETE");

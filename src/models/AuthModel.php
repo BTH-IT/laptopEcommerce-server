@@ -141,6 +141,7 @@ class AuthModel
   public function register($data): array | null
   {
     $ten_dang_nhap = $data["ten_dang_nhap"];
+    $so_dien_thoai = $data["so_dien_thoai"];
 
     $sql = "SELECT COUNT(*) AS num_rows FROM taikhoan
             WHERE ten_dang_nhap='$ten_dang_nhap' LIMIT 1;";
@@ -156,10 +157,23 @@ class AuthModel
       ];
     }
 
+    $sql = "SELECT COUNT(*) AS num_rows FROM khachhang
+            WHERE so_dien_thoai='$so_dien_thoai' LIMIT 1;";
+
+    $rows = mysqli_query($this->conn, $sql);
+
+    $row = mysqli_fetch_array($rows);
+
+    if ($row["num_rows"] > 0) {
+      return [
+        'status' => 500,
+        'message' => 'Số điện thoại đã có trên hệ thống',
+      ];
+    }
+
     $ten_khach_hang = $data["ten_khach_hang"];
     $ngay_sinh = date("Y-m-d", $data["ngay_sinh"]);
     $gioi_tinh = (int) $data["gioi_tinh"];
-    $so_dien_thoai = $data["so_dien_thoai"];
     $dia_chi = $data["dia_chi"];
     $avatar = $data["avatar"];
     $mat_khau = password_hash($data["mat_khau"], PASSWORD_DEFAULT);
@@ -180,7 +194,7 @@ class AuthModel
 
     $sql = "INSERT INTO khachhang (`ma_khach_hang`, `ten_khach_hang`, `ngay_sinh`, `gioi_tinh`,
             `so_dien_thoai`, `dia_chi`, `avatar`) VALUES ('$ten_dang_nhap', '$ten_khach_hang',
-            '$ngay_sinh', $gioi_tinh, '$so_dien_thoai', '$dia_chi', `$avatar`);";
+            '$ngay_sinh', $gioi_tinh, '$so_dien_thoai', '$dia_chi', '$avatar');";
 
     $result = $this->conn->query($sql);
 
