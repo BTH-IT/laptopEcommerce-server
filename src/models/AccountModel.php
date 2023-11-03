@@ -16,7 +16,7 @@ class AccountModel
     if ($searching) {
       $sql .= " AND (ten_dang_nhap LIKE '%$searching%'
                 OR ma_nhom_quyen LIKE '%$searching%'
-                OR ngay_cap LIKE '%%$searching%')";
+                OR ngay_cap LIKE '%$searching%')";
     }
 
     $sortName = $_GET["sortName"] ?? "ten_dang_nhap";
@@ -155,7 +155,11 @@ class AccountModel
 
 
     if ($result) {
-      return "success";
+      if (mysqli_affected_rows($this->conn) > 0) {
+        return "success"; // Dòng dữ liệu đã bị xóa
+      } else {
+        return "Không tìm thấy dòng dữ liệu để xóa";
+      }
     } else {
       return $this->conn->error;
     }
